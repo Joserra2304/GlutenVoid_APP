@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class MainMenuModel extends FlutterFlowModel<MainMenuWidget> {
-  ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // State field(s) for TextField widget.

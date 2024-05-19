@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:glutenvoid_app/view/widget/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../view/register_view/register_view_widget.dart';
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -39,21 +41,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       errorBuilder: (context, state) => MainMenuWidget(),
       routes: [
         FFRoute(
-          name: '_initialize',
+          name: 'SplashScreen',
           path: '/',
-          builder: (context, _) => MainMenuWidget(),
+          builder: (context, _) => SplashScreen(),
         ),
         FFRoute(
           name: 'MainMenu',
           path: '/mainMenu',
           builder: (context, params) => MainMenuWidget(),
         ),
-       /* FFRoute(
+       FFRoute(
           name: 'RegisterView',
           path: '/registerView',
           builder: (context, params) => RegisterViewWidget(),
         ),
-        FFRoute(
+        /*FFRoute(
           name: 'AdminView',
           path: '/adminView',
           builder: (context, params) => AdminViewWidget(),

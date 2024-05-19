@@ -1,3 +1,5 @@
+import 'package:glutenvoid_app/view/register_view/register_view_widget.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -16,7 +18,7 @@ class MainMenuWidget extends StatefulWidget {
 
 class _MainMenuWidgetState extends State<MainMenuWidget> {
   late MainMenuModel _model;
-
+  bool showRegisterPage = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -65,9 +67,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: Align(
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Padding(
+          child: SingleChildScrollView(
               padding: EdgeInsets.all(20.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -92,7 +92,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                           child: TextFormField(
                             controller: _model.textController1,
                             focusNode: _model.textFieldFocusNode1,
-                            autofocus: true,
+                            autofocus: false,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Usuario',
@@ -162,7 +162,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                           child: TextFormField(
                             controller: _model.textController2,
                             focusNode: _model.textFieldFocusNode2,
-                            autofocus: true,
+                            autofocus: false,
                             obscureText: !_model.passwordVisibility,
                             decoration: InputDecoration(
                               labelText: 'Contraseña',
@@ -243,8 +243,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
+                            onPressed: () async {
+                              context.pushNamed("RegisterView");
                             },
                             text: 'Acceder',
                             options: FFButtonOptions(
@@ -271,40 +271,38 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                             ),
                           ),
                           FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
+                            onPressed: () async {
+                              context.pushNamed("RegisterView");
                             },
                             text: 'Registrarse',
                             options: FFButtonOptions(
-                              width: 160.0,
-                              height: 40.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
+                              width: 160,
+                              height: 40,
+                              padding:
+                              EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                              iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                               color: FlutterFlowTheme.of(context).primary,
                               textStyle: FlutterFlowTheme.of(context)
                                   .titleSmall
                                   .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                  ),
-                              elevation: 20.0,
+                                fontFamily: 'Readex Pro',
+                                color: Colors.white,
+                                letterSpacing: 0,
+                              ),
+                              elevation: 20,
                               borderSide: BorderSide(
                                 color: Colors.transparent,
-                                width: 1.0,
+                                width: 1,
                               ),
-                              borderRadius: BorderRadius.circular(50.0),
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                          ),
-                        ],
+                          ),                        ],
                       ),
                     ],
                   ),
                 ].divide(SizedBox(height: 30.0)),
               ),
-            ),
           ),
         ),
       ),
