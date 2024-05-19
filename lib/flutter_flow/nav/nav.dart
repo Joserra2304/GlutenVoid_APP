@@ -6,7 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../view/admin_view/admin_view_widget.dart';
 import '../../view/register_view/register_view_widget.dart';
+import '../../view/user_control_view/user_control_view_widget.dart';
+import '../../view/user_profile_view/user_profile_view_widget.dart';
+import '../../view/user_view/user_view_widget.dart';
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -55,7 +59,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/registerView',
           builder: (context, params) => RegisterViewWidget(),
         ),
-        /*FFRoute(
+        FFRoute(
           name: 'AdminView',
           path: '/adminView',
           builder: (context, params) => AdminViewWidget(),
@@ -65,7 +69,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/userView',
           builder: (context, params) => UserViewWidget(),
         ),
-        FFRoute(
+        /*FFRoute(
           name: 'ProductView',
           path: '/productView',
           builder: (context, params) => ProductViewWidget(),
@@ -100,16 +104,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/establishmentDetailsView',
           builder: (context, params) => EstablishmentDetailsViewWidget(),
         ),
+        */
+
         FFRoute(
           name: 'UserProfileView',
           path: '/userProfileView',
           builder: (context, params) => UserProfileViewWidget(),
         ),
+
         FFRoute(
           name: 'UserControlView',
           path: '/userControlView',
           builder: (context, params) => UserControlViewWidget(),
-        )*/
+        )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

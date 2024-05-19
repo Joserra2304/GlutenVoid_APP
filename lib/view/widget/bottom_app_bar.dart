@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../flutter_flow/flutter_flow_theme.dart';
 
-/*class CommonBottomAppBar extends StatelessWidget {
+
+class CommonBottomAppBar extends StatelessWidget {
   final BuildContext parentContext;
   final int selectedIndex;
 
   CommonBottomAppBar(
       {required this.selectedIndex, required this.parentContext});
 
-  void _onItemTapped(int index) {
+  /*void _onItemTapped(int index) {
     switch (index) {
       case 0:
         Navigator.push(parentContext,
@@ -57,31 +59,43 @@ import 'package:flutter/material.dart';
         break;
     }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
+    final primaryColor = FlutterFlowTheme.of(context).primary;
+    final secondaryColor = FlutterFlowTheme.of(context).secondary;
     return BottomAppBar(
+
       shape: CircularNotchedRectangle(),
       notchMargin: 6.0,
-      color: Colors.deepPurple,
+
+      color: primaryColor,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
-              icon: Icon(Icons.shopping_cart, color: Color(0xFFe9d7ac)),
-              onPressed: () => _onItemTapped(0)),
+              icon: Icon(Icons.shopping_cart, color: secondaryColor),
+              onPressed: () {
+
+              }),
           IconButton(
-              icon: Icon(Icons.menu_book, color: Color(0xFFe9d7ac)),
-              onPressed: () => _onItemTapped(1)),
+              icon: Icon(Icons.menu_book, color: secondaryColor),
+              onPressed: () {
+
+    }),
           IconButton(
-              icon: Icon(Icons.restaurant_menu, color: Color(0xFFe9d7ac)),
-              onPressed: () => _onItemTapped(2)),
+              icon: Icon(Icons.restaurant_menu, color: secondaryColor),
+              onPressed: () {
+
+              }),
           IconButton(
               icon: Icon(Icons.person, color: Color(0xFFe9d7ac)),
-              onPressed: () => _onItemTapped(3)),
+              onPressed: () {
+
+              }),
         ],
       ),
     );
   }
-}*/
+}
