@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../view/admin_view/admin_view_widget.dart';
+import '../../view/product_view/product_view_widget.dart';
 import '../../view/register_view/register_view_widget.dart';
 import '../../view/user_control_view/user_control_view_widget.dart';
 import '../../view/user_profile_view/user_profile_view_widget.dart';
@@ -69,12 +70,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/userView',
           builder: (context, params) => UserViewWidget(),
         ),
-        /*FFRoute(
+        FFRoute(
           name: 'ProductView',
           path: '/productView',
           builder: (context, params) => ProductViewWidget(),
         ),
-        FFRoute(
+       /* FFRoute(
           name: 'RecipeView',
           path: '/recipeView',
           builder: (context, params) => RecipeViewWidget(),
