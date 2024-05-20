@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'product_view_model.dart';
+import '../../controller/product_controller.dart';
+import '../../service/product_service.dart';
+import '../../service/openfoodfacts_api_service.dart';
+import '../../model/product_model.dart';
 export 'product_view_model.dart';
 
 class ProductViewWidget extends StatefulWidget {
@@ -17,6 +21,8 @@ class ProductViewWidget extends StatefulWidget {
 
 class _ProductViewWidgetState extends State<ProductViewWidget> {
   late ProductViewModel _model;
+  late ProductController _productController;
+  late Future<List<ProductModel>> _productsFuture;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -24,12 +30,15 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProductViewModel());
+    final openFoodFactsApi = OpenFoodFactsApi(); // Asegúrate de implementar esta clase
+    final productService = ProductService(openFoodFactsApi);
+    _productController = ProductController(productService);
+    _productsFuture = _productController.fetchGlutenFreeProducts();
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -50,7 +59,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
             borderRadius: 30.0,
             borderWidth: 1.0,
             buttonSize: 60.0,
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_rounded,
               color: Colors.white,
               size: 30.0,
@@ -66,11 +75,11 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
               Text(
                 'Productos',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
-                    ),
+                  fontFamily: 'Outfit',
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  letterSpacing: 0.0,
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -117,49 +126,63 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
           top: true,
           child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.0),
-                  ),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.image,
-                      color: FlutterFlowTheme.of(context).secondary,
-                    ),
-                    title: Text(
-                      'Title',
-                      style: FlutterFlowTheme.of(context).titleLarge.override(
-                            fontFamily: 'Outfit',
+            child: FutureBuilder<List<ProductModel>>(
+              future: _productsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No hay productos disponibles'));
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final product = snapshot.data![index];
+                      return Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                        child: ListTile(
+                          leading: Image.network(
+                            product.imageUrl,
+                            width: 50.0,
+                            height: 50.0,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            product.name,
+                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                              fontFamily: 'Outfit',
+                              color: FlutterFlowTheme.of(context).secondary,
+                              letterSpacing: 0.0,
+                            ),
+                          ),
+                          subtitle: Text(
+                            product.company,
+                            style: FlutterFlowTheme.of(context).labelMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              letterSpacing: 0.0,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
                             color: FlutterFlowTheme.of(context).secondary,
-                            letterSpacing: 0.0,
+                            size: 20.0,
                           ),
-                    ),
-                    subtitle: Text(
-                      'Subtitle goes here...',
-                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                            fontFamily: 'Readex Pro',
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            letterSpacing: 0.0,
-                          ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 20.0,
-                    ),
-                    tileColor: FlutterFlowTheme.of(context).primary,
-                    dense: false,
-                  ),
-                ),
-              ],
+                          tileColor: FlutterFlowTheme.of(context).primary,
+                          dense: false,
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
         ),
