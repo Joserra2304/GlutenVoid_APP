@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'user_control_view_model.dart';
 export 'user_control_view_model.dart';
 
@@ -40,6 +41,9 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
   }
 
   Future<void> _loadUsers() async {
+    setState(() {
+      _isLoading = true;
+    });
     final users = await _userController.getUsers();
     setState(() {
       _users = users;
@@ -70,8 +74,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                     decoration: InputDecoration(hintText: "Apellido")),
                 TextField(
                     controller: _emailController,
-                    decoration:
-                    InputDecoration(hintText: "Correo electrónico")),
+                    decoration: InputDecoration(hintText: "Correo electrónico")),
                 TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(hintText: "Nombre de usuario")),
@@ -98,8 +101,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                     username: _usernameController.text,
                     email: _emailController.text,
                     password: _passwordController.text,
-                    isAdmin:
-                    false);
+                    isAdmin: false);
                 bool success = await _userController.registerUser(newUser);
                 if (success) {
                   Navigator.of(context).pop();
@@ -130,7 +132,10 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
             ),
             TextButton(
               child: Text('Eliminar'),
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+                print('borrado');
+              },
             ),
           ],
         );
@@ -140,9 +145,13 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
     if (result == true) {
       bool success = await _userController.deleteUser(id);
       if (success) {
+        setState(() {
+          _users.removeWhere((user) => user.id == id);
+
+          _loadUsers();
+        });
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Usuario eliminado con éxito')));
-        _loadUsers();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error al eliminar el usuario')));
@@ -169,7 +178,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
             borderRadius: 30.0,
             borderWidth: 1.0,
             buttonSize: 60.0,
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_rounded,
               color: Colors.white,
               size: 30.0,
@@ -221,7 +230,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
         body: SafeArea(
           top: true,
           child: _isLoading
-              ? Center(child: Container())
+              ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
             child: Center(
               child: Padding(
@@ -255,18 +264,18 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                 clipBehavior: Clip.none,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 15.0, 0.0, 0.0),
                                     child: ListTile(
                                       leading: user.isAdmin
                                           ? Icon(
                                         Icons.admin_panel_settings,
-                                        color: FlutterFlowTheme.of(context).tertiary,
+                                        color: FlutterFlowTheme.of(context).warning,
                                         size: 30.0,
                                       )
                                           : Icon(
                                         Icons.person,
-                                        color: FlutterFlowTheme.of(context).secondary,
+                                        color: FlutterFlowTheme.of(context).successLight,
                                         size: 30.0,
                                       ),
                                       title: Text(
@@ -331,7 +340,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                       size: 24.0,
                                     ),
                                     onPressed: () {
-                                      context.pushNamed("UserProfileView");
+                                      context.pushNamed('UserProfileView', extra: {'id': user.id});
                                     },
                                   ),
                                   FlutterFlowIconButton(
@@ -347,6 +356,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                     ),
                                     onPressed: () {
                                       _confirmDeletion(user.id!);
+                                      print(user.id!);
                                     },
                                   ),
                                 ],
@@ -366,10 +376,4 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
       ),
     );
   }
-
-  void _reloadPage() {
-    Navigator.pop(context);
-    context.pushNamed("UserControlView");
-  }
 }
-

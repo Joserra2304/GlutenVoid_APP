@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import '../model/user_model.dart';
 import '/service/glutenvoid_api_service.dart';
 
@@ -14,16 +13,12 @@ class UserService {
   bool get isAdmin => _currentUser?.isAdmin ?? false;
   UserModel? get currentUser => _currentUser;
 
-  // Factory constructor para acceder a la instancia
   factory UserService() {
     return _singleton;
   }
 
-  // Constructor privado para el singleton
   UserService._internal() : glutenVoidApi = GlutenVoidApi();
 
-
-//Obtener Usuarios en lista
   Future<List<UserModel>> fetchAllUsers() async {
     final response = await glutenVoidApi.get('/users');
     if (response.statusCode == 200) {
@@ -35,7 +30,6 @@ class UserService {
     }
   }
 
-  //Obtener un usuario
   Future<UserModel> getUserById(int id) async {
     final response = await glutenVoidApi.get('/users/$id');
     if (response.statusCode == 200) {
@@ -45,7 +39,6 @@ class UserService {
     }
   }
 
-  //Registrar usuario
   Future<bool> register(UserModel newUser) async {
     final response = await glutenVoidApi.post('/users', jsonEncode(newUser.toJson()));
     if (response.statusCode == 200) {
@@ -53,7 +46,6 @@ class UserService {
     } else {
       print('Failed to register: ${response.body}');
       print('Failed to register: Status ${response.statusCode}, Body: ${response.body}');
-
       return false;
     }
   }
@@ -63,12 +55,11 @@ class UserService {
     return response.statusCode == 200;
   }
 
-  Future<bool> deleteUser(int userId) async{
-    final response = await glutenVoidApi.delete('users/$userId');
+  Future<bool> deleteUser(int userId) async {
+    final response = await glutenVoidApi.delete('/users/$userId');
     return response.statusCode == 200;
   }
 
-  //Loguearse
   Future<UserModel?> login(String username, String password) async {
     try {
       final response = await glutenVoidApi.post('/users/login', jsonEncode({
@@ -90,10 +81,7 @@ class UserService {
     }
   }
 
-  //Desloguearse
-  void logout(){
+  void logout() {
     _currentUser = null;
   }
-
-
 }

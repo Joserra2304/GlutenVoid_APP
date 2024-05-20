@@ -23,7 +23,7 @@ class UserController {
     try {
       return await userService.register(newUser);
     } catch (e) {
-      throw Exception("Failed to registwerr: $e");
+      throw Exception("Failed to register: $e");
     }
   }
 
