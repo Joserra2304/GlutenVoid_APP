@@ -101,6 +101,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       },
     ),
     GoRoute(
+      name: 'EstablishmentView',
+      path: '/establishmentView',
+      builder: (context, state) => EstablishmentViewWidget(
+        establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
+      ),
+    ),
+    GoRoute(
+      name: 'EstablishmentDetailsView',
+      path: '/establishmentDetailsView',
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['id']!);
+        return EstablishmentDetailsViewWidget(
+          establishmentId: id,
+          establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
+        );
+      },
+    ),
+
+    GoRoute(
       name: 'MapView',
       path: '/mapView',
       builder: (context, state) => MapView(
@@ -120,6 +139,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
     ),
   ],
 );
+
 
 
 extension NavParamExtensions on Map<String, String?> {

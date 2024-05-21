@@ -49,6 +49,8 @@ abstract class FlutterFlowTheme {
   late Color accent2;
   late Color accent3;
   late Color accent4;
+  late Color accent4Light;
+  late Color accent4Dark;
   late Color success;
   late Color successLight;
   late Color warning;
@@ -131,13 +133,15 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color accent2 = const Color(0xFF780CA1);
   late Color accent3 = const Color(0xFF430062);
   late Color accent4 = const Color(0xFF9263A8);
+  late Color accent4Light = const Color(0xFFA98EC4);
+  late Color accent4Dark = const Color(0xFF704C7E);
   late Color success = const Color(0xFF249689);
   late Color warning = const Color(0xFFF9CF58);
   late Color error = const Color(0xFFFF5963);
   late Color info = const Color(0xFFFFFFFF);
-  late Color successLight = const Color(0xFF66CDAA); // Medium Aquamarine
-
+  late Color successLight = const Color(0xFF66CDAA);
 }
+
 
 class DarkModeTheme extends FlutterFlowTheme {
   late Color primary = const Color(0xFF6412C0);
@@ -152,12 +156,15 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color accent2 = const Color(0xFF780CA1);
   late Color accent3 = const Color(0xFF430062);
   late Color accent4 = const Color(0xFF9263A8);
+  late Color accent4Light = const Color(0xFFA98EC4);
+  late Color accent4Dark = const Color(0xFF704C7E);
   late Color success = const Color(0xFF249689);
   late Color warning = const Color(0xFFF9CF58);
   late Color error = const Color(0xFFFF5963);
   late Color info = const Color(0xFFFFFFFF);
-  late Color successLight = const Color(0xFF66CDAA); // Medium Aquamarine
+  late Color successLight = const Color(0xFF66CDAA);
 }
+
 
 
 abstract class Typography {

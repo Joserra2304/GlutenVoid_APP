@@ -1,15 +1,13 @@
-import '../../controller/user_controller.dart';
-import '../../model/user_model.dart';
-import '../../service/user_service.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flip_card/flip_card.dart';
+import '../../controller/user_controller.dart';
+import '../../model/user_model.dart';
+import '../../service/user_service.dart';
 import 'user_control_view_model.dart';
-export 'user_control_view_model.dart';
+import 'package:go_router/go_router.dart';
 
 class UserControlViewWidget extends StatefulWidget {
   const UserControlViewWidget({super.key});
@@ -23,6 +21,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
   late List<UserModel> _users;
   late UserController _userController;
   bool _isLoading = true;
+  final List<GlobalKey<FlipCardState>> _cardKeys = [];
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -48,6 +47,10 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
     setState(() {
       _users = users;
       _isLoading = false;
+      _cardKeys.clear();
+      for (int i = 0; i < users.length; i++) {
+        _cardKeys.add(GlobalKey<FlipCardState>());
+      }
     });
   }
 
@@ -147,7 +150,6 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
       if (success) {
         setState(() {
           _users.removeWhere((user) => user.id == id);
-
           _loadUsers();
         });
         ScaffoldMessenger.of(context).showSnackBar(
@@ -157,6 +159,15 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
             SnackBar(content: Text('Error al eliminar el usuario')));
       }
     }
+  }
+
+  void _flipCard(int index) {
+    for (int i = 0; i < _cardKeys.length; i++) {
+      if (i != index && _cardKeys[i].currentState!.isFront == false) {
+        _cardKeys[i].currentState!.toggleCard();
+      }
+    }
+    _cardKeys[index].currentState!.toggleCard();
   }
 
   @override
@@ -240,73 +251,86 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ..._users.map((user) {
+                      int index = _users.indexOf(user);
                       return Column(
                         children: [
                           FlipCard(
+                            key: _cardKeys[index],
                             fill: Fill.fillBack,
                             direction: FlipDirection.HORIZONTAL,
                             speed: 400,
-                            front: Container(
-                              width: double.infinity,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).primary,
-                                borderRadius: BorderRadius.circular(14.0),
-                              ),
-                              child: Wrap(
-                                spacing: 0.0,
-                                runSpacing: 0.0,
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                direction: Axis.horizontal,
-                                runAlignment: WrapAlignment.start,
-                                verticalDirection: VerticalDirection.down,
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 15.0, 0.0, 0.0),
-                                    child: ListTile(
-                                      leading: user.isAdmin
-                                          ? Icon(
-                                        Icons.admin_panel_settings,
-                                        color: FlutterFlowTheme.of(context).warning,
-                                        size: 30.0,
-                                      )
-                                          : Icon(
-                                        Icons.person,
-                                        color: FlutterFlowTheme.of(context).successLight,
-                                        size: 30.0,
-                                      ),
-                                      title: Text(
-                                        user.name,
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .override(
-                                          fontFamily: 'Outfit',
-                                          color: FlutterFlowTheme.of(context).secondary,
-                                          letterSpacing: 0.0,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        user.email,
-                                        style: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: FlutterFlowTheme.of(context).info,
-                                          letterSpacing: 0.0,
-                                        ),
-                                      ),
-                                      trailing: Icon(
-                                        Icons.touch_app_outlined,
-                                        color: FlutterFlowTheme.of(context).secondary,
-                                        size: 30.0,
-                                      ),
-                                      dense: false,
-                                    ),
+                            front: GestureDetector(
+                              onTap: () => _flipCard(index),
+                              child: Container(
+                                width: double.infinity,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      FlutterFlowTheme.of(context).accent3,
+                                      FlutterFlowTheme.of(context).accent4
+                                    ],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(0.0, -1.0),
+                                    end: AlignmentDirectional(0, 1.0),
                                   ),
-                                ],
+                                  borderRadius: BorderRadius.circular(14.0),
+                                ),
+                                child: Wrap(
+                                  spacing: 0.0,
+                                  runSpacing: 0.0,
+                                  alignment: WrapAlignment.start,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  direction: Axis.horizontal,
+                                  runAlignment: WrapAlignment.start,
+                                  verticalDirection: VerticalDirection.down,
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 15.0, 0.0, 0.0),
+                                      child: ListTile(
+                                        leading: user.isAdmin
+                                            ? Icon(
+                                          Icons.admin_panel_settings,
+                                          color: FlutterFlowTheme.of(context).warning,
+                                          size: 30.0,
+                                        )
+                                            : Icon(
+                                          Icons.person,
+                                          color: FlutterFlowTheme.of(context).successLight,
+                                          size: 30.0,
+                                        ),
+                                        title: Text(
+                                          user.name,
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleLarge
+                                              .override(
+                                            fontFamily: 'Outfit',
+                                            color: FlutterFlowTheme.of(context).secondary,
+                                            letterSpacing: 0.0,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          user.email,
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelMedium
+                                              .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: FlutterFlowTheme.of(context).info,
+                                            letterSpacing: 0.0,
+                                          ),
+                                        ),
+                                        trailing: Icon(
+                                          Icons.touch_app_outlined,
+                                          color: FlutterFlowTheme.of(context).secondary,
+                                          size: 30.0,
+                                        ),
+                                        dense: false,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             back: Container(
@@ -315,8 +339,8 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    FlutterFlowTheme.of(context).accent3,
-                                    FlutterFlowTheme.of(context).accent4
+                                    FlutterFlowTheme.of(context).accent4,
+                                    FlutterFlowTheme.of(context).accent4Dark,
                                   ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(0.0, -1.0),
@@ -341,6 +365,21 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                     ),
                                     onPressed: () {
                                       context.pushNamed('UserProfileView', extra: {'id': user.id});
+                                    },
+                                  ),
+                                  FlutterFlowIconButton(
+                                    borderColor: FlutterFlowTheme.of(context).primary,
+                                    borderRadius: 20.0,
+                                    borderWidth: 1.0,
+                                    buttonSize: 40.0,
+                                    fillColor: FlutterFlowTheme.of(context).success,
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: FlutterFlowTheme.of(context).primaryText,
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () {
+                                      // Acción de editar
                                     },
                                   ),
                                   FlutterFlowIconButton(

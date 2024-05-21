@@ -268,7 +268,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                         ),
                       ],
                       icon: Icon(
-                        Icons.filter_list,
+                        Icons.filter_alt,
                         color: FlutterFlowTheme.of(context).secondary,
                       ),
                     ),

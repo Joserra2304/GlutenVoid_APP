@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../controller/establishment_controller.dart';
@@ -35,16 +36,10 @@ class _MapViewState extends State<MapView> {
   }
 
   void openEstablishmentDetails(int id) {
-    /*Navigator.push(context, MaterialPageRoute(
-      builder: (context) => EstablishmentDetailsView(
-        establishmentId: id,
-        establishmentController: widget.establishmentController,
-      ),
-    )).then((deleted) {
-      if (deleted == true) {  // Si la eliminación fue exitosa
-        loadEstablishmentMarkers();  // Recarga los marcadores para reflejar la eliminación
-      }
-    });*/
+    context.pushNamed(
+      'EstablishmentDetailsView',
+      queryParameters: {'id': id.toString()},
+    );
   }
 
   void _handleTap(LatLng point) {
@@ -67,7 +62,7 @@ class _MapViewState extends State<MapView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Información del Restaurante'),
-          content: SingleChildScrollView( // Asegura que todo el contenido sea visible cuando el teclado aparezca
+          content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -106,7 +101,11 @@ class _MapViewState extends State<MapView> {
                       Marker(
                         markerId: MarkerId(point.toString()),
                         position: point,
-                        infoWindow: InfoWindow(title: _name.text, snippet: "pulsa para más detalles"),
+                        infoWindow: InfoWindow(
+                          title: _name.text,
+                          snippet: "pulsa para más detalles",
+                          onTap: () => openEstablishmentDetails(newEstablishment.id),
+                        ),
                       ),
                     );
                   });
@@ -142,27 +141,22 @@ class _MapViewState extends State<MapView> {
     return Scaffold(
       backgroundColor: FlutterFlowTheme.of(context).info,
       appBar: AppBar(
-
-        title: Text('Mapa de restaurantes',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-              fontFamily: 'Outfit',
-              color: Colors.white,
-              fontSize: 22.0,
-              letterSpacing: 0.0,
-            ),
+        title: Text(
+          'Mapa de restaurantes',
+          style: FlutterFlowTheme.of(context).headlineMedium.override(
+            fontFamily: 'Outfit',
+            color: Colors.white,
+            fontSize: 22.0,
+            letterSpacing: 0.0,
+          ),
         ),
         backgroundColor: FlutterFlowTheme.of(context).primary,
         actions: [
           IconButton(
-              icon: Icon(Icons.list, color: Color(0xFFe9d7ac)),
-              onPressed: () {
-                // Aquí pasas el controlador y el estado del admin al 'EstablishmentsView'
-                /* Navigator.push(context, MaterialPageRoute(
-                builder: (context) => EstablishmentsView(
-                  establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
-                ),
-              ));*/
-              }
+            icon: Icon(Icons.list, color: Color(0xFFe9d7ac)),
+            onPressed: () {
+              context.go("/establishmentView");
+            },
           ),
         ],
       ),
@@ -176,7 +170,6 @@ class _MapViewState extends State<MapView> {
               decoration: InputDecoration(
                 hintText: 'Buscar dirección',
                 hintStyle: TextStyle(color: Colors.black),
-
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.black), // Borde negro
                 ),
@@ -207,7 +200,3 @@ class _MapViewState extends State<MapView> {
     );
   }
 }
-
-
-
-
