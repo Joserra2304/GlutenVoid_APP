@@ -1,5 +1,4 @@
 import 'package:glutenvoid_app/service/user_service.dart';
-
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -31,7 +30,6 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -49,53 +47,48 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Vista del administrador',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
-                    ),
-              ),
-              FlutterFlowIconButton(
-                borderColor: FlutterFlowTheme.of(context).primary,
-                borderRadius: 20.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
-                fillColor: FlutterFlowTheme.of(context).primary,
-                icon: Icon(
-                  Icons.map,
-                  color: FlutterFlowTheme.of(context).secondary,
-                  size: 24.0,
-                ),
-                onPressed: () {
-                  context.pushNamed('MapView');
-                },
-              ),
-              FlutterFlowIconButton(
-                borderColor: FlutterFlowTheme.of(context).primary,
-                borderRadius: 20.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
-                fillColor: FlutterFlowTheme.of(context).primary,
-                icon: Icon(
-                  Icons.logout_outlined,
-                  color: FlutterFlowTheme.of(context).secondary,
-                  size: 24.0,
-                ),
-                onPressed: () {
-                  userService.logout();
-                  context.pushNamed('MainMenu');
-                },
-              ),
-            ],
+          title: Text(
+            'Vista del administrador',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+              fontFamily: 'Outfit',
+              color: Colors.white,
+              fontSize: 22.0,
+              letterSpacing: 0.0,
+            ),
           ),
-          actions: [],
+          actions: [
+            FlutterFlowIconButton(
+              borderColor: FlutterFlowTheme.of(context).primary,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
+              fillColor: FlutterFlowTheme.of(context).primary,
+              icon: Icon(
+                Icons.map,
+                color: FlutterFlowTheme.of(context).secondary,
+                size: 24.0,
+              ),
+              onPressed: () {
+                context.pushNamed('MapView');
+              },
+            ),
+            FlutterFlowIconButton(
+              borderColor: FlutterFlowTheme.of(context).primary,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
+              fillColor: FlutterFlowTheme.of(context).primary,
+              icon: Icon(
+                Icons.logout_outlined,
+                color: FlutterFlowTheme.of(context).secondary,
+                size: 24.0,
+              ),
+              onPressed: () {
+                userService.logout();
+                context.pushNamed('MainMenu');
+              },
+            ),
+          ],
           centerTitle: false,
           elevation: 2.0,
         ),
@@ -138,7 +131,7 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
                                     BoxShadow(
                                       blurRadius: 10.0,
                                       color:
-                                          FlutterFlowTheme.of(context).accent3,
+                                      FlutterFlowTheme.of(context).accent3,
                                       offset: Offset(
                                         0.0,
                                         2.0,
@@ -175,12 +168,12 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondary,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -243,12 +236,12 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondary,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                      fontFamily: 'Readex Pro',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -318,12 +311,12 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondary,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ],
                                 ),
