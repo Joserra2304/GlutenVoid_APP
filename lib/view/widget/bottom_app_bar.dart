@@ -1,6 +1,6 @@
-
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import '../../service/user_service.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -22,47 +22,21 @@ class CommonBottomAppBar extends StatelessWidget {
       case 0:
         GoRouter.of(parentContext).go('/productView');
         break;
-    /*case 1:
-        Navigator.push(
-          parentContext,
-          MaterialPageRoute(
-            builder: (context) => RecipesView(
-              recipeController: RecipeController(
-                RecipeService(GlutenVoidApi()),
-              ),
-            ),
-          ),
-        );
+      case 1:
+        //GoRouter.of(parentContext).go('/mapView');
         break;
-    // case 2:
-    //   Navigator.push(
-    //     parentContext,
-    //     MaterialPageRoute(
-    //       builder: (context) => EstablishmentsView(
-    //         establishmentController: EstablishmentController(
-    //           EstablishmentService(GlutenVoidApi()),
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    //   break;
-    // case 3:
-    //   var userService = UserService();
-    //   var userId = userService.currentUser?.id;
-    //   if (userId != null) {
-    //     Navigator.push(
-    //       parentContext,
-    //       MaterialPageRoute(
-    //         builder: (context) => UserProfileView(
-    //           userController: UserController(userService),
-    //           userId: userId,
-    //         ),
-    //       ),
-    //     );
-    //   } else {
-    //     print("No hay un usuario autenticado para mostrar el perfil");
-    //   }
-    //   break;*/
+      case 2:
+        GoRouter.of(parentContext).go('/mapView');
+        break;
+      case 3:
+        var userService = UserService();
+        var userId = userService.currentUser?.id;
+        if (userId != null) {
+          GoRouter.of(parentContext).go('/userControlView');
+        } else {
+          print("No hay un usuario autenticado para mostrar el perfil");
+        }
+        break;
     }
   }
 
@@ -82,14 +56,16 @@ class CommonBottomAppBar extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.shopping_cart,
-              color: selectedIndex == 0 ? const Color(0xFFe9d7ac) : secondaryColor,
+              color:
+                  selectedIndex == 0 ? const Color(0xFFe9d7ac) : secondaryColor,
             ),
             onPressed: () => _onItemTapped(0),
           ),
           IconButton(
             icon: Icon(
               Icons.menu_book,
-              color: selectedIndex == 1 ? const Color(0xFFe9d7ac) : secondaryColor,
+              color:
+                  selectedIndex == 1 ? const Color(0xFFe9d7ac) : secondaryColor,
             ),
             onPressed: () => _onItemTapped(1),
           ),

@@ -80,7 +80,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                       size: 24.0,
                     ),
                     onPressed: () {
-                      print('Map pressed ...');
+                      context.pushNamed('MapView');
                     },
                   ),
                   FlutterFlowIconButton(

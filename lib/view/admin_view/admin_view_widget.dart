@@ -69,6 +69,21 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
                 buttonSize: 40.0,
                 fillColor: FlutterFlowTheme.of(context).primary,
                 icon: Icon(
+                  Icons.map,
+                  color: FlutterFlowTheme.of(context).secondary,
+                  size: 24.0,
+                ),
+                onPressed: () {
+                  context.pushNamed('MapView');
+                },
+              ),
+              FlutterFlowIconButton(
+                borderColor: FlutterFlowTheme.of(context).primary,
+                borderRadius: 20.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                fillColor: FlutterFlowTheme.of(context).primary,
+                icon: Icon(
                   Icons.logout_outlined,
                   color: FlutterFlowTheme.of(context).secondary,
                   size: 24.0,

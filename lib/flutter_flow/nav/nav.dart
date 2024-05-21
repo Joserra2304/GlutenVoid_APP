@@ -6,14 +6,20 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../controller/establishment_controller.dart';
+import '../../controller/map_controller.dart';
 import '../../service/barcode_scanner_service.dart';
+import '../../service/establishment_service.dart';
+import '../../service/glutenvoid_api_service.dart';
 import '../../service/product_service.dart';
+import '../../service/user_service.dart';
 import '../../view/admin_view/admin_view_widget.dart';
 import '../../view/product_view/product_view_widget.dart';
 import '../../view/register_view/register_view_widget.dart';
 import '../../view/user_control_view/user_control_view_widget.dart';
 import '../../view/user_profile_view/user_profile_view_widget.dart';
 import '../../view/user_view/user_view_widget.dart';
+import '../../view/widget/map_view.dart';
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -40,7 +46,6 @@ class AppStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
-
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
@@ -96,6 +101,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       },
     ),
     GoRoute(
+      name: 'MapView',
+      path: '/mapView',
+      builder: (context, state) => MapView(
+        mapController: MapController(EstablishmentService(GlutenVoidApi())),
+        establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
+      ),
+    ),
+    GoRoute(
       name: 'UserProfileView',
       path: '/userProfileView',
       builder: (context, state) => UserProfileViewWidget(),
@@ -107,6 +120,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
     ),
   ],
 );
+
 
 extension NavParamExtensions on Map<String, String?> {
   Map<String, String> get withoutNulls => Map.fromEntries(
