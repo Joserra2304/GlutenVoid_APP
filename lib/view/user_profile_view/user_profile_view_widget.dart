@@ -293,7 +293,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(14.0),
-                        child: Row(
+                        child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -309,6 +309,34 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                 iconPadding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
                                 color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            FFButtonWidget(
+                              onPressed: () {
+
+                              },
+                              text: 'Eliminar cuenta',
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).error,
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(

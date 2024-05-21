@@ -11,6 +11,7 @@ class EstablishmentController {
   GoogleMapController? _mapController;
   Set<Marker> _markers = {};
   final EstablishmentService establishmentService;
+  List<EstablishmentModel> establishments = [];
 
   EstablishmentController(this.establishmentService);
 

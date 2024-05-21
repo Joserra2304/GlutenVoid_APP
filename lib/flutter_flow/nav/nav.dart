@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:glutenvoid_app/view/recipe_approval_view/recipe_approval_view_widget.dart';
 import 'package:glutenvoid_app/view/widget/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
@@ -8,13 +9,17 @@ import 'package:provider/provider.dart';
 
 import '../../controller/establishment_controller.dart';
 import '../../controller/map_controller.dart';
+import '../../controller/recipe_controller.dart';
 import '../../service/barcode_scanner_service.dart';
 import '../../service/establishment_service.dart';
 import '../../service/glutenvoid_api_service.dart';
 import '../../service/product_service.dart';
+import '../../service/recipe_service.dart';
 import '../../service/user_service.dart';
 import '../../view/admin_view/admin_view_widget.dart';
 import '../../view/product_view/product_view_widget.dart';
+import '../../view/recipe_details_view/recipe_details_view_widget.dart';
+import '../../view/recipe_view/recipe_view_widget.dart';
 import '../../view/register_view/register_view_widget.dart';
 import '../../view/user_control_view/user_control_view_widget.dart';
 import '../../view/user_profile_view/user_profile_view_widget.dart';
@@ -82,6 +87,52 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       path: '/productView',
       builder: (context, state) => ProductViewWidget(),
     ),
+
+    GoRoute(
+      name: 'EstablishmentView',
+      path: '/establishmentView',
+      builder: (context, state) => EstablishmentViewWidget(
+        establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
+      ),
+    ),
+
+    GoRoute(
+      name: 'RecipeApprovalView',
+      path: '/recipeApprovalView',
+      builder: (context, state) => RecipeApprovalViewWidget(
+        recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+      ),
+    ),
+    //RECIPES
+    GoRoute(
+      name: 'RecipeView',
+      path: '/recipeView',
+      builder: (context, state) => RecipeViewWidget(
+        recipeController: RecipeController(RecipeService(GlutenVoidApi()))),
+    ),
+
+    GoRoute(
+      name: 'RecipeDetailsView',
+      path: '/recipeDetailsView',
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['id']!);
+        return RecipeDetailsViewWidget(
+          recipeId: id,
+          recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+      );
+      },
+    ),
+    GoRoute(
+      name: 'EstablishmentDetailsView',
+      path: '/establishmentDetailsView',
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['id']!);
+        return EstablishmentDetailsViewWidget(
+          establishmentId: id,
+          establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
+        );
+      },
+    ),
     GoRoute(
       name: 'ProductDetailsView',
       path: '/productDetailsView',
@@ -97,24 +148,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               }
             }).scanBarcode(context);
           },
-        );
-      },
-    ),
-    GoRoute(
-      name: 'EstablishmentView',
-      path: '/establishmentView',
-      builder: (context, state) => EstablishmentViewWidget(
-        establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
-      ),
-    ),
-    GoRoute(
-      name: 'EstablishmentDetailsView',
-      path: '/establishmentDetailsView',
-      builder: (context, state) {
-        final id = int.parse(state.uri.queryParameters['id']!);
-        return EstablishmentDetailsViewWidget(
-          establishmentId: id,
-          establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
         );
       },
     ),

@@ -23,7 +23,7 @@ class CommonBottomAppBar extends StatelessWidget {
         GoRouter.of(parentContext).go('/productView');
         break;
       case 1:
-        //GoRouter.of(parentContext).go('/mapView');
+        GoRouter.of(parentContext).go('/recipeView');
         break;
       case 2:
         GoRouter.of(parentContext).go('/mapView');
@@ -32,7 +32,7 @@ class CommonBottomAppBar extends StatelessWidget {
         var userService = UserService();
         var userId = userService.currentUser?.id;
         if (userId != null) {
-          GoRouter.of(parentContext).go('/userControlView');
+          GoRouter.of(parentContext).go('/userProfileView');
         } else {
           print("No hay un usuario autenticado para mostrar el perfil");
         }
@@ -65,24 +65,26 @@ class CommonBottomAppBar extends StatelessWidget {
             icon: Icon(
               Icons.menu_book,
               color:
-                  selectedIndex == 1 ? const Color(0xFFe9d7ac) : secondaryColor,
+                  selectedIndex == 1 ? secondaryColor : const Color(0xFFe9d7ac),
             ),
             onPressed: () => _onItemTapped(1),
           ),
-          // IconButton(
-          //   icon: Icon(
-          //     Icons.restaurant_menu,
-          //     color: selectedIndex == 2 ? const Color(0xFFe9d7ac) : secondaryColor,
-          //   ),
-          //   onPressed: () => _onItemTapped(2),
-          // ),
-          // IconButton(
-          //   icon: Icon(
-          //     Icons.person,
-          //     color: selectedIndex == 3 ? const Color(0xFFe9d7ac) : secondaryColor,
-          //   ),
-          //   onPressed: () => _onItemTapped(3),
-          // ),
+          IconButton(
+            icon: Icon(
+              Icons.restaurant_menu,
+              color:
+                  selectedIndex == 2 ? secondaryColor : const Color(0xFFe9d7ac),
+            ),
+            onPressed: () => _onItemTapped(2),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.person,
+              color:
+                  selectedIndex == 3 ? secondaryColor : const Color(0xFFe9d7ac),
+            ),
+            onPressed: () => _onItemTapped(3),
+          ),
         ],
       ),
     );

@@ -1,15 +1,21 @@
 import 'package:glutenvoid_app/service/user_service.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../controller/establishment_controller.dart';
+import '../../controller/product_controller.dart';
+import '../../controller/recipe_controller.dart';
+import '../../model/establishment_model.dart';
+import '../../model/product_model.dart';
+import '../../model/recipe_model.dart';
+import '../../service/establishment_service.dart';
+import '../../service/glutenvoid_api_service.dart';
+import '../../service/recipe_service.dart';
 import '../widget/bottom_app_bar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'user_view_model.dart';
 export 'user_view_model.dart';
 
@@ -24,17 +30,50 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   late UserViewModel _model;
   int _selectedIndex = 0;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final ProductController productController = ProductController();
+  final RecipeController recipeController =
+  RecipeController(RecipeService(GlutenVoidApi()));
+  final EstablishmentController establishmentController =
+  EstablishmentController(EstablishmentService(GlutenVoidApi()));
+  bool _isLoadingProducts = true;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => UserViewModel());
+    _fetchProducts();
+    _fetchOtherData();
+  }
+
+  void _fetchProducts() async {
+    try {
+      List<ProductModel> products =
+      await productController.fetchGlutenFreeProducts();
+      setState(() {
+        productController.products = products;
+        _isLoadingProducts = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoadingProducts = false;
+      });
+    }
+  }
+
+  void _fetchOtherData() async {
+    List<RecipeModel> recipes = await recipeController.fetchApprovedRecipes();
+    List<EstablishmentModel> establishments =
+    await establishmentController.fetchEstablishments();
+
+    setState(() {
+      recipeController.recipes = recipes;
+      establishmentController.establishments = establishments;
+    });
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -59,11 +98,11 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               Text(
                 'Gluten Void',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
-                    ),
+                  fontFamily: 'Outfit',
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  letterSpacing: 0.0,
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -109,213 +148,285 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: 180.0,
-                        child: CarouselSlider(
-                          items: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/445/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/983/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/255/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/213/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                          carouselController: _model.carouselController1 ??=
-                              CarouselController(),
-                          options: CarouselOptions(
-                            initialPage: 1,
-                            viewportFraction: 0.5,
-                            disableCenter: true,
-                            enlargeCenterPage: true,
-                            enlargeFactor: 0.25,
-                            enableInfiniteScroll: true,
-                            scrollDirection: Axis.horizontal,
-                            autoPlay: false,
-                            onPageChanged: (index, _) =>
-                                _model.carouselCurrentIndex1 = index,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                Text(
+                  'PRODUCTOS',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: 180.0,
-                        child: CarouselSlider(
-                          items: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/91/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/278/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/953/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/454/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                          carouselController: _model.carouselController2 ??=
-                              CarouselController(),
-                          options: CarouselOptions(
-                            initialPage: 1,
-                            viewportFraction: 0.5,
-                            disableCenter: true,
-                            enlargeCenterPage: true,
-                            enlargeFactor: 0.25,
-                            enableInfiniteScroll: true,
-                            scrollDirection: Axis.horizontal,
-                            autoPlay: false,
-                            onPageChanged: (index, _) =>
-                                _model.carouselCurrentIndex2 = index,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                SizedBox(height: 2.0),
+                _isLoadingProducts
+                    ? Center(child: CircularProgressIndicator())
+                    : buildSection<ProductModel>(
+                  context: context,
+                  icon: Icons.shopping_cart,
+                  title: 'Productos',
+                  items: productController.products,
+                  buildItem: buildProductItem,
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: 180.0,
-                        child: CarouselSlider(
-                          items: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/101/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/895/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/846/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/912/600',
-                                width: 300.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                          carouselController: _model.carouselController3 ??=
-                              CarouselController(),
-                          options: CarouselOptions(
-                            initialPage: 1,
-                            viewportFraction: 0.5,
-                            disableCenter: true,
-                            enlargeCenterPage: true,
-                            enlargeFactor: 0.25,
-                            enableInfiniteScroll: true,
-                            scrollDirection: Axis.horizontal,
-                            autoPlay: false,
-                            onPageChanged: (index, _) =>
-                                _model.carouselCurrentIndex3 = index,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                SizedBox(height: 16.0),
+                Text(
+                  'RECETAS',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 2.0),
+                buildSection<RecipeModel>(
+                  context: context,
+                  icon: Icons.book,
+                  title: 'Recetas',
+                  items: recipeController.recipes,
+                  buildItem: buildRecipeItem,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'RESTAURANTES',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 2.0),
+                buildSection<EstablishmentModel>(
+                  context: context,
+                  icon: Icons.store,
+                  title: 'Establecimientos',
+                  items: establishmentController.establishments,
+                  buildItem: buildEstablishmentItem,
                 ),
               ],
             ),
           ),
         ),
         bottomNavigationBar: CommonBottomAppBar(
-            selectedIndex: _selectedIndex, parentContext: context),
+          selectedIndex: _selectedIndex,
+          parentContext: context,
+        ),
+      ),
+    );
+  }
+
+  Widget buildSection<T>({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required List<T> items,
+    required Widget Function(T) buildItem,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 30.0, color: Colors.black),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: Container(
+                height: 2.0,
+                color: Colors.black,
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          width: double.infinity,
+          height: 150.0,
+          child: buildCarousel(items, buildItem),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCarousel<T>(List<T> items, Widget Function(T) buildItem) {
+    return items.isEmpty
+        ? Center(
+      child: Text(
+        'No hay elementos disponibles',
+        style: TextStyle(color: Colors.grey),
+      ),
+    )
+        : CarouselSlider(
+      items: items.map((item) => buildItem(item)).toList(),
+      options: CarouselOptions(
+        height: 150.0,
+        initialPage: 0,
+        viewportFraction: 0.8,
+        disableCenter: true,
+        enlargeCenterPage: true,
+        enlargeFactor: 0.25,
+        enableInfiniteScroll: true,
+        scrollDirection: Axis.horizontal,
+        autoPlay: false,
+      ),
+    );
+  }
+
+  Widget buildProductItem(ProductModel item) {
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed('ProductDetailsView', queryParameters: {'id': item.barcode});
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                FlutterFlowTheme.of(context).accent3,
+                FlutterFlowTheme.of(context).accent4,
+              ],
+              stops: [0.0, 1.0],
+              begin: AlignmentDirectional(0.0, -1.0),
+              end: AlignmentDirectional(0, 1.0),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                item.imageUrl,
+                width: 80.0,
+                height: 80.0,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                item.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildRecipeItem(RecipeModel item) {
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed('RecipeDetailsView', queryParameters: {'id': item.id.toString()});
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                FlutterFlowTheme.of(context).accent3,
+                FlutterFlowTheme.of(context).accent4,
+              ],
+              stops: [0.0, 1.0],
+              begin: AlignmentDirectional(0.0, -1.0),
+              end: AlignmentDirectional(0, 1.0),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  item.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  item.ingredients,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildEstablishmentItem(EstablishmentModel item) {
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed('EstablishmentDetailsView', queryParameters: {'id': item.id.toString()});
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                FlutterFlowTheme.of(context).accent3,
+                FlutterFlowTheme.of(context).accent4,
+              ],
+              stops: [0.0, 1.0],
+              begin: AlignmentDirectional(0.0, -1.0),
+              end: AlignmentDirectional(0, 1.0),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  item.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 7.5),
+                Text(
+                  '${item.address}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '${item.city}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
