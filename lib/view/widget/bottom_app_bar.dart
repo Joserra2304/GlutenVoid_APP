@@ -1,99 +1,112 @@
+
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 
 import '../../flutter_flow/flutter_flow_theme.dart';
-
 
 class CommonBottomAppBar extends StatelessWidget {
   final BuildContext parentContext;
   final int selectedIndex;
 
-  CommonBottomAppBar(
-      {required this.selectedIndex, required this.parentContext});
+  CommonBottomAppBar({
+    required this.selectedIndex,
+    required this.parentContext,
+  });
 
-  /*void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.push(parentContext,
-            MaterialPageRoute(builder: (context) => ProductsView()));
+        GoRouter.of(parentContext).go('/productView');
         break;
-      case 1:
+    /*case 1:
         Navigator.push(
-            parentContext,
-            MaterialPageRoute(
-                builder: (context) => RecipesView(
-                  recipeController: RecipeController(
-                    RecipeService(GlutenVoidApi()),
-                  ),
-                )
-            )
-        );
-        break;
-      case 2:
-        Navigator.push(
-            parentContext,
-            MaterialPageRoute(
-                builder: (context) => EstablishmentsView(
-                  establishmentController: EstablishmentController(
-                      EstablishmentService(GlutenVoidApi())),
-                )
-            )
-        );
-        break;
-      case 3:
-        var userService = UserService();
-        var userId = userService.currentUser?.id;
-        if (userId != null) {
-          Navigator.push(
-            parentContext,
-            MaterialPageRoute(
-              builder: (context) => UserProfileView(
-                  userController: UserController(userService), // Pasar el userService adecuadamente
-                  userId: userId
+          parentContext,
+          MaterialPageRoute(
+            builder: (context) => RecipesView(
+              recipeController: RecipeController(
+                RecipeService(GlutenVoidApi()),
               ),
             ),
-          );
-        } else {
-          // Opcional: Mostrar mensaje o redirigir al login
-          print("No hay un usuario autenticado para mostrar el perfil");
-        }
+          ),
+        );
         break;
+    // case 2:
+    //   Navigator.push(
+    //     parentContext,
+    //     MaterialPageRoute(
+    //       builder: (context) => EstablishmentsView(
+    //         establishmentController: EstablishmentController(
+    //           EstablishmentService(GlutenVoidApi()),
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    //   break;
+    // case 3:
+    //   var userService = UserService();
+    //   var userId = userService.currentUser?.id;
+    //   if (userId != null) {
+    //     Navigator.push(
+    //       parentContext,
+    //       MaterialPageRoute(
+    //         builder: (context) => UserProfileView(
+    //           userController: UserController(userService),
+    //           userId: userId,
+    //         ),
+    //       ),
+    //     );
+    //   } else {
+    //     print("No hay un usuario autenticado para mostrar el perfil");
+    //   }
+    //   break;*/
     }
   }
-*/
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = FlutterFlowTheme.of(context).primary;
     final secondaryColor = FlutterFlowTheme.of(context).secondary;
+
     return BottomAppBar(
-
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       notchMargin: 6.0,
-
       color: primaryColor,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
-              icon: Icon(Icons.shopping_cart, color: secondaryColor),
-              onPressed: () {
-
-              }),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: selectedIndex == 0 ? const Color(0xFFe9d7ac) : secondaryColor,
+            ),
+            onPressed: () => _onItemTapped(0),
+          ),
           IconButton(
-              icon: Icon(Icons.menu_book, color: secondaryColor),
-              onPressed: () {
-
-    }),
-          IconButton(
-              icon: Icon(Icons.restaurant_menu, color: secondaryColor),
-              onPressed: () {
-
-              }),
-          IconButton(
-              icon: Icon(Icons.person, color: Color(0xFFe9d7ac)),
-              onPressed: () {
-
-              }),
+            icon: Icon(
+              Icons.menu_book,
+              color: selectedIndex == 1 ? const Color(0xFFe9d7ac) : secondaryColor,
+            ),
+            onPressed: () => _onItemTapped(1),
+          ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.restaurant_menu,
+          //     color: selectedIndex == 2 ? const Color(0xFFe9d7ac) : secondaryColor,
+          //   ),
+          //   onPressed: () => _onItemTapped(2),
+          // ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.person,
+          //     color: selectedIndex == 3 ? const Color(0xFFe9d7ac) : secondaryColor,
+          //   ),
+          //   onPressed: () => _onItemTapped(3),
+          // ),
         ],
       ),
     );

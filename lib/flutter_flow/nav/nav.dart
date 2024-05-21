@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../service/barcode_scanner_service.dart';
+import '../../service/product_service.dart';
 import '../../view/admin_view/admin_view_widget.dart';
 import '../../view/product_view/product_view_widget.dart';
 import '../../view/register_view/register_view_widget.dart';
@@ -40,99 +42,82 @@ class AppStateNotifier extends ChangeNotifier {
 }
 
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
-      initialLocation: '/',
-      debugLogDiagnostics: true,
-      refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) => MainMenuWidget(),
-      routes: [
-        FFRoute(
-          name: 'SplashScreen',
-          path: '/',
-          builder: (context, _) => SplashScreen(),
-        ),
-        FFRoute(
-          name: 'MainMenu',
-          path: '/mainMenu',
-          builder: (context, params) => MainMenuWidget(),
-        ),
-       FFRoute(
-          name: 'RegisterView',
-          path: '/registerView',
-          builder: (context, params) => RegisterViewWidget(),
-        ),
-        FFRoute(
-          name: 'AdminView',
-          path: '/adminView',
-          builder: (context, params) => AdminViewWidget(),
-        ),
-        FFRoute(
-          name: 'UserView',
-          path: '/userView',
-          builder: (context, params) => UserViewWidget(),
-        ),
-        FFRoute(
-          name: 'ProductView',
-          path: '/productView',
-          builder: (context, params) => ProductViewWidget(),
-        ),
-       /* FFRoute(
-          name: 'RecipeView',
-          path: '/recipeView',
-          builder: (context, params) => RecipeViewWidget(),
-        ),
-        FFRoute(
-          name: 'RecipeDetailsView',
-          path: '/recipeDetailsView',
-          builder: (context, params) => RecipeDetailsViewWidget(),
-        ),
-        FFRoute(
-          name: 'RecipeApprovalView',
-          path: '/recipeApprovalView',
-          builder: (context, params) => RecipeApprovalViewWidget(),
-        ),
-        FFRoute(
-          name: 'ProductDetailsView',
-          path: '/productDetailsView',
-          builder: (context, params) => ProductDetailsViewWidget(),
-        ),
-        FFRoute(
-          name: 'EstablishmentView',
-          path: '/establishmentView',
-          builder: (context, params) => EstablishmentViewWidget(),
-        ),
-        FFRoute(
-          name: 'EstablishmentDetailsView',
-          path: '/establishmentDetailsView',
-          builder: (context, params) => EstablishmentDetailsViewWidget(),
-        ),
-        */
-
-        FFRoute(
-          name: 'UserProfileView',
-          path: '/userProfileView',
-          builder: (context, params) => UserProfileViewWidget(),
-        ),
-
-        FFRoute(
-          name: 'UserControlView',
-          path: '/userControlView',
-          builder: (context, params) => UserControlViewWidget(),
-        )
-      ].map((r) => r.toRoute(appStateNotifier)).toList(),
-    );
+  initialLocation: '/',
+  debugLogDiagnostics: true,
+  refreshListenable: appStateNotifier,
+  errorBuilder: (context, state) => MainMenuWidget(),
+  routes: [
+    GoRoute(
+      name: 'SplashScreen',
+      path: '/',
+      builder: (context, state) => SplashScreen(),
+    ),
+    GoRoute(
+      name: 'MainMenu',
+      path: '/mainMenu',
+      builder: (context, state) => MainMenuWidget(),
+    ),
+    GoRoute(
+      name: 'RegisterView',
+      path: '/registerView',
+      builder: (context, state) => RegisterViewWidget(),
+    ),
+    GoRoute(
+      name: 'AdminView',
+      path: '/adminView',
+      builder: (context, state) => AdminViewWidget(),
+    ),
+    GoRoute(
+      name: 'UserView',
+      path: '/userView',
+      builder: (context, state) => UserViewWidget(),
+    ),
+    GoRoute(
+      name: 'ProductView',
+      path: '/productView',
+      builder: (context, state) => ProductViewWidget(),
+    ),
+    GoRoute(
+      name: 'ProductDetailsView',
+      path: '/productDetailsView',
+      builder: (context, state) {
+        final barcode = state.uri.queryParameters['barcode'];
+        return ProductDetailsViewWidget(
+          barcode: barcode ?? 'nou',
+          onScan: () async {
+            await BarcodeScannerService((String barcode) async {
+              final newProduct = await ProductService().fetchProductByBarcode(barcode);
+              if (newProduct != null) {
+                // Actualiza el estado o navega al detalle del producto escaneado
+              }
+            }).scanBarcode(context);
+          },
+        );
+      },
+    ),
+    GoRoute(
+      name: 'UserProfileView',
+      path: '/userProfileView',
+      builder: (context, state) => UserProfileViewWidget(),
+    ),
+    GoRoute(
+      name: 'UserControlView',
+      path: '/userControlView',
+      builder: (context, state) => UserControlViewWidget(),
+    ),
+  ],
+);
 
 extension NavParamExtensions on Map<String, String?> {
   Map<String, String> get withoutNulls => Map.fromEntries(
-        entries
-            .where((e) => e.value != null)
-            .map((e) => MapEntry(e.key, e.value!)),
-      );
+    entries
+        .where((e) => e.value != null)
+        .map((e) => MapEntry(e.key, e.value!)),
+  );
 }
 
 extension NavigationExtensions on BuildContext {
   void safePop() {
-    // If there is only one route on the stack, navigate to the initial
-    // page instead of popping.
     if (canPop()) {
       pop();
     } else {
@@ -151,120 +136,6 @@ extension _GoRouterStateExtensions on GoRouterState {
   TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
       ? extraMap[kTransitionInfoKey] as TransitionInfo
       : TransitionInfo.appDefault();
-}
-
-class FFParameters {
-  FFParameters(this.state, [this.asyncParams = const {}]);
-
-  final GoRouterState state;
-  final Map<String, Future<dynamic> Function(String)> asyncParams;
-
-  Map<String, dynamic> futureParamValues = {};
-
-  // Parameters are empty if the params map is empty or if the only parameter
-  // present is the special extra parameter reserved for the transition info.
-  bool get isEmpty =>
-      state.allParams.isEmpty ||
-      (state.allParams.length == 1 &&
-          state.extraMap.containsKey(kTransitionInfoKey));
-  bool isAsyncParam(MapEntry<String, dynamic> param) =>
-      asyncParams.containsKey(param.key) && param.value is String;
-  bool get hasFutures => state.allParams.entries.any(isAsyncParam);
-  Future<bool> completeFutures() => Future.wait(
-        state.allParams.entries.where(isAsyncParam).map(
-          (param) async {
-            final doc = await asyncParams[param.key]!(param.value)
-                .onError((_, __) => null);
-            if (doc != null) {
-              futureParamValues[param.key] = doc;
-              return true;
-            }
-            return false;
-          },
-        ),
-      ).onError((_, __) => [false]).then((v) => v.every((e) => e));
-
-  dynamic getParam<T>(
-    String paramName,
-    ParamType type, {
-    bool isList = false,
-  }) {
-    if (futureParamValues.containsKey(paramName)) {
-      return futureParamValues[paramName];
-    }
-    if (!state.allParams.containsKey(paramName)) {
-      return null;
-    }
-    final param = state.allParams[paramName];
-    // Got parameter from `extras`, so just directly return it.
-    if (param is! String) {
-      return param;
-    }
-    // Return serialized value.
-    return deserializeParam<T>(
-      param,
-      type,
-      isList,
-    );
-  }
-}
-
-class FFRoute {
-  const FFRoute({
-    required this.name,
-    required this.path,
-    required this.builder,
-    this.requireAuth = false,
-    this.asyncParams = const {},
-    this.routes = const [],
-  });
-
-  final String name;
-  final String path;
-  final bool requireAuth;
-  final Map<String, Future<dynamic> Function(String)> asyncParams;
-  final Widget Function(BuildContext, FFParameters) builder;
-  final List<GoRoute> routes;
-
-  GoRoute toRoute(AppStateNotifier appStateNotifier) => GoRoute(
-        name: name,
-        path: path,
-        pageBuilder: (context, state) {
-          fixStatusBarOniOS16AndBelow(context);
-          final ffParams = FFParameters(state, asyncParams);
-          final page = ffParams.hasFutures
-              ? FutureBuilder(
-                  future: ffParams.completeFutures(),
-                  builder: (context, _) => builder(context, ffParams),
-                )
-              : builder(context, ffParams);
-          final child = page;
-
-          final transitionInfo = state.transitionInfo;
-          return transitionInfo.hasTransition
-              ? CustomTransitionPage(
-                  key: state.pageKey,
-                  child: child,
-                  transitionDuration: transitionInfo.duration,
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          PageTransition(
-                    type: transitionInfo.transitionType,
-                    duration: transitionInfo.duration,
-                    reverseDuration: transitionInfo.duration,
-                    alignment: transitionInfo.alignment,
-                    child: child,
-                  ).buildTransitions(
-                    context,
-                    animation,
-                    secondaryAnimation,
-                    child,
-                  ),
-                )
-              : MaterialPage(key: state.pageKey, child: child);
-        },
-        routes: routes,
-      );
 }
 
 class TransitionInfo {
@@ -298,9 +169,9 @@ class RootPageContext {
   }
 
   static Widget wrap(Widget child, {String? errorRoute}) => Provider.value(
-        value: RootPageContext(true, errorRoute),
-        child: child,
-      );
+    value: RootPageContext(true, errorRoute),
+    child: child,
+  );
 }
 
 extension GoRouterLocationExtension on GoRouter {

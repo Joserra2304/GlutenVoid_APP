@@ -6,6 +6,7 @@ class ProductModel {
   final String description;
   final String imageUrl;
   final bool hasGluten;
+  final String? barcode;
 
   ProductModel({
     required this.name,
@@ -13,6 +14,7 @@ class ProductModel {
     required this.description,
     required this.imageUrl,
     required this.hasGluten,
+    this.barcode,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json){
@@ -22,6 +24,7 @@ class ProductModel {
       company: json['brands'] ?? 'Marca no disponible',
       description:json['ingredients_text'] ?? 'Descripción no disponible',
       hasGluten: json['has_gluten'] ?? false,
+      barcode: json['code'] ?? '',
     );
   }
 }

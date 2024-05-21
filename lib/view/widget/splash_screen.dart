@@ -61,7 +61,10 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Image.asset('assets/images/gv_animated.gif'),
                 ),
               ),
-              Text('Absorbiendo gluten...', style: TextStyle(fontSize: 20)),
+              Text('Absorbiendo gluten...', style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black)
+              ),
               // Texto justo debajo de la imagen
             ],
           ),

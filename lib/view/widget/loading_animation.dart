@@ -37,7 +37,10 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
               child: Image.asset('assets/images/gv_animated.gif'),
             ),
           ),
-          Text('Absorbiendo gluten...', style: TextStyle(fontSize: 20)),
+          Text('Absorbiendo gluten...', style: TextStyle(
+              fontSize: 20,
+              color: Colors.black),
+          )
         ],
       ),
     );
