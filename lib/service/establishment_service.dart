@@ -28,13 +28,13 @@ class EstablishmentService {
 
   Future<bool> deleteEstablishment(int id) async {
     final response = await glutenVoidApi.delete('/establishments/$id');
-    return response.statusCode == 200;
+    return response.statusCode == 204;
   }
 
   Future<bool> registerEstablishment(EstablishmentModel establishment) async {
     final response = await glutenVoidApi.post(
         '/establishments', jsonEncode(establishment.toJson()));
-    return response.statusCode == 200;
+    return response.statusCode == 201;
   }
 
   Future<bool> updateEstablishment(int id, Map<String, dynamic> updates) async {

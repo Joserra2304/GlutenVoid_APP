@@ -1,44 +1,60 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GlutenVoidApi {
-  //final String baseUrl = 'http://10.0.2.2:8080';
-  //final String baseUrl = 'http://192.168.1.176:8080';
-  //final String baseUrl = 'http://192.168.0.37:8080';
   final String baseUrl = 'https://glutenvoid-api-0697772007f6.herokuapp.com';
+
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('jwt');
+  }
+
+  Future<Map<String, String>> _getHeaders() async {
+    final token = await _getToken();
+    return {
+      'Content-Type': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+  }
 
   Future<http.Response> get(String path) async {
     final uri = Uri.parse('$baseUrl$path');
-    return await http.get(uri);
+    final headers = await _getHeaders();
+    return await http.get(uri, headers: headers);
   }
 
   Future<http.Response> post(String path, dynamic data) async {
     final uri = Uri.parse('$baseUrl$path');
+    final headers = await _getHeaders();
     return await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: headers,
       body: data,
     );
   }
 
   Future<http.Response> delete(String path) async {
     final uri = Uri.parse('$baseUrl$path');
-    return await http.delete(uri);
+    final headers = await _getHeaders();
+    return await http.delete(uri, headers: headers);
   }
 
   Future<http.Response> put(String path, dynamic data) async {
     final uri = Uri.parse('$baseUrl$path');
+    final headers = await _getHeaders();
     return await http.put(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: headers,
       body: data,
     );
   }
 
   Future<http.Response> patch(String path, dynamic data) async {
     final uri = Uri.parse('$baseUrl$path');
+    final headers = await _getHeaders();
     return await http.patch(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: headers,
       body: data,
     );
   }
@@ -46,7 +62,7 @@ class GlutenVoidApi {
   // Método para probar la conexión
   Future<void> testConnection() async {
     try {
-      final response = await get('/users');  // Asumiendo que el endpoint es '/test'
+      final response = await get('/users');
       if (response.statusCode == 200) {
         print("Conexión exitosa: ${response.body}");
       } else {

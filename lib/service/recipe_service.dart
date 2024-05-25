@@ -44,7 +44,7 @@ class RecipeService {
         '/recipes',
         jsonEncode(recipe.toJson())
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return true;
     } else {
       print("Failed to add recipe: ${response.statusCode} ${response.body}");
@@ -64,7 +64,7 @@ class RecipeService {
 
   Future<bool> deleteRecipe(int recipeId) async {
     var response = await glutenVoidApi.delete('/recipes/$recipeId');
-    return response.statusCode == 200;
+    return response.statusCode == 204;
   }
 }
 

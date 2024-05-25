@@ -64,10 +64,14 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
 
     final success = await UserService().register(newUser);
     if (success) {
-      _message = "Register successfull";
+      setState(() {
+        _message = "Register successful";
+      });
       context.go('/mainMenu'); // Usar GoRouter para navegar
     } else {
-      _message = "Failed to register. Please try again.";
+      setState(() {
+        _message = "Failed to register. Please try again.";
+      });
     }
     setState(() => _isLoading = false);
   }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 enum UserRole { admin, user }
-enum GlutenCondition {ALERGIC, INTOLERANT, SENSITIVE}
+enum GlutenCondition { Alergia, Celiaquia, Sensibilidad, Ninguna }
 
 class UserModel {
   final int? id;
@@ -22,7 +22,7 @@ class UserModel {
     required this.username,
     required this.password,
     this.profileBio,
-    this.glutenCondition = GlutenCondition.INTOLERANT,
+    this.glutenCondition = GlutenCondition.Ninguna,
     this.isAdmin = false,
   });
 
@@ -36,10 +36,10 @@ class UserModel {
       password: json['password'],
       profileBio: json['profileBio'],
       glutenCondition: GlutenCondition.values.firstWhere(
-            (e) => e.toString().split('.').last == json['glutenCondition'],
-        orElse: () => GlutenCondition.INTOLERANT,
+            (e) => e.toString().split('.').last.toUpperCase() == json['glutenCondition'].toString().toUpperCase(),
+        orElse: () => GlutenCondition.Ninguna,
       ),
-      isAdmin: json['admin'] as bool ?? false,
+      isAdmin: json['admin'] ?? false,
     );
   }
 
@@ -53,7 +53,7 @@ class UserModel {
       'password': password,
       if (profileBio != null) 'profileBio': profileBio,
       'glutenCondition': glutenCondition.toString().split('.').last,
-      'admin': isAdmin,
+      'isAdmin': isAdmin,
     };
   }
 }
