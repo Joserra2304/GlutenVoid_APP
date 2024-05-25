@@ -36,8 +36,14 @@ class UserController {
   }
 
   Future<UserModel?> attemptLogin(String username, String password) async {
-    return await userService.login(username, password);
+    try {
+      return await userService.login(username, password);
+    } catch (e) {
+      print("Login attempt failed: $e");
+      return null;
+    }
   }
+
 
   void logout(BuildContext context) {
     userService.logout(); // Llama al método logout del UserService
