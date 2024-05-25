@@ -90,7 +90,6 @@ class _MapViewState extends State<MapView> {
                   city: _city.text,
                   latitude: point.latitude,
                   longitude: point.longitude,
-                  rating: double.tryParse(_rating.text) ?? 0.0,
                   glutenFreeOption: glutenFree,
                 );
 

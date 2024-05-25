@@ -70,7 +70,6 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
     TextEditingController _telephone = TextEditingController(text: establishment.phoneNumber.toString());
     TextEditingController _address = TextEditingController(text: establishment.address);
     TextEditingController _city = TextEditingController(text: establishment.city);
-    TextEditingController _rating = TextEditingController(text: establishment.rating.toString());
     TextEditingController _glutenFreeOption = TextEditingController(text: establishment.glutenFreeOption.toString());
 
     var result = await showDialog<bool>(
@@ -87,7 +86,6 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                 TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
                 TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
                 TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
-                TextField(controller: _rating, decoration: InputDecoration(labelText: 'Calificación')),
                 TextField(controller: _glutenFreeOption, decoration: InputDecoration(labelText: '¿Opción Sin Gluten?')),
               ],
             ),
@@ -106,7 +104,6 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                   'phoneNumber': int.parse(_telephone.text),
                   'address': _address.text,
                   'city': _city.text,
-                  'rating': double.parse(_rating.text),
                   'glutenFreeOption': _glutenFreeOption.text.toLowerCase() == 'sí',
                 };
                 bool success = await widget.establishmentController.updateEstablishmentDetails(establishment.id, updates);

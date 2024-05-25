@@ -30,7 +30,7 @@ class RecipeModel {
         instructions: json['instructions'] ?? '',
         preparationTime: json['preparationTime'] ?? 0,
         approval: json['isApproved'] ?? false,
-        userId: json['userId'] ?? -1 // Usando -1 o cualquier otro valor predeterminado apropiado
+        userId: json['userId'] ?? -1
     );
   }
 
@@ -49,6 +49,8 @@ class RecipeModel {
 
   @override
   String toString() {
-    return 'RecipeModel{id: $id, name: $name, description: $description, ingredients: $ingredients, instructions: $instructions, preparationTime: $preparationTime, approval: $approval, userId: $userId}';
+    return 'RecipeModel{id: $id, name: $name, description: $description,'
+        ' ingredients: $ingredients, instructions: $instructions,'
+        ' preparationTime: $preparationTime, approval: $approval, userId: $userId}';
   }
 }

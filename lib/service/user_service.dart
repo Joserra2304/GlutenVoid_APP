@@ -50,11 +50,15 @@ class UserService {
       return false;
     }
   }
-
   Future<bool> updateUser(int userId, Map<String, dynamic> updates) async {
     final response = await glutenVoidApi.patch('/users/$userId', jsonEncode(updates));
+    print('Request body: ${jsonEncode(updates)}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
     return response.statusCode == 200;
   }
+
+
 
   Future<bool> deleteUser(int userId) async {
     final response = await glutenVoidApi.delete('/users/$userId');
@@ -113,13 +117,10 @@ class UserService {
     return null;
   }
 
-
-
-
-
   void logout() async {
     _currentUser = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
   }
 }
+

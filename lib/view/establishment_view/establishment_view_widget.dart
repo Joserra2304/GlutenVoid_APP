@@ -77,8 +77,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
         TextEditingController(text: establishment.address);
     TextEditingController _city =
         TextEditingController(text: establishment.city);
-    TextEditingController _rating =
-        TextEditingController(text: establishment.rating.toString());
     TextEditingController _glutenFreeOption =
         TextEditingController(text: establishment.glutenFreeOption.toString());
 
@@ -108,9 +106,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                     controller: _city,
                     decoration: InputDecoration(labelText: 'Ciudad')),
                 TextField(
-                    controller: _rating,
-                    decoration: InputDecoration(labelText: 'Calificación')),
-                TextField(
                     controller: _glutenFreeOption,
                     decoration:
                         InputDecoration(labelText: '¿Opción Sin Gluten?')),
@@ -131,7 +126,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                   'phoneNumber': int.parse(_telephone.text),
                   'address': _address.text,
                   'city': _city.text,
-                  'rating': double.parse(_rating.text),
                   'glutenFreeOption':
                       _glutenFreeOption.text.toLowerCase() == 'sí',
                 };

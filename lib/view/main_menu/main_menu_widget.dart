@@ -1,5 +1,6 @@
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:glutenvoid_app/view/register_view/register_view_widget.dart';
+import 'package:glutenvoid_app/view/widget/snackbar_messages.dart';
 
 import '../../controller/user_controller.dart';
 import '../../model/user_model.dart';
@@ -56,10 +57,12 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     if (_model.textController1!.text.isEmpty ||
         _model.textController2!.text.isEmpty) {
       _showErrorMessage('Por favor ingrese usuario y contraseña');
+      SnackbarMessages.showWarningSnackbar(
+          context, "Por favor ingrese usuario y contraseña");
       return;
     }
 
-    _showLoading(true); // Activa el indicador de carga
+    _showLoading(true);
 
     try {
       final UserModel? user = await _loginController.attemptLogin(
@@ -68,11 +71,17 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
       );
       if (user != null) {
         navigateBasedOnUserRole(user, context);
+        SnackbarMessages.showPositiveSnackbar(
+            context, "Bienvenido/a, ${user.name}");
       } else {
         _showErrorMessage("Usuario o contraseña incorrectos");
+        SnackbarMessages.showNegativeSnackbar(
+            context, "Usuario o contraseña incorrectos");
       }
     } catch (e) {
       _showErrorMessage("Error durante el inicio de sesión: $e");
+      SnackbarMessages.showNegativeSnackbar(
+          context, "Error durante el inicio de sesión");
     } finally {
       _showLoading(false);
     }
@@ -87,8 +96,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
   }
 
   Future<bool> _onWillPop() async {
-    FlutterExitApp
-        .exitApp();
+    FlutterExitApp.exitApp();
     return false;
   }
 

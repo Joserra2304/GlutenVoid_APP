@@ -1,3 +1,4 @@
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -10,6 +11,7 @@ import 'user_control_view_model.dart';
 import 'package:go_router/go_router.dart';
 
 class UserControlViewWidget extends StatefulWidget {
+
   const UserControlViewWidget({super.key});
 
   @override
@@ -107,11 +109,13 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                     isAdmin: false);
                 bool success = await _userController.registerUser(newUser);
                 if (success) {
+                  SnackbarMessages.showPositiveSnackbar(
+                      context, "Éxito al registrar usuario");
                   Navigator.of(context).pop();
                   _loadUsers();
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Error al registrar usuario.")));
+                  SnackbarMessages.showNegativeSnackbar(
+                      context, "Error al registrar en el registro");
                 }
               },
             ),
@@ -137,7 +141,6 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
               child: Text('Eliminar'),
               onPressed: () {
                 Navigator.of(context).pop(true);
-                print('borrado');
               },
             ),
           ],
@@ -152,11 +155,11 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
           _users.removeWhere((user) => user.id == id);
           _loadUsers();
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Usuario eliminado con éxito')));
+       SnackbarMessages.showPositiveSnackbar(
+           context, "Usuario eliminado con éxito");
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al eliminar el usuario')));
+        SnackbarMessages.showNegativeSnackbar(
+            context, "Error al eliminar el usuario");
       }
     }
   }
@@ -353,7 +356,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   FlutterFlowIconButton(
-                                    borderColor: FlutterFlowTheme.of(context).primary,
+                                    borderColor: FlutterFlowTheme.of(context).secondary,
                                     borderRadius: 20.0,
                                     borderWidth: 1.0,
                                     buttonSize: 40.0,
@@ -364,22 +367,9 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                       size: 24.0,
                                     ),
                                     onPressed: () {
-                                      context.pushNamed('UserProfileView', extra: {'id': user.id});
-                                    },
-                                  ),
-                                  FlutterFlowIconButton(
-                                    borderColor: FlutterFlowTheme.of(context).primary,
-                                    borderRadius: 20.0,
-                                    borderWidth: 1.0,
-                                    buttonSize: 40.0,
-                                    fillColor: FlutterFlowTheme.of(context).success,
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: FlutterFlowTheme.of(context).primaryText,
-                                      size: 24.0,
-                                    ),
-                                    onPressed: () {
-                                      // Acción de editar
+                                      GoRouter.of(context).goNamed(
+                                          'UserProfileView',
+                                          queryParameters: {'id': user.id.toString()});
                                     },
                                   ),
                                   FlutterFlowIconButton(
@@ -395,7 +385,6 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                     ),
                                     onPressed: () {
                                       _confirmDeletion(user.id!);
-                                      print(user.id!);
                                     },
                                   ),
                                 ],

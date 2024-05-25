@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
 import '../service/user_service.dart';

@@ -9,7 +9,6 @@ class EstablishmentModel {
   final String city;
   final double latitude;
   final double longitude;
-  final double rating;
   final bool glutenFreeOption;
 
   EstablishmentModel({
@@ -21,7 +20,6 @@ class EstablishmentModel {
     this.city = '',
     required this.latitude,
     required this.longitude,
-    this.rating = 0.0,
     this.glutenFreeOption = false,
   });
 
@@ -35,7 +33,6 @@ class EstablishmentModel {
       city: json['city'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      rating: json['rating'],
       glutenFreeOption: json['glutenFreeOption'],
     );
   }
@@ -50,7 +47,6 @@ class EstablishmentModel {
       'city': city,
       'latitude': latitude,
       'longitude': longitude,
-      'rating': rating,
       'glutenFreeOption': glutenFreeOption,
     };
   }

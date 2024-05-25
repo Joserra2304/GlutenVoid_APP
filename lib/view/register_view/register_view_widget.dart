@@ -1,5 +1,6 @@
 import '../../model/user_model.dart';
 import '../../service/user_service.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -66,11 +67,15 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
     if (success) {
       setState(() {
         _message = "Register successful";
+        SnackbarMessages.showPositiveSnackbar(
+            context, "Registro exitoso");
       });
-      context.go('/mainMenu'); // Usar GoRouter para navegar
+      context.go('/mainMenu');
     } else {
       setState(() {
         _message = "Failed to register. Please try again.";
+        SnackbarMessages.showNegativeSnackbar(
+            context, "Fallo en el registro");
       });
     }
     setState(() => _isLoading = false);
@@ -585,3 +590,5 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
     );
   }
 }
+
+

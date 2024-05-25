@@ -151,7 +151,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         );
       },
     ),
-
+    GoRoute(
+      name: 'UserProfileView',
+      path: '/userProfileView',
+      builder: (context, state) {
+        final userId = int.parse(state.uri.queryParameters['id']!);
+        return UserProfileViewWidget(userId: userId);
+      },
+    ),
     GoRoute(
       name: 'MapView',
       path: '/mapView',
@@ -159,11 +166,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         mapController: MapController(EstablishmentService(GlutenVoidApi())),
         establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
       ),
-    ),
-    GoRoute(
-      name: 'UserProfileView',
-      path: '/userProfileView',
-      builder: (context, state) => UserProfileViewWidget(),
     ),
     GoRoute(
       name: 'UserControlView',
