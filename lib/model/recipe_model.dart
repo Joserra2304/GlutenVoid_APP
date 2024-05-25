@@ -47,4 +47,8 @@ class RecipeModel {
     };
   }
 
+  @override
+  String toString() {
+    return 'RecipeModel{id: $id, name: $name, description: $description, ingredients: $ingredients, instructions: $instructions, preparationTime: $preparationTime, approval: $approval, userId: $userId}';
+  }
 }

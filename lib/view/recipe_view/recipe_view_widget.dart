@@ -67,6 +67,11 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             ElevatedButton(
               child: Text('Guardar'),
               onPressed: () async {
+                if (userService.currentUser?.id == null) {
+                  print("Error: Usuario no autenticado.");
+                  return;
+                }
+
                 bool isAdmin = userService.isAdmin;
                 RecipeModel newRecipe = RecipeModel(
                   id: 0, // ID se maneja en el backend
@@ -76,8 +81,12 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   instructions: _instructionsController.text,
                   preparationTime: int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: isAdmin,
-                  userId: userService.currentUser?.id ?? 0, // Assuming the current user ID is available
+                  userId: userService.currentUser?.id ?? 0,
                 );
+
+                // Utilizar Log para mostrar la información de la receta
+                print("Guardando receta: ${newRecipe.toString()}");
+                print("userId: ${newRecipe.userId}");
 
                 bool result = await widget.recipeController.addRecipe(newRecipe);
                 Navigator.of(context).pop();
