@@ -32,7 +32,7 @@ class CommonBottomAppBar extends StatelessWidget {
         var userService = UserService();
         var userId = userService.currentUser?.id;
         if (userId != null) {
-          GoRouter.of(parentContext).go('/userProfileView');
+          GoRouter.of(parentContext).go('/userProfileView?id=$userId');
         } else {
           print("No hay un usuario autenticado para mostrar el perfil");
         }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glutenvoid_app/controller/user_controller.dart';
 import 'package:glutenvoid_app/service/user_service.dart';
+import '../widget/bottom_app_bar.dart';
 import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -8,6 +9,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'user_profile_view_model.dart';
 import '../../model/user_model.dart';
+import '../../model/recipe_model.dart';
 
 class UserProfileViewWidget extends StatefulWidget {
   final int userId;
@@ -23,6 +25,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
   UserModel? _user;
   late UserController userController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  int _selectedIndex = 0;
 
   final List<String> glutenConditions = ['Alergia', 'Celiaquia', 'Sensibilidad', 'Ninguna'];
 
@@ -175,16 +178,68 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
       bool success = await userController.deleteUser(userId);
       if (success) {
         SnackbarMessages.showPositiveSnackbar(context, "Éxito al eliminar usuario");
-        context.pushNamed("UserControlView");
       } else {
         SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar usuario");
       }
     }
   }
 
+  Widget buildRecipeItem(RecipeModel recipe) {
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed('RecipeDetailsView', queryParameters: {'id': recipe.id.toString()});
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                FlutterFlowTheme.of(context).accent3,
+                FlutterFlowTheme.of(context).accent4,
+              ],
+              stops: [0.0, 1.0],
+              begin: AlignmentDirectional(0.0, -1.0),
+              end: AlignmentDirectional(0, 1.0),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  recipe.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  recipe.ingredients,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = UserService().currentUser;
+    final bool isViewingOwnProfile = currentUser != null && currentUser.id == widget.userId;
+    final bool isAdmin = currentUser?.isAdmin ?? false;
 
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
@@ -207,64 +262,60 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
               size: 30.0,
             ),
             onPressed: () async {
-              context.go('/userControlView');
+              if (isViewingOwnProfile && !isAdmin) {
+                context.go('/userView');
+              } else {
+                context.go('/userControlView');
+              }
             },
           ),
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Perfil del usuario',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  letterSpacing: 0.0,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primary,
-                    icon: Icon(
-                      Icons.edit,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      if (_user != null) {
-                        _showEditUserDialog(_user!);
-                      }
-                    },
-                  ),
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primary,
-                    icon: Icon(
-                      Icons.delete,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      if (_user != null) {
-                        _confirmDeletion(_user!.id!);
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
+          title: Text(
+            isViewingOwnProfile && !isAdmin ? 'Mi perfil sin gluten' : 'Perfil del usuario',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+              fontFamily: 'Outfit',
+              color: Colors.white,
+              fontSize: 18.0,
+              letterSpacing: 0.0,
+            ),
           ),
-          actions: [],
+          actions: isAdmin
+              ? [
+            FlutterFlowIconButton(
+              borderColor: FlutterFlowTheme.of(context).primary,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
+              fillColor: FlutterFlowTheme.of(context).primary,
+              icon: Icon(
+                Icons.edit,
+                color: FlutterFlowTheme.of(context).secondary,
+                size: 24.0,
+              ),
+              onPressed: () {
+                if (_user != null) {
+                  _showEditUserDialog(_user!);
+                }
+              },
+            ),
+            FlutterFlowIconButton(
+              borderColor: FlutterFlowTheme.of(context).primary,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
+              fillColor: FlutterFlowTheme.of(context).primary,
+              icon: Icon(
+                Icons.delete,
+                color: FlutterFlowTheme.of(context).secondary,
+                size: 24.0,
+              ),
+              onPressed: () {
+                if (_user != null) {
+                  _confirmDeletion(_user!.id!);
+                }
+              },
+            ),
+          ]
+              : [],
           centerTitle: false,
           elevation: 2.0,
         ),
@@ -379,7 +430,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                           ),
                         ),
                       ),
-                      if (currentUser != null && currentUser.isAdmin)
+                      if (isAdmin)
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -390,30 +441,14 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                 fontSize: 16.0,
                               ),
                             ),
-                            Switch(
-                              value: _user!.isAdmin,
-                              onChanged: (bool value) async {
-                                setState(() {
-                                  _user = UserModel(
-                                    id: _user!.id,
-                                    name: _user!.name,
-                                    surname: _user!.surname,
-                                    email: _user!.email,
-                                    username: _user!.username,
-                                    password: _user!.password,
-                                    profileBio: _user!.profileBio,
-                                    glutenCondition: _user!.glutenCondition,
-                                    isAdmin: value,
-                                    recipes: _user!.recipes,
-                                  );
-                                });
-                                // Save the new state using UserController
-                                Map<String, dynamic> updates = {
-                                  'admin': value, // Cambia 'isAdmin' a 'admin'
-                                };
-                                print('Attempting to update user with: $updates');
-                                bool success = await userController.updateUser(_user!.id!, updates);
-                                if (!success) {
+                            Container(
+                              decoration: BoxDecoration(
+                                color: _user!.isAdmin ? Colors.green.shade100 : Colors.red.shade100,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Switch(
+                                value: _user!.isAdmin,
+                                onChanged: (bool value) async {
                                   setState(() {
                                     _user = UserModel(
                                       id: _user!.id,
@@ -424,20 +459,68 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                       password: _user!.password,
                                       profileBio: _user!.profileBio,
                                       glutenCondition: _user!.glutenCondition,
-                                      isAdmin: !value,
+                                      isAdmin: value,
                                       recipes: _user!.recipes,
                                     );
                                   });
-                                  SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar estado de admin");
-                                } else {
-                                  SnackbarMessages.showPositiveSnackbar(context, "Estado de admin actualizado con éxito");
-                                }
-                              },
-                              activeColor: Colors.green, // Color del switch activo
-                              inactiveThumbColor: Colors.red, // Color del switch inactivo
+                                  // Save the new state using UserController
+                                  Map<String, dynamic> updates = {
+                                    'admin': value, // Cambia 'isAdmin' a 'admin'
+                                  };
+                                  print('Attempting to update user with: $updates');
+                                  bool success = await userController.updateUser(_user!.id!, updates);
+                                  if (!success) {
+                                    setState(() {
+                                      _user = UserModel(
+                                        id: _user!.id,
+                                        name: _user!.name,
+                                        surname: _user!.surname,
+                                        email: _user!.email,
+                                        username: _user!.username,
+                                        password: _user!.password,
+                                        profileBio: _user!.profileBio,
+                                        glutenCondition: _user!.glutenCondition,
+                                        isAdmin: !value,
+                                        recipes: _user!.recipes,
+                                      );
+                                    });
+                                    SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar estado de admin");
+                                  } else {
+                                    SnackbarMessages.showPositiveSnackbar(context, "Estado de admin actualizado con éxito");
+                                  }
+                                },
+                                activeColor: Colors.green, // Color del switch activo
+                                inactiveThumbColor: Colors.red, // Color del switch inactivo
+                              ),
                             ),
                           ],
                         ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
+                        child: FFButtonWidget(
+                          onPressed: () {
+                            // Navega a la página de recetas
+                            context.pushNamed('UserRecipesView', queryParameters: {'userId': _user!.id.toString()});
+                          },
+                          text: 'Ver Recetas',
+                          options: FFButtonOptions(
+                            height: 40.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
+                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              fontFamily: 'Readex Pro',
+                              color: Colors.white,
+                              letterSpacing: 0.0,
+                            ),
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -482,7 +565,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                           ],
                         ),
                       ),
-                      if (currentUser != null && !currentUser.isAdmin)
+                      if (currentUser != null && !isAdmin)
                         Padding(
                           padding: EdgeInsets.all(14.0),
                           child: Column(
@@ -553,6 +636,12 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
               ],
             ),
           ),
+        ),
+        bottomNavigationBar: isAdmin
+            ? null
+            : CommonBottomAppBar(
+          selectedIndex: _selectedIndex,
+          parentContext: context,
         ),
       ),
     );

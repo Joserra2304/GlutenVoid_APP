@@ -2,6 +2,7 @@ import 'package:glutenvoid_app/index.dart';
 import '../../controller/recipe_controller.dart';
 import '../../model/recipe_model.dart';
 import '../../service/user_service.dart';
+import '../widget/bottom_app_bar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -20,6 +21,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
   late Future<List<RecipeModel>> _recipes;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final userService = UserService();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -196,6 +198,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserService().isAdmin;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondary,
@@ -373,6 +376,12 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             },
           ),
         ),
+      ),
+      bottomNavigationBar: isAdmin
+          ? null
+          : CommonBottomAppBar(
+        selectedIndex: _selectedIndex,
+        parentContext: context,
       ),
     );
   }

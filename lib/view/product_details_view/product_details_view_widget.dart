@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:glutenvoid_app/service/user_service.dart';
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_model.dart';
 import '../../model/product_model.dart';
+import '../widget/bottom_app_bar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../service/barcode_scanner_service.dart';
 import '../../service/product_service.dart';
@@ -25,6 +27,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
   late ProductDetailsViewModel _model;
   late BarcodeScannerService barcodeScannerService;
   ProductModel? product;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserService().isAdmin;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -247,6 +251,12 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
               ],
             ),
           ),
+        ),
+        bottomNavigationBar: isAdmin
+            ? null
+            : CommonBottomAppBar(
+          selectedIndex: _selectedIndex,
+          parentContext: context,
         ),
       ),
     );

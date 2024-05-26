@@ -7,13 +7,12 @@ class RecipeController {
 
   RecipeController(this.recipeService);
 
-  // Fetch all recipes (approved and unapproved)
   Future<List<RecipeModel>> fetchApprovedRecipes() async {
-    return await recipeService.fetchRecipesByApproval(true);
+    return await recipeService.fetchApprovedRecipes();
   }
 
   Future<List<RecipeModel>> fetchPendingRecipes() async {
-    return await recipeService.fetchRecipesByApproval(false);
+    return await recipeService.fetchRecipesByApproval();
   }
 
   Future<RecipeModel> getRecipeById(int id) async {

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:glutenvoid_app/view/widget/snackbar_messages.dart';
 import '../../controller/establishment_controller.dart';
 import '../../model/establishment_model.dart';
 import '../../service/user_service.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'establishment_details_view_model.dart';
 
 export 'establishment_details_view_model.dart';
@@ -27,6 +25,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
   late EstablishmentDetailsViewModel _model;
   late Future<EstablishmentModel> _establishmentFuture;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _glutenFreeOption = false;
 
   @override
   void initState() {
@@ -39,6 +38,105 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
   void dispose() {
     _model.dispose();
     super.dispose();
+  }
+
+  Future<void> _showEditDialog(EstablishmentModel establishment) async {
+    TextEditingController _name = TextEditingController(text: establishment.name);
+    TextEditingController _description = TextEditingController(text: establishment.description);
+    TextEditingController _telephone = TextEditingController(text: establishment.phoneNumber.toString());
+    TextEditingController _address = TextEditingController(text: establishment.address);
+    TextEditingController _city = TextEditingController(text: establishment.city);
+    _glutenFreeOption = establishment.glutenFreeOption;
+
+    var result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Editar Restaurante"),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
+                    TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
+                    TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
+                    TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
+                    TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0), // Add top margin
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('¿Opción Sin Gluten?'),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _glutenFreeOption = !_glutenFreeOption;
+                              });
+                            },
+                            child: Container(
+                              width: 40.0, // Smaller width
+                              height: 25.0, // Smaller height
+                              decoration: BoxDecoration(
+                                color: _glutenFreeOption ? Colors.green : Colors.red,
+                                borderRadius: BorderRadius.circular(12.5), // Smaller radius
+                              ),
+                              child: Align(
+                                alignment: _glutenFreeOption ? Alignment.centerRight : Alignment.centerLeft,
+                                child: Container(
+                                  width: 20.0, // Smaller width
+                                  height: 20.0, // Smaller height
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0), // Smaller radius
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Cancelar'),
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+                TextButton(
+                  child: Text('Guardar Cambios'),
+                  onPressed: () async {
+                    Map<String, dynamic> updates = {
+                      'name': _name.text,
+                      'description': _description.text,
+                      'phoneNumber': int.parse(_telephone.text),
+                      'address': _address.text,
+                      'city': _city.text,
+                      'glutenFreeOption': _glutenFreeOption,
+                    };
+                    bool success = await widget.establishmentController.updateEstablishmentDetails(establishment.id, updates);
+                    Navigator.of(context).pop(success);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result == true) {
+      setState(() {
+        _establishmentFuture = widget.establishmentController.fetchEstablishmentDetails(widget.establishmentId);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento actualizado con éxito")));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Actualización fallida")));
+    }
   }
 
   Future<bool> _confirmDeletion() async {
@@ -62,67 +160,6 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
       },
     );
     return result ?? false;
-  }
-
-  Future<void> _showEditDialog(EstablishmentModel establishment) async {
-    TextEditingController _name = TextEditingController(text: establishment.name);
-    TextEditingController _description = TextEditingController(text: establishment.description);
-    TextEditingController _telephone = TextEditingController(text: establishment.phoneNumber.toString());
-    TextEditingController _address = TextEditingController(text: establishment.address);
-    TextEditingController _city = TextEditingController(text: establishment.city);
-    TextEditingController _glutenFreeOption = TextEditingController(text: establishment.glutenFreeOption.toString());
-
-    var result = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Editar Restaurante"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
-                TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
-                TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
-                TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
-                TextField(controller: _glutenFreeOption, decoration: InputDecoration(labelText: '¿Opción Sin Gluten?')),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
-              child: Text('Guardar Cambios'),
-              onPressed: () async {
-                Map<String, dynamic> updates = {
-                  'name': _name.text,
-                  'description': _description.text,
-                  'phoneNumber': int.parse(_telephone.text),
-                  'address': _address.text,
-                  'city': _city.text,
-                  'glutenFreeOption': _glutenFreeOption.text.toLowerCase() == 'sí',
-                };
-                bool success = await widget.establishmentController.updateEstablishmentDetails(establishment.id, updates);
-                Navigator.of(context).pop(success);
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-    if (result == true) {
-      setState(() {
-        _establishmentFuture = widget.establishmentController.fetchEstablishmentDetails(widget.establishmentId);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento actualizado con éxito")));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Actualización fallida")));
-    }
   }
 
   @override
@@ -149,7 +186,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               size: 30.0,
             ),
             onPressed: () async {
-              context.pushNamed('RecipeView');
+              context.pushNamed('EstablishmentView');
             },
           ),
           title: Row(
@@ -203,10 +240,12 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                         if (confirmed) {
                           bool success = await widget.establishmentController.deleteEstablishment(widget.establishmentId);
                           if (success) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Establecimiento eliminado con éxito')));
-                            Navigator.pop(context, true);
+                            SnackbarMessages.showPositiveSnackbar(
+                                context, "Establecimiento borrado con éxito");
+                            context.pushNamed("EstablishmentView");
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al eliminar el establecimiento')));
+                            SnackbarMessages.showNegativeSnackbar(
+                                context, "Error al eliminar el establecimiento");
                           }
                         }
                       },
@@ -399,7 +438,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                                     width: 50.0,
                                     height: 50.0,
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context).success,
+                                      color: establishment.glutenFreeOption ? FlutterFlowTheme.of(context).success : FlutterFlowTheme.of(context).error,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Align(
