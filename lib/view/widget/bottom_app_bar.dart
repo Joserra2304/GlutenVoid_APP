@@ -26,9 +26,12 @@ class CommonBottomAppBar extends StatelessWidget {
         GoRouter.of(parentContext).go('/recipeView');
         break;
       case 2:
-        GoRouter.of(parentContext).go('/mapView');
+        GoRouter.of(parentContext).go('/userView');
         break;
       case 3:
+        GoRouter.of(parentContext).go('/mapView');
+        break;
+      case 4:
         var userService = UserService();
         var userId = userService.currentUser?.id;
         if (userId != null) {
@@ -48,7 +51,7 @@ class CommonBottomAppBar extends StatelessWidget {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       notchMargin: 6.0,
-      color: primaryColor,
+      color: Colors.purple[700],
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -71,19 +74,27 @@ class CommonBottomAppBar extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(
-              Icons.restaurant_menu,
+              Icons.home,
               color:
-                  selectedIndex == 2 ? secondaryColor : const Color(0xFFe9d7ac),
+              selectedIndex == 2 ? secondaryColor : const Color(0xFFe9d7ac),
             ),
             onPressed: () => _onItemTapped(2),
           ),
           IconButton(
             icon: Icon(
-              Icons.person,
+              Icons.restaurant_menu,
               color:
                   selectedIndex == 3 ? secondaryColor : const Color(0xFFe9d7ac),
             ),
             onPressed: () => _onItemTapped(3),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.person,
+              color:
+                  selectedIndex == 4 ? secondaryColor : const Color(0xFFe9d7ac),
+            ),
+            onPressed: () => _onItemTapped(4),
           ),
         ],
       ),

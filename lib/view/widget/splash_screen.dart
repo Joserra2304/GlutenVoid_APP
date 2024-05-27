@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          FlutterFlowTheme.of(context).secondary, // Usar color secundario
+          Colors.transparent, // Usar color secundario
       appBar: AppBar(
         backgroundColor:
             FlutterFlowTheme.of(context).primary, // Usar color primario
