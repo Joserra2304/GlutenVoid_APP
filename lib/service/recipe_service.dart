@@ -20,8 +20,18 @@ class RecipeService {
     return _instance!;
   }
 
-  Future<List<RecipeModel>> fetchRecipesByApproval(bool isApproved) async {
-    var response = await glutenVoidApi.get('/recipes?isApproved=$isApproved');
+  Future<List<RecipeModel>> fetchApprovedRecipes() async {
+    var response = await glutenVoidApi.get('/recipes?approved=true');
+    if (response.statusCode == 200) {
+      List<dynamic> recipesJson = jsonDecode(response.body);
+      return recipesJson.map((json) => RecipeModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load recipes');
+    }
+  }
+
+  Future<List<RecipeModel>> fetchRecipesByApproval() async {
+    var response = await glutenVoidApi.get('/recipes?approved=false');
     if (response.statusCode == 200) {
       List<dynamic> recipesJson = jsonDecode(response.body);
       return recipesJson.map((json) => RecipeModel.fromJson(json)).toList();
@@ -38,6 +48,18 @@ class RecipeService {
       throw Exception('Failed to load recipe');
     }
   }
+
+  Future<List<RecipeModel>> getRecipeByUserId(int userId) async {
+    final response = await glutenVoidApi.get('/recipes?userId=$userId');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => RecipeModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load recipes');
+    }
+  }
+
+
 
   Future<bool> addRecipe(RecipeModel recipe) async {
     var response = await glutenVoidApi.post(
@@ -58,7 +80,8 @@ class RecipeService {
   }
 
   Future<bool> approveRecipe(int recipeId) async {
-    final response = await glutenVoidApi.patch('/recipes/$recipeId', jsonEncode({'approval': true}));
+    final response = await glutenVoidApi.patch('/recipes/$recipeId'
+        , jsonEncode({'approvedRecipe': true}));
     return response.statusCode == 200;
   }
 

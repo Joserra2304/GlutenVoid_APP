@@ -66,97 +66,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
     return result ?? false;
   }
 
-  Future<void> _showEditDialog(EstablishmentModel establishment) async {
-    TextEditingController _name =
-        TextEditingController(text: establishment.name);
-    TextEditingController _description =
-        TextEditingController(text: establishment.description);
-    TextEditingController _telephone =
-        TextEditingController(text: establishment.phoneNumber.toString());
-    TextEditingController _address =
-        TextEditingController(text: establishment.address);
-    TextEditingController _city =
-        TextEditingController(text: establishment.city);
-    TextEditingController _rating =
-        TextEditingController(text: establishment.rating.toString());
-    TextEditingController _glutenFreeOption =
-        TextEditingController(text: establishment.glutenFreeOption.toString());
-
-    var result = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Editar Restaurante"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                    controller: _name,
-                    decoration:
-                        InputDecoration(labelText: 'Nombre del Restaurante')),
-                TextField(
-                    controller: _description,
-                    decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(
-                    controller: _telephone,
-                    decoration: InputDecoration(labelText: 'Teléfono')),
-                TextField(
-                    controller: _address,
-                    decoration: InputDecoration(labelText: 'Dirección')),
-                TextField(
-                    controller: _city,
-                    decoration: InputDecoration(labelText: 'Ciudad')),
-                TextField(
-                    controller: _rating,
-                    decoration: InputDecoration(labelText: 'Calificación')),
-                TextField(
-                    controller: _glutenFreeOption,
-                    decoration:
-                        InputDecoration(labelText: '¿Opción Sin Gluten?')),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
-              child: Text('Guardar Cambios'),
-              onPressed: () async {
-                Map<String, dynamic> updates = {
-                  'name': _name.text,
-                  'description': _description.text,
-                  'phoneNumber': int.parse(_telephone.text),
-                  'address': _address.text,
-                  'city': _city.text,
-                  'rating': double.parse(_rating.text),
-                  'glutenFreeOption':
-                      _glutenFreeOption.text.toLowerCase() == 'sí',
-                };
-                bool success = await widget.establishmentController
-                    .updateEstablishmentDetails(establishment.id, updates);
-                Navigator.of(context).pop(success);
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-    if (result == true) {
-      setState(() {
-        // Refresh the list or item details
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Establecimiento actualizado con éxito")));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Actualización fallida")));
-    }
-  }
-
   void _flipCard(int index) {
     for (int i = 0; i < _cardKeys.length; i++) {
       if (i != index && _cardKeys[i].currentState!.isFront == false) {
@@ -393,26 +302,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                                           onPressed: () {
                                             _navigateToDetails(
                                                 establishment.id);
-                                          },
-                                        ),
-                                        FlutterFlowIconButton(
-                                          borderColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                          borderRadius: 20.0,
-                                          borderWidth: 1.0,
-                                          buttonSize: 40.0,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .success,
-                                          icon: Icon(
-                                            Icons.edit,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            size: 24.0,
-                                          ),
-                                          onPressed: () {
-                                            _showEditDialog(establishment);
                                           },
                                         ),
                                         FlutterFlowIconButton(

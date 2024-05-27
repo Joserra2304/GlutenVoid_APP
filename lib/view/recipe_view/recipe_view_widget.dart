@@ -2,6 +2,7 @@ import 'package:glutenvoid_app/index.dart';
 import '../../controller/recipe_controller.dart';
 import '../../model/recipe_model.dart';
 import '../../service/user_service.dart';
+import '../widget/bottom_app_bar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,8 +10,9 @@ import 'package:flutter/material.dart';
 
 class RecipeViewWidget extends StatefulWidget {
   final RecipeController recipeController;
+  final int? userId;
 
-  const RecipeViewWidget({super.key, required this.recipeController});
+  const RecipeViewWidget({super.key, required this.recipeController, this.userId});
 
   @override
   State<RecipeViewWidget> createState() => _RecipeViewWidgetState();
@@ -20,6 +22,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
   late Future<List<RecipeModel>> _recipes;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final userService = UserService();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -29,7 +32,11 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
   void _refreshRecipes() {
     setState(() {
-      _recipes = widget.recipeController.fetchApprovedRecipes();
+      if (widget.userId != null) {
+        _recipes = widget.recipeController.getRecipesByUserId(widget.userId!);
+      } else {
+        _recipes = widget.recipeController.fetchApprovedRecipes();
+      }
     });
   }
 
@@ -82,6 +89,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   preparationTime: int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: isAdmin,
                   userId: userService.currentUser?.id ?? 0,
+                  username: userService.currentUser?.username ?? '', // Añadir nombre de usuario
                 );
 
                 // Utilizar Log para mostrar la información de la receta
@@ -149,6 +157,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   preparationTime: int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: recipe.approval,
                   userId: recipe.userId,
+                  username: recipe.username, // Mantener nombre de usuario
                 );
 
                 bool result = await widget.recipeController.updateRecipe(recipe.id, updatedRecipe.toJson());
@@ -196,6 +205,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserService().isAdmin;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondary,
@@ -326,6 +336,15 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                                 letterSpacing: 0.0,
                               ),
                             ),
+                            subtitle: Text(
+                              recipe.username,
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Outfit',
+                                color: FlutterFlowTheme.of(context).secondary,
+                                letterSpacing: 0.0,
+                              ),
+                            ),
                             tileColor: FlutterFlowTheme.of(context).secondaryBackground,
                             dense: false,
                             onTap: () async {
@@ -373,6 +392,12 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             },
           ),
         ),
+      ),
+      bottomNavigationBar: isAdmin
+          ? null
+          : CommonBottomAppBar(
+        selectedIndex: _selectedIndex,
+        parentContext: context,
       ),
     );
   }

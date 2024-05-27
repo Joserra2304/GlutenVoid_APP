@@ -6,6 +6,8 @@ import 'package:glutenvoid_app/controller/recipe_controller.dart';
 import 'package:glutenvoid_app/model/recipe_model.dart';
 import 'package:glutenvoid_app/service/user_service.dart';
 
+import '../widget/bottom_app_bar.dart';
+
 class RecipeDetailsViewWidget extends StatefulWidget {
   final int recipeId;
   final RecipeController recipeController;
@@ -19,6 +21,7 @@ class RecipeDetailsViewWidget extends StatefulWidget {
 class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
   late Future<RecipeModel> _recipeFuture;
   final userService = UserService();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -126,6 +129,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserService().isAdmin;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -386,7 +390,14 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
             },
           ),
         ),
+        bottomNavigationBar: isAdmin
+            ? null
+            : CommonBottomAppBar(
+          selectedIndex: _selectedIndex,
+          parentContext: context,
+        ),
       ),
+
     );
   }
 }

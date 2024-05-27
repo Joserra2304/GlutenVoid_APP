@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'recipe_model.dart';
+
 enum UserRole { admin, user }
 enum GlutenCondition { Alergia, Celiaquia, Sensibilidad, Ninguna }
 
@@ -13,6 +15,7 @@ class UserModel {
   final String? profileBio;
   final GlutenCondition glutenCondition;
   final bool isAdmin;
+  final List<RecipeModel> recipes;
 
   UserModel({
     this.id,
@@ -24,6 +27,7 @@ class UserModel {
     this.profileBio,
     this.glutenCondition = GlutenCondition.Ninguna,
     this.isAdmin = false,
+    this.recipes = const [],
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -39,7 +43,10 @@ class UserModel {
             (e) => e.toString().split('.').last.toUpperCase() == json['glutenCondition'].toString().toUpperCase(),
         orElse: () => GlutenCondition.Ninguna,
       ),
-      isAdmin: json['admin'] ?? false,
+      isAdmin: json['admin'] ?? false, // Cambia 'isAdmin' a 'admin'
+      recipes: (json['recipes'] as List<dynamic>?)
+          ?.map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
     );
   }
 
@@ -53,7 +60,9 @@ class UserModel {
       'password': password,
       if (profileBio != null) 'profileBio': profileBio,
       'glutenCondition': glutenCondition.toString().split('.').last,
-      'isAdmin': isAdmin,
+      'admin': isAdmin,
+      'recipes': recipes.map((recipe) => recipe.toJson()).toList(),
     };
   }
 }
+

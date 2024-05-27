@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
 import '../service/user_service.dart';
@@ -35,9 +31,9 @@ class UserController {
     return userService.updateUser(id, updates);
   }
 
-  Future<UserModel?> attemptLogin(String username, String password) async {
+  Future<UserModel?> attemptLogin(String username, String password, BuildContext context) async {
     try {
-      return await userService.login(username, password);
+      return await userService.login(username, password, context);
     } catch (e) {
       print("Login attempt failed: $e");
       return null;

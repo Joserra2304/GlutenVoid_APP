@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../controller/establishment_controller.dart';
 import '../../controller/map_controller.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/establishment_model.dart';
-import '../../service/glutenvoid_api_service.dart';
 import '../../service/user_service.dart';
+import 'bottom_app_bar.dart';
 
 class MapView extends StatefulWidget {
   final MapController mapController;
@@ -22,6 +21,8 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   final TextEditingController _addressController = TextEditingController();
   Set<Marker> markers = {};
+  int _selectedIndex = 0;
+  bool _glutenFreeOption = false;
 
   void _onMapCreated(GoogleMapController controller) {
     widget.mapController.setMapController(controller);
@@ -54,76 +55,110 @@ class _MapViewState extends State<MapView> {
     TextEditingController _telephone = TextEditingController();
     TextEditingController _address = TextEditingController();
     TextEditingController _city = TextEditingController();
-    TextEditingController _rating = TextEditingController();
-    TextEditingController _glutenFreeOption = TextEditingController();
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Información del Restaurante'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
-                TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
-                TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
-                TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
-                TextField(controller: _rating, decoration: InputDecoration(labelText: 'Calificación')),
-                TextField(controller: _glutenFreeOption, decoration: InputDecoration(labelText: '¿Opción Sin Gluten?')),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: Text('Guardar'),
-              onPressed: () async {
-                bool glutenFree = _glutenFreeOption.text.toLowerCase() == 'sí' || _glutenFreeOption.text.toLowerCase() == 'si';
-                EstablishmentModel newEstablishment = EstablishmentModel(
-                  id: 0, // ID se maneja en el backend
-                  name: _name.text,
-                  description: _description.text,
-                  phoneNumber: int.tryParse(_telephone.text) ?? 0,
-                  address: _address.text,
-                  city: _city.text,
-                  latitude: point.latitude,
-                  longitude: point.longitude,
-                  rating: double.tryParse(_rating.text) ?? 0.0,
-                  glutenFreeOption: glutenFree,
-                );
-
-                bool result = await widget.establishmentController.registerEstablishment(newEstablishment);
-                if (result) {
-                  setState(() {
-                    markers.add(
-                      Marker(
-                        markerId: MarkerId(point.toString()),
-                        position: point,
-                        infoWindow: InfoWindow(
-                          title: _name.text,
-                          snippet: "pulsa para más detalles",
-                          onTap: () => openEstablishmentDetails(newEstablishment.id),
-                        ),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Información del Restaurante'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
+                    TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
+                    TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
+                    TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
+                    TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0), // Add top margin
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('¿Opción Sin Gluten?'),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _glutenFreeOption = !_glutenFreeOption;
+                              });
+                            },
+                            child: Container(
+                              width: 40.0, // Smaller width
+                              height: 25.0, // Smaller height
+                              decoration: BoxDecoration(
+                                color: _glutenFreeOption ? Colors.green : Colors.red,
+                                borderRadius: BorderRadius.circular(12.5), // Smaller radius
+                              ),
+                              child: Align(
+                                alignment: _glutenFreeOption ? Alignment.centerRight : Alignment.centerLeft,
+                                child: Container(
+                                  width: 20.0, // Smaller width
+                                  height: 20.0, // Smaller height
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0), // Smaller radius
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Guardar'),
+                  onPressed: () async {
+                    bool glutenFree = _glutenFreeOption;
+                    EstablishmentModel newEstablishment = EstablishmentModel(
+                      id: 0, // ID se maneja en el backend
+                      name: _name.text,
+                      description: _description.text,
+                      phoneNumber: int.tryParse(_telephone.text) ?? 0,
+                      address: _address.text,
+                      city: _city.text,
+                      latitude: point.latitude,
+                      longitude: point.longitude,
+                      glutenFreeOption: glutenFree,
                     );
-                  });
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento guardado con éxito!")));
-                } else {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al guardar el establecimiento.")));
-                }
-              },
-            ),
-            ElevatedButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+
+                    bool result = await widget.establishmentController.registerEstablishment(newEstablishment);
+                    if (result) {
+                      setState(() {
+                        markers.add(
+                          Marker(
+                            markerId: MarkerId(point.toString()),
+                            position: point,
+                            infoWindow: InfoWindow(
+                              title: _name.text,
+                              snippet: "Pulsa para más detalles",
+                              onTap: () => openEstablishmentDetails(newEstablishment.id),
+                            ),
+                          ),
+                        );
+                      });
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento guardado con éxito!")));
+                    } else {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al guardar el establecimiento.")));
+                    }
+                  },
+                ),
+                TextButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     ).then((_) => loadEstablishmentMarkers());
@@ -138,6 +173,7 @@ class _MapViewState extends State<MapView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserService().isAdmin;
     return Scaffold(
       backgroundColor: FlutterFlowTheme.of(context).info,
       appBar: AppBar(
@@ -196,6 +232,12 @@ class _MapViewState extends State<MapView> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: isAdmin
+          ? null
+          : CommonBottomAppBar(
+        selectedIndex: _selectedIndex,
+        parentContext: context,
       ),
     );
   }

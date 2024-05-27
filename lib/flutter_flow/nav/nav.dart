@@ -108,7 +108,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       name: 'RecipeView',
       path: '/recipeView',
       builder: (context, state) => RecipeViewWidget(
-        recipeController: RecipeController(RecipeService(GlutenVoidApi()))),
+        recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+      ),
+    ),
+
+    GoRoute(
+      name: 'UserRecipesView',
+      path: '/userRecipesView',
+      builder: (context, state) {
+        final userIdParam = state.uri.queryParameters['userId'];
+        if (userIdParam != null) {
+          final userId = int.tryParse(userIdParam);
+          if (userId != null) {
+            return RecipeViewWidget(
+              recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+              userId: userId,
+            );
+          }
+        }
+        // Considera mostrar una página de error o redireccionar si el userId no es válido
+        print("Error: userId is null or not a number.");
+        return RecipeViewWidget(
+          recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+        );
+      },
     ),
 
     GoRoute(
@@ -151,7 +174,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         );
       },
     ),
-
+    GoRoute(
+      name: 'UserProfileView',
+      path: '/userProfileView',
+      builder: (context, state) {
+        final userId = int.parse(state.uri.queryParameters['id']!);
+        return UserProfileViewWidget(userId: userId);
+      },
+    ),
     GoRoute(
       name: 'MapView',
       path: '/mapView',
@@ -159,11 +189,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         mapController: MapController(EstablishmentService(GlutenVoidApi())),
         establishmentController: EstablishmentController(EstablishmentService(GlutenVoidApi())),
       ),
-    ),
-    GoRoute(
-      name: 'UserProfileView',
-      path: '/userProfileView',
-      builder: (context, state) => UserProfileViewWidget(),
     ),
     GoRoute(
       name: 'UserControlView',
