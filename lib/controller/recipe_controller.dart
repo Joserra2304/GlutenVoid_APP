@@ -18,6 +18,10 @@ class RecipeController {
   Future<RecipeModel> getRecipeById(int id) async {
     return await recipeService.getRecipeById(id);
   }
+  Future<List<RecipeModel>> getRecipesByUserId(int userId) {
+    return recipeService.getRecipeByUserId(userId);
+  }
+
 
   // Add a new recipe
   Future<bool> addRecipe(RecipeModel recipe) async {

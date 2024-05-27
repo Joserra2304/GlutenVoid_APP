@@ -87,7 +87,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).secondary,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
@@ -154,25 +154,6 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'PRODUCTOS',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 2.0),
-                _isLoadingProducts
-                    ? Center(child: CircularProgressIndicator())
-                    : buildSection<ProductModel>(
-                  context: context,
-                  icon: Icons.shopping_cart,
-                  title: 'Productos',
-                  items: productController.products,
-                  buildItem: buildProductItem,
-                ),
-                SizedBox(height: 16.0),
-                Text(
                   'RECETAS',
                   style: TextStyle(
                     fontSize: 20.0,
@@ -204,6 +185,25 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                   title: 'Establecimientos',
                   items: establishmentController.establishments,
                   buildItem: buildEstablishmentItem,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'PRODUCTOS',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 2.0),
+                _isLoadingProducts
+                    ? Center(child: CircularProgressIndicator())
+                    : buildSection<ProductModel>(
+                  context: context,
+                  icon: Icons.shopping_cart,
+                  title: 'Productos',
+                  items: productController.products,
+                  buildItem: buildProductItem,
                 ),
               ],
             ),

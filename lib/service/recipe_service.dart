@@ -49,6 +49,18 @@ class RecipeService {
     }
   }
 
+  Future<List<RecipeModel>> getRecipeByUserId(int userId) async {
+    final response = await glutenVoidApi.get('/recipes?userId=$userId');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => RecipeModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load recipes');
+    }
+  }
+
+
+
   Future<bool> addRecipe(RecipeModel recipe) async {
     var response = await glutenVoidApi.post(
         '/recipes',

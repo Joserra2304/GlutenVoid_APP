@@ -499,8 +499,12 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                         padding: EdgeInsets.symmetric(vertical: 20.0),
                         child: FFButtonWidget(
                           onPressed: () {
-                            // Navega a la página de recetas
-                            context.pushNamed('UserRecipesView', queryParameters: {'userId': _user!.id.toString()});
+                            if (_user != null) {
+                              context.go('/userRecipesView?userId=${_user!.id}');
+                            } else {
+                              SnackbarMessages.showNegativeSnackbar(
+                                  context, "Este usuario no tiene recetas agregadas");
+                            }
                           },
                           text: 'Ver Recetas',
                           options: FFButtonOptions(

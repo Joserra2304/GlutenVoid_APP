@@ -1,4 +1,6 @@
-import 'package:flutter/rendering.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,18 +9,23 @@ import '/service/glutenvoid_api_service.dart';
 
 class UserService {
   static final UserService _singleton = UserService._internal();
-
   final GlutenVoidApi glutenVoidApi;
-
   UserModel? _currentUser;
   bool get isAdmin => _currentUser?.isAdmin ?? false;
   UserModel? get currentUser => _currentUser;
+  Timer? _tokenTimer;
 
   factory UserService() {
     return _singleton;
   }
 
   UserService._internal() : glutenVoidApi = GlutenVoidApi();
+
+  Future<void> saveTokenAndExpiration(String token, int expiresAt) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('jwt', token);
+    await prefs.setInt('tokenExpiryTime', expiresAt);
+  }
 
   Future<List<UserModel>> fetchAllUsers() async {
     final response = await glutenVoidApi.get('/users');
@@ -50,6 +57,7 @@ class UserService {
       return false;
     }
   }
+
   Future<bool> updateUser(int userId, Map<String, dynamic> updates) async {
     final response = await glutenVoidApi.patch('/users/$userId', jsonEncode(updates));
     print('Request body: ${jsonEncode(updates)}');
@@ -58,14 +66,12 @@ class UserService {
     return response.statusCode == 200;
   }
 
-
-
   Future<bool> deleteUser(int userId) async {
     final response = await glutenVoidApi.delete('/users/$userId');
     return response.statusCode == 204;
   }
 
-  Future<UserModel?> login(String username, String password) async {
+  Future<UserModel?> login(String username, String password, BuildContext context) async {
     try {
       final response = await glutenVoidApi.post('/users/login', jsonEncode({
         'username': username,
@@ -76,34 +82,28 @@ class UserService {
         var data = jsonDecode(response.body);
         print("Response data: $data");  // Log para depuración
 
-        // Verificar si el token está presente y no es nulo
         String? jwtToken = data['jwt'];
-        if (jwtToken != null) {
+        int? expiresAt = data['expiresAt'];
+        if (jwtToken != null && expiresAt != null) {
+          await saveTokenAndExpiration(jwtToken, expiresAt);
           print("JWT Token: $jwtToken");  // Log para depuración
+          _startTokenTimer(context, expiresAt - DateTime.now().millisecondsSinceEpoch);
 
-          // Verificar si los datos del usuario están presentes y no son nulos
           if (data.containsKey('user') && data['user'] != null) {
             Map<String, dynamic> userJson = data['user'];
             print("User JSON: $userJson");  // Log para depuración
 
-            // Crear el UserModel desde el campo 'user' en la respuesta
             _currentUser = UserModel.fromJson(userJson);
-
-            // Verificar que _currentUser no sea nulo antes de llamar a toJson
             if (_currentUser != null) {
               print("User Data: ${_currentUser!.toJson()}");  // Log para depuración
             }
-
-            // Almacenar el token JWT
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString('jwt', jwtToken);
 
             return _currentUser;
           } else {
             print("Error: 'user' key is missing or null in the response data");
           }
         } else {
-          print("No token found in the response");
+          print("No token or expiration info found in the response");
         }
       } else {
         print("Login failed with status: ${response.statusCode}");
@@ -117,10 +117,36 @@ class UserService {
     return null;
   }
 
+  void _startTokenTimer(BuildContext context, int expiryDuration) {
+    _tokenTimer?.cancel();  // Cancela cualquier timer existente
+    _tokenTimer = Timer(Duration(milliseconds: expiryDuration - 5000), () => _showTokenExpiryAlert(context));  // 5 segundos antes de que expire
+  }
+
+  void _showTokenExpiryAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Session Expiry"),
+          content: Text("Your session is about to expire. Please log in again to continue."),
+          actions: [
+            TextButton(
+              child: Text("Renew Session"),
+              onPressed: () {
+                Navigator.of(context).pop();  // Cierra el diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void logout() async {
     _currentUser = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
+    await prefs.remove('tokenExpiryTime'); // Asegúrate de eliminar el tiempo de expiración
+    _tokenTimer?.cancel(); // Cancela el temporizador del token
   }
 }
-

@@ -9,6 +9,7 @@ class RecipeModel {
   final int preparationTime;
   final bool approval;
   final int userId;
+  final String username;
 
   RecipeModel({
     required this.id,
@@ -19,7 +20,8 @@ class RecipeModel {
     required this.preparationTime,
     required this.approval,
     required this.userId,
-  });
+    required this.username,
+});
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
@@ -30,7 +32,8 @@ class RecipeModel {
         instructions: json['instructions'] ?? '',
         preparationTime: json['preparationTime'] ?? 0,
         approval: json['isApproved'] ?? false,
-        userId: json['userId'] ?? -1
+        userId: json['userId'] ?? -1,
+        username: json['username'] ?? '',
     );
   }
 
@@ -43,7 +46,8 @@ class RecipeModel {
       'instructions': instructions,
       'preparationTime': preparationTime,
       'isApproved': approval,
-      'userId': userId  // Asegúrate de incluir esto si es necesario
+      'userId': userId,
+      'username': username,
     };
   }
 
