@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:glutenvoid_app/index.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../flutter_flow/flutter_flow_theme.dart';
@@ -10,22 +9,22 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
 
+    // Inicializa el AnimationController
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(
-          seconds: 5), // Puedes ajustar la duración de la animación aquí
-    )..repeat(); // Hace que la animación gire constantemente
+      duration: Duration(seconds: 5),
+    )..repeat(period: Duration(seconds: 3)); // Hace que la animación se repita cada 3 segundos
 
+    // Navega a la página principal después de 5 segundos
     Future.delayed(Duration(seconds: 5), () {
-      context.go('/mainMenu'); // Navegación usando GoRouter
+      context.go('/mainMenu');
     });
   }
 
@@ -38,11 +37,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Colors.transparent, // Usar color secundario
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor:
-            FlutterFlowTheme.of(context).primary, // Usar color primario
+        backgroundColor: FlutterFlowTheme.of(context).primary,
         title: const Text(
           "Gluten Void",
           style: TextStyle(color: Colors.white),
@@ -58,14 +55,13 @@ class _SplashScreenState extends State<SplashScreen>
                 turns: _animationController,
                 child: Transform.scale(
                   scale: 0.4, // Puedes ajustar el tamaño aquí
-                  child: Image.asset('assets/images/gv_animated.gif'),
+                  child: Image.asset('assets/images/gluten_void_logo.png'),
                 ),
               ),
               Text('Absorbiendo gluten...', style: TextStyle(
                   fontSize: 20,
                   color: Colors.black)
               ),
-              // Texto justo debajo de la imagen
             ],
           ),
         ),

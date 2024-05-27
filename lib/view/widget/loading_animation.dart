@@ -14,7 +14,7 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 2),
     )..repeat();
   }
 
@@ -34,7 +34,7 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
             turns: _animationController,
             child: Transform.scale(
               scale: 0.4,
-              child: Image.asset('assets/images/gv_animated.gif'),
+              child: Image.asset('assets/images/gluten_void_logo.png'),
             ),
           ),
           Text('Absorbiendo gluten...', style: TextStyle(

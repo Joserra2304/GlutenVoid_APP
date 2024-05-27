@@ -143,7 +143,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
         onWillPop: _onWillPop,
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).secondary,
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).primary,
             automaticallyImplyLeading: false,

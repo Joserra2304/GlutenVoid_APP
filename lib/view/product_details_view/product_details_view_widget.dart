@@ -56,7 +56,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,

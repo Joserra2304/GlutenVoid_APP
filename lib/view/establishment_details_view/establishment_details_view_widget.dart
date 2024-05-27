@@ -171,7 +171,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).secondary,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,

@@ -208,7 +208,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
     final bool isAdmin = UserService().isAdmin;
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondary,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,

@@ -183,7 +183,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).secondary,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
@@ -270,8 +270,8 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      FlutterFlowTheme.of(context).accent3,
-                                      FlutterFlowTheme.of(context).accent4
+                                      Color(0xFF6A1B9A),
+                                      Color(0xFF8E24AA),
                                     ],
                                     stops: [0.0, 1.0],
                                     begin: AlignmentDirectional(0.0, -1.0),
@@ -342,8 +342,8 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    FlutterFlowTheme.of(context).accent4,
-                                    FlutterFlowTheme.of(context).accent4Dark,
+                                    Color(0xFF7B1FA2),
+                                    Color(0xFF9C27B0),
                                   ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(0.0, -1.0),

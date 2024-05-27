@@ -133,7 +133,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: FlutterFlowTheme.of(context).secondary,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
