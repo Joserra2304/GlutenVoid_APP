@@ -1,6 +1,7 @@
 import '../../controller/recipe_controller.dart';
 import '../../model/recipe_model.dart';
 import '../../service/user_service.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -37,12 +38,10 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
   void _approveRecipe(int id) async {
     bool success = await widget.recipeController.approveRecipe(id);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Receta aprobada con éxito")));
+      SnackbarMessages.showPositiveSnackbar(context, "Receta aprobada con éxito");
       _refreshUnapprovedRecipes();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("No se pudo aprobar la receta")));
+      SnackbarMessages.showNegativeSnackbar(context, "No se pudo aprobar la receta");
     }
   }
 
@@ -167,7 +166,7 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Material(
-                        color: Colors.transparent,
+                        color: Color(0xFF9575CD),
                         elevation: 5.0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22.0),
@@ -182,11 +181,8 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                               width: double.infinity,
                               height: 100.0,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    FlutterFlowTheme.of(context).accent3,
-                                    FlutterFlowTheme.of(context).accent4
-                                  ],
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF9575CD), Color(0xFFB39DDB)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(0.0, -1.0),
                                   end: AlignmentDirectional(0, 1.0),
@@ -293,7 +289,7 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                                     size: 24.0,
                                   ),
                                   onPressed: () {
-                                    //_navigateToDetails(recipe.id);
+                                   context.go("/recipeDetailsView");
                                   },
                                 ),
                                 FlutterFlowIconButton(
@@ -341,15 +337,9 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                                         setState(() {
                                           recipes.removeAt(index);
                                         });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'Receta eliminada con éxito')));
+                                        SnackbarMessages.showPositiveSnackbar(context, "Receta eliminada con éxito");
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'Error al eliminar la receta')));
+                                        SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar receta");
                                       }
                                     }
                                   },

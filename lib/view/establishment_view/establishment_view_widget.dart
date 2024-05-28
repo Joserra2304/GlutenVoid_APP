@@ -1,3 +1,4 @@
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -96,7 +97,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
             buttonSize: 60.0,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: Colors.white,
+              color: FlutterFlowTheme.of(context).secondary,
               size: 30.0,
             ),
             onPressed: () {
@@ -113,7 +114,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                 'Restaurantes',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       fontFamily: 'Outfit',
-                      color: Colors.white,
+                      color: FlutterFlowTheme.of(context).secondary,
                       fontSize: 22.0,
                       letterSpacing: 0.0,
                     ),
@@ -169,7 +170,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Material(
-                          color: Colors.transparent,
+                          color: Color(0xFF8E24AA),
                           elevation: 5.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(22.0),
@@ -333,15 +334,9 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                                                   establishments
                                                       .removeAt(index);
                                                 });
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            'Establecimiento eliminado con éxito')));
+                                                SnackbarMessages.showPositiveSnackbar(context, "Establecimiento eliminado con éxito");
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            'Error al eliminar el establecimiento')));
+                                                SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar el establecimiento");
                                               }
                                             }
                                           },
@@ -354,10 +349,9 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                                   width: double.infinity,
                                   height: 100.0,
                                   decoration: BoxDecoration(
-                                    gradient: LinearGradient(
+                                    gradient: const LinearGradient(
                                       colors: [
-                                        FlutterFlowTheme.of(context).accent3,
-                                        FlutterFlowTheme.of(context).accent4
+                                        Color(0xFF6A1B9A), Color(0xFF8E24AA),
                                       ],
                                       stops: [0.0, 1.0],
                                       begin: AlignmentDirectional(0.0, -1.0),
@@ -396,7 +390,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                                           ),
                                     ),
                                     tileColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                        .secondary,
                                     dense: false,
                                     onTap: () {
                                       _navigateToDetails(establishment.id);

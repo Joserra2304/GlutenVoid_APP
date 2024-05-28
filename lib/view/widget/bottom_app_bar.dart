@@ -6,8 +6,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 
-import '../../flutter_flow/flutter_flow_theme.dart';
-
 class CommonBottomAppBar extends StatelessWidget {
   final BuildContext parentContext;
   final int selectedIndex;
@@ -45,7 +43,6 @@ class CommonBottomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = FlutterFlowTheme.of(context).primary;
     final secondaryColor = FlutterFlowTheme.of(context).secondary;
 
     return BottomAppBar(
@@ -59,40 +56,35 @@ class CommonBottomAppBar extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.shopping_cart,
-              color:
-                  selectedIndex == 0 ? const Color(0xFFe9d7ac) : secondaryColor,
+              color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(0),
           ),
           IconButton(
             icon: Icon(
               Icons.menu_book,
-              color:
-                  selectedIndex == 1 ? secondaryColor : const Color(0xFFe9d7ac),
+              color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(1),
           ),
           IconButton(
             icon: Icon(
               Icons.home,
-              color:
-              selectedIndex == 2 ? secondaryColor : const Color(0xFFe9d7ac),
+              color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(2),
           ),
           IconButton(
             icon: Icon(
               Icons.restaurant_menu,
-              color:
-                  selectedIndex == 3 ? secondaryColor : const Color(0xFFe9d7ac),
+              color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(3),
           ),
           IconButton(
             icon: Icon(
               Icons.person,
-              color:
-                  selectedIndex == 4 ? secondaryColor : const Color(0xFFe9d7ac),
+              color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(4),
           ),

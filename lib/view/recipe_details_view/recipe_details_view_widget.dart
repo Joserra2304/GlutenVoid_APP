@@ -7,6 +7,7 @@ import 'package:glutenvoid_app/model/recipe_model.dart';
 import 'package:glutenvoid_app/service/user_service.dart';
 
 import '../widget/bottom_app_bar.dart';
+import '../widget/snackbar_messages.dart';
 
 class RecipeDetailsViewWidget extends StatefulWidget {
   final int recipeId;
@@ -23,55 +24,80 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
   final userService = UserService();
   int _selectedIndex = 0;
 
+  bool _isEditingDescription = false;
+  bool _isEditingIngredients = false;
+  bool _isEditingInstructions = false;
+
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _ingredientsController = TextEditingController();
+  TextEditingController _instructionsController = TextEditingController();
+  FocusNode _descriptionFocusNode = FocusNode();
+  FocusNode _ingredientsFocusNode = FocusNode();
+  FocusNode _instructionsFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId);
+    _recipeFuture.then((recipe) {
+      if (recipe != null) {
+        _descriptionController.text = recipe.description;
+        _ingredientsController.text = recipe.ingredients;
+        _instructionsController.text = recipe.instructions;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _ingredientsController.dispose();
+    _instructionsController.dispose();
+    _descriptionFocusNode.dispose();
+    _ingredientsFocusNode.dispose();
+    _instructionsFocusNode.dispose();
+    super.dispose();
   }
 
   void _showEditRecipeDialog(RecipeModel recipe) {
     TextEditingController _nameController = TextEditingController(text: recipe.name);
-    TextEditingController _descriptionController = TextEditingController(text: recipe.description);
-    TextEditingController _ingredientsController = TextEditingController(text: recipe.ingredients);
-    TextEditingController _instructionsController = TextEditingController(text: recipe.instructions);
     TextEditingController _preparationTimeController = TextEditingController(text: recipe.preparationTime.toString());
-    bool _isApproved = recipe.approval;  // Estado actual de aprobación
+    bool _isApproved = recipe.approval;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Editar Receta'),
+          backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
+          title: Text('Editar Receta', style: TextStyle(color: Colors.yellow)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre')),
-                TextField(controller: _descriptionController, decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(controller: _ingredientsController, decoration: InputDecoration(labelText: 'Ingredientes')),
-                TextField(controller: _instructionsController, decoration: InputDecoration(labelText: 'Instrucciones')),
                 TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación')),
-                if (userService.isAdmin) SwitchListTile(  // Solo visible para administradores
-                  value: _isApproved,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isApproved = value;
-                    });
-                  },
-                  title: Text('Aprobada'),
-                ),
+                if (userService.isAdmin)
+                  SwitchListTile(
+                    value: _isApproved,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _isApproved = value;
+                      });
+                    },
+                    title: Text('Aprobada', style: TextStyle(color: Colors.yellow)),
+                  ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Guardar Cambios'),
+              child: Text('Guardar Cambios', style: TextStyle(color: Colors.yellow)),
               onPressed: () async {
                 Map<String, dynamic> updates = {
                   'id': recipe.id,
@@ -81,17 +107,17 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                   'instructions': _instructionsController.text,
                   'preparationTime': int.tryParse(_preparationTimeController.text) ?? recipe.preparationTime,
                   'approval': _isApproved,
-                  'userId': recipe.userId // Mantener el mismo userId
+                  'userId': recipe.userId
                 };
                 bool success = await widget.recipeController.updateRecipe(recipe.id, updates);
                 if (success) {
                   Navigator.of(context).pop();
                   setState(() {
-                    _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId); // Refresh the details
+                    _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId);
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Receta actualizada con éxito")));
+                  SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al actualizar la receta")));
+                  SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
                 }
               },
             ),
@@ -106,15 +132,16 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar Eliminación'),
-          content: Text('¿Estás seguro de que quieres eliminar esta receta?'),
+          backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
+          title: Text('Confirmar Eliminación', style: TextStyle(color: Colors.yellow)),
+          content: Text('¿Estás seguro de que quieres eliminar esta receta?', style: TextStyle(color: Colors.yellow)),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: Text('Eliminar', style: TextStyle(color: Colors.yellow)),
               onPressed: () async {
                 bool success = await widget.recipeController.deleteRecipe(widget.recipeId);
                 Navigator.of(context).pop(success);
@@ -131,7 +158,14 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () {
+        setState(() {
+          _isEditingDescription = false;
+          _isEditingIngredients = false;
+          _isEditingInstructions = false;
+        });
+        FocusScope.of(context).unfocus();
+      },
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -164,48 +198,47 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                   letterSpacing: 0.0,
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: userService.isAdmin
-                    ? [
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primaryColor,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).accent1,
-                    icon: Icon(
-                      Icons.edit,
-                      color: FlutterFlowTheme.of(context).secondaryColor,
-                      size: 24.0,
+              if (userService.isAdmin)
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).primary,
+                      icon: Icon(
+                        Icons.edit,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: () {
+                        _recipeFuture.then((recipe) {
+                          if (recipe != null) _showEditRecipeDialog(recipe);
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      _recipeFuture.then((recipe) {
-                        if (recipe != null) _showEditRecipeDialog(recipe);
-                      });
-                    },
-                  ),
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primaryColor,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).accent1,
-                    icon: Icon(
-                      Icons.delete,
-                      color: FlutterFlowTheme.of(context).tertiaryColor,
-                      size: 24.0,
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).primary,
+                      icon: Icon(
+                        Icons.delete,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: () async {
+                        bool deleted = await _confirmDeletion();
+                        if (deleted) {
+                          Navigator.of(context).pop(true);
+                        }
+                      },
                     ),
-                    onPressed: () async {
-                      bool deleted = await _confirmDeletion();
-                      if (deleted) {
-                        Navigator.of(context).pop(true);
-                      }
-                    },
-                  ),
-                ]
-                    : [],
-              ),
+                  ],
+                ),
             ],
           ),
           actions: [],
@@ -243,37 +276,52 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 300.0,
-                                  height: 150.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Text(
-                                      snapshot.data!.description,
-                                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context).secondaryColor,
-                                        letterSpacing: 0.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          _buildEditableField(
+                            context,
+                            label: 'Descripción',
+                            isEditing: _isEditingDescription,
+                            focusNode: _descriptionFocusNode,
+                            controller: _descriptionController,
+                            onTap: () {
+                              setState(() {
+                                _isEditingDescription = true;
+                                _isEditingIngredients = false;
+                                _isEditingInstructions = false;
+                                _descriptionFocusNode.requestFocus();
+                              });
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          _buildEditableField(
+                            context,
+                            label: 'Ingredientes',
+                            isEditing: _isEditingIngredients,
+                            focusNode: _ingredientsFocusNode,
+                            controller: _ingredientsController,
+                            onTap: () {
+                              setState(() {
+                                _isEditingDescription = false;
+                                _isEditingIngredients = true;
+                                _isEditingInstructions = false;
+                                _ingredientsFocusNode.requestFocus();
+                              });
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          _buildEditableField(
+                            context,
+                            label: 'Instrucciones',
+                            isEditing: _isEditingInstructions,
+                            focusNode: _instructionsFocusNode,
+                            controller: _instructionsController,
+                            onTap: () {
+                              setState(() {
+                                _isEditingDescription = false;
+                                _isEditingIngredients = false;
+                                _isEditingInstructions = true;
+                                _instructionsFocusNode.requestFocus();
+                              });
+                            },
                           ),
                           Padding(
                             padding: EdgeInsets.all(14.0),
@@ -281,103 +329,48 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 300.0,
-                                  height: 125.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Text(
-                                      snapshot.data!.ingredients,
-                                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context).secondaryColor,
-                                        letterSpacing: 0.0,
-                                      ),
-                                    ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                  child: Icon(
+                                    Icons.av_timer,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    size: 40.0,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 300.0,
-                                  height: 125.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Text(
-                                      snapshot.data!.instructions,
-                                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context).secondaryColor,
-                                        letterSpacing: 0.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.0, 6.0),
-                            child: Padding(
-                              padding: EdgeInsets.all(14.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                                    child: Icon(
-                                      Icons.av_timer,
-                                      color: FlutterFlowTheme.of(context).primaryColor,
-                                      size: 40.0,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                    child: Text(
-                                      snapshot.data!.preparationTime.toString(),
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                        fontFamily: 'Readex Pro',
-                                        fontSize: 18.0,
-                                        letterSpacing: 0.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    'min.',
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                  child: Text(
+                                    snapshot.data!.preparationTime.toString(),
                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                       fontFamily: 'Readex Pro',
-                                      fontSize: 16.0,
+                                      fontSize: 18.0,
                                       letterSpacing: 0.0,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                Text(
+                                  'min.',
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 16.0,
+                                    letterSpacing: 0.0,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          if (!snapshot.data!.approval)
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Text(
+                                'Receta pendiente de aprobación',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -397,7 +390,108 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
           parentContext: context,
         ),
       ),
+    );
+  }
 
+  Widget _buildEditableField(
+      BuildContext context, {
+        required String label,
+        required bool isEditing,
+        required FocusNode focusNode,
+        required TextEditingController controller,
+        required VoidCallback onTap,
+      }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 300.0,
+        height: 150.0,
+        decoration: BoxDecoration(
+          gradient: isEditing
+              ? const LinearGradient(
+            colors: [
+              Color(0xFF8E5DB2), // Un poco más claro que el fondo morado
+              Color(0xFF7A2B9B),
+            ],
+            stops: [0.0, 1.0],
+            begin: AlignmentDirectional(0.0, -1.0),
+            end: AlignmentDirectional(0, 1.0),
+          )
+              : const LinearGradient(
+            colors: [
+              Color(0xFF7C4DA4),
+              Color(0xFF6A1B9A),
+            ],
+            stops: [0.0, 1.0],
+            begin: AlignmentDirectional(0.0, -1.0),
+            end: AlignmentDirectional(0, 1.0),
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Colors.black,
+            width: 3.0,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: isEditing
+              ? Column(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  maxLines: null,
+                  expands: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: label,
+                  ),
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Readex Pro',
+                    color: FlutterFlowTheme.of(context).secondary,
+                  ),
+                  focusNode: focusNode,
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.save,
+                  color: Colors.yellow,
+                ),
+                onPressed: () async {
+                  Map<String, dynamic> updates = {
+                    'description': _descriptionController.text,
+                    'ingredients': _ingredientsController.text,
+                    'instructions': _instructionsController.text,
+                  };
+                  bool success = await widget.recipeController.updateRecipe(widget.recipeId, updates);
+                  if (success) {
+                    setState(() {
+                      _isEditingDescription = false;
+                      _isEditingIngredients = false;
+                      _isEditingInstructions = false;
+                    });
+                    _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId);
+                    SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
+                  } else {
+                    SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
+                  }
+                },
+              ),
+            ],
+          )
+              : Center(
+            child: Text(
+              controller.text.isNotEmpty ? controller.text : 'No hay $label',
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Readex Pro',
+                color: FlutterFlowTheme.of(context).secondary,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

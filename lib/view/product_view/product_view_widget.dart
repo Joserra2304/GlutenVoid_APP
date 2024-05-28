@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../service/barcode_scanner_service.dart';
 import '../widget/bottom_app_bar.dart';
 import '../widget/loading_animation.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -46,9 +47,9 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       if (productDetails != null) {
         goToProductDetails(productDetails);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Producto no encontrado.')));
+        SnackbarMessages.showNegativeSnackbar(context, "Producto no encontrado");
       }
+
     });
 
     _scrollController.addListener(() {
@@ -86,9 +87,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al cargar los productos: $e')),
-      );
+      SnackbarMessages.showNegativeSnackbar(context, "Error al cargar los productos");
     }
   }
 
@@ -176,8 +175,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al buscar productos: $e')));
+      SnackbarMessages.showNegativeSnackbar(context, "Error al buscar productos");
     }
   }
 
@@ -335,7 +333,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                       onTap: () => goToProductDetails(product),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        color: FlutterFlowTheme.of(context).primary, // Asegurar el color de fondo
+                        color:  Color(0xFF6A1B9A),
                         elevation: 4.0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0),

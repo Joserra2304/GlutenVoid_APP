@@ -26,23 +26,33 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
   late Future<EstablishmentModel> _establishmentFuture;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _glutenFreeOption = false;
+  bool _isEditingDescription = false;
+
+  TextEditingController _descriptionController = TextEditingController();
+  FocusNode _descriptionFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => EstablishmentDetailsViewModel());
     _establishmentFuture = widget.establishmentController.fetchEstablishmentDetails(widget.establishmentId);
+    _establishmentFuture.then((establishment) {
+      if (establishment != null) {
+        _descriptionController.text = establishment.description;
+      }
+    });
   }
 
   @override
   void dispose() {
     _model.dispose();
+    _descriptionController.dispose();
+    _descriptionFocusNode.dispose();
     super.dispose();
   }
 
   Future<void> _showEditDialog(EstablishmentModel establishment) async {
     TextEditingController _name = TextEditingController(text: establishment.name);
-    TextEditingController _description = TextEditingController(text: establishment.description);
     TextEditingController _telephone = TextEditingController(text: establishment.phoneNumber.toString());
     TextEditingController _address = TextEditingController(text: establishment.address);
     TextEditingController _city = TextEditingController(text: establishment.city);
@@ -55,12 +65,15 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("Editar Restaurante"),
+              backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+              title: Text(
+                "Editar Restaurante",
+                style: TextStyle(color: Colors.yellow),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
                     TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
-                    TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
                     TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
                     TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
                     TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
@@ -104,15 +117,14 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               ),
               actions: [
                 TextButton(
-                  child: Text('Cancelar'),
+                  child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
                 TextButton(
-                  child: Text('Guardar Cambios'),
+                  child: Text('Guardar Cambios', style: TextStyle(color: Colors.yellow)),
                   onPressed: () async {
                     Map<String, dynamic> updates = {
                       'name': _name.text,
-                      'description': _description.text,
                       'phoneNumber': int.parse(_telephone.text),
                       'address': _address.text,
                       'city': _city.text,
@@ -133,9 +145,9 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
       setState(() {
         _establishmentFuture = widget.establishmentController.fetchEstablishmentDetails(widget.establishmentId);
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento actualizado con éxito")));
+      SnackbarMessages.showPositiveSnackbar(context, "Establecimiento actualizado con éxito");
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Actualización fallida")));
+      SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar el establecimiento");
     }
   }
 
@@ -144,15 +156,16 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de que quieres eliminar este establecimiento?'),
+          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          title: Text('Confirmar eliminación', style: TextStyle(color: Colors.yellow)),
+          content: Text('¿Estás seguro de que quieres eliminar este establecimiento?', style: TextStyle(color: Colors.yellow)),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: Text('Eliminar', style: TextStyle(color: Colors.yellow)),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -166,9 +179,12 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
   Widget build(BuildContext context) {
     final userService = UserService();
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        setState(() {
+          _isEditingDescription = false;
+        });
+        FocusScope.of(context).unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.transparent,
@@ -377,37 +393,18 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                             ),
                             Padding(
                               padding: EdgeInsets.all(14.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                                    child: Container(
-                                      width: 300.0,
-                                      height: 125.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context).primary,
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Text(
-                                          establishment.description,
-                                          style: FlutterFlowTheme.of(context).labelMedium.override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context).secondary,
-                                            letterSpacing: 0.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: _buildEditableField(
+                                context,
+                                label: 'Descripción',
+                                isEditing: _isEditingDescription,
+                                focusNode: _descriptionFocusNode,
+                                controller: _descriptionController,
+                                onTap: () {
+                                  setState(() {
+                                    _isEditingDescription = true;
+                                    _descriptionFocusNode.requestFocus();
+                                  });
+                                },
                               ),
                             ),
                           ],
@@ -469,6 +466,104 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               }
               return Center(child: CircularProgressIndicator());
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditableField(
+      BuildContext context, {
+        required String label,
+        required bool isEditing,
+        required FocusNode focusNode,
+        required TextEditingController controller,
+        required VoidCallback onTap,
+      }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 300.0,
+        height: 150.0,
+        decoration: BoxDecoration(
+          gradient: isEditing
+              ? const LinearGradient(
+            colors: [
+              Color(0xFF8E5DB2), // Un poco más claro que el fondo morado
+              Color(0xFF7A2B9B),
+            ],
+            stops: [0.0, 1.0],
+            begin: AlignmentDirectional(0.0, -1.0),
+            end: AlignmentDirectional(0, 1.0),
+          )
+              : const LinearGradient(
+            colors: [
+              Color(0xFF7C4DA4),
+              Color(0xFF6A1B9A),
+            ],
+            stops: [0.0, 1.0],
+            begin: AlignmentDirectional(0.0, -1.0),
+            end: AlignmentDirectional(0, 1.0),
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Colors.black,
+            width: 3.0,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: isEditing
+              ? Column(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  maxLines: null,
+                  expands: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: label,
+                  ),
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Readex Pro',
+                    color: FlutterFlowTheme.of(context).secondary,
+                  ),
+                  focusNode: focusNode,
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.save,
+                  color: Colors.yellow,
+                ),
+                onPressed: () async {
+                  Map<String, dynamic> updates = {
+                    'description': _descriptionController.text,
+                  };
+                  bool success = await widget.establishmentController.updateEstablishmentDetails(widget.establishmentId, updates);
+                  if (success) {
+                    setState(() {
+                      _isEditingDescription = false;
+                    });
+                    _establishmentFuture = widget.establishmentController.fetchEstablishmentDetails(widget.establishmentId);
+                    SnackbarMessages.showPositiveSnackbar(context, "Descripción actualizada con éxito");
+                  } else {
+                    SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la descripción");
+                  }
+                },
+              ),
+            ],
+          )
+              : Center(
+            child: Text(
+              controller.text.isNotEmpty ? controller.text : 'No hay $label',
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Readex Pro',
+                color: FlutterFlowTheme.of(context).secondary,
+              ),
+            ),
           ),
         ),
       ),

@@ -182,7 +182,12 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
                     width: 300.0,
                     height: 200.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primary,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                        stops: [0.0, 1.0],
+                        begin: AlignmentDirectional(0.0, -1.0),
+                        end: AlignmentDirectional(0, 1.0),
+                      ),
                       borderRadius: BorderRadius.circular(10.0),
                       border: Border.all(width: 1.0),
                     ),

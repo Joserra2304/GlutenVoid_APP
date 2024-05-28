@@ -97,7 +97,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
             'Únete a Gluten Void',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondary,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                 ),
@@ -177,8 +177,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                         ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
+                                        color: Colors.black,
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(24.0),
@@ -193,8 +192,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            FlutterFlowTheme.of(context).error,
+                                        color: Colors.red,
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(24.0),
@@ -251,8 +249,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                       ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.black,
                                       width: 2.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -320,8 +317,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                       ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.black,
                                       width: 2.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -389,8 +385,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                       ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.black,
                                       width: 2.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -458,8 +453,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                       ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.black,
                                       width: 2.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -497,6 +491,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                           ? Icons.visibility_outlined
                                           : Icons.visibility_off_outlined,
                                       size: 22,
+                                      color: FlutterFlowTheme.of(context).primary,
                                     ),
                                   ),
                                 ),
@@ -537,7 +532,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     .titleSmall
                                     .override(
                                       fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      color: FlutterFlowTheme.of(context).secondary,
                                       letterSpacing: 0.0,
                                     ),
                                 elevation: 20.0,
@@ -565,7 +560,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     .titleSmall
                                     .override(
                                       fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      color: FlutterFlowTheme.of(context).secondary,
                                       letterSpacing: 0.0,
                                     ),
                                 elevation: 20.0,

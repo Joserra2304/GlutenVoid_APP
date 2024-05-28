@@ -3,6 +3,7 @@ import '../../controller/recipe_controller.dart';
 import '../../model/recipe_model.dart';
 import '../../service/user_service.dart';
 import '../widget/bottom_app_bar.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -99,12 +100,13 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 bool result = await widget.recipeController.addRecipe(newRecipe);
                 Navigator.of(context).pop();
                 if (result) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Receta añadida con éxito y " + (isAdmin ? "aprobada." : "pendiente de aprobación."))));
+                  SnackbarMessages.showPositiveSnackbar(context, "Receta añadida con éxito y "
+                          + (isAdmin ? "aprobada." : "pendiente de aprobación."));
                   if (isAdmin) {
                     _refreshRecipes(); // Refresh the list immediately for admins
                   }
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al guardar la receta.")));
+                  SnackbarMessages.showNegativeSnackbar(context, "Error al guardar la receta");
                 }
               },
             ),
@@ -163,10 +165,10 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 bool result = await widget.recipeController.updateRecipe(recipe.id, updatedRecipe.toJson());
                 Navigator.of(context).pop(result);
                 if (result) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Receta actualizada con éxito.")));
+                  SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
                   _refreshRecipes();
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al actualizar la receta.")));
+                  SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
                 }
               },
             ),
@@ -206,6 +208,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
   @override
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
+    final bool isSpecificUserView = widget.userId != null;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.transparent,
@@ -223,7 +226,11 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             size: 30.0,
           ),
           onPressed: () {
-            userService.isAdmin ? context.pushNamed('AdminView') : context.pushNamed('UserView');
+            if (isSpecificUserView && widget.userId != null) {
+              context.go('/userProfileView?id=${widget.userId}');
+            } else {
+              context.go(isAdmin ? '/adminView' : '/userView');
+            }
           },
         ),
         title: Row(
@@ -242,7 +249,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                if (userService.isAdmin)
+                if (userService.isAdmin && !isSpecificUserView)
                   FlutterFlowIconButton(
                     borderColor: FlutterFlowTheme.of(context).primary,
                     borderRadius: 20.0,
@@ -300,6 +307,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   itemCount: recipes.length,
                   itemBuilder: (context, index) {
                     var recipe = recipes[index];
+                    bool isPendingApproval = !recipe.approval;
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Material(
@@ -312,10 +320,9 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [
-                                FlutterFlowTheme.of(context).accent3,
-                                FlutterFlowTheme.of(context).accent4,
-                              ],
+                              colors: isPendingApproval
+                                  ? [Color(0xFF9575CD), Color(0xFFB39DDB)]
+                                  : [Color(0xFF6A1B9A), Color(0xFF8E24AA)],  // Original colors
                               stops: [0.0, 1.0],
                               begin: AlignmentDirectional(0.0, -1.0),
                               end: AlignmentDirectional(0, 1.0),
@@ -336,15 +343,17 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                                 letterSpacing: 0.0,
                               ),
                             ),
-                            subtitle: Text(
-                              recipe.username,
+                            subtitle: isPendingApproval
+                                ? Text(
+                              'Pendiente de aprobación',
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                 fontFamily: 'Outfit',
-                                color: FlutterFlowTheme.of(context).secondary,
+                                color: Colors.red,
                                 letterSpacing: 0.0,
                               ),
-                            ),
+                            )
+                                : null,
                             tileColor: FlutterFlowTheme.of(context).secondaryBackground,
                             dense: false,
                             onTap: () async {
@@ -356,12 +365,6 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 FlutterFlowIconButton(
-                                  icon: Icon(Icons.edit, color: Colors.green),
-                                  onPressed: () {
-                                    _showEditRecipeDialog(recipe);
-                                  },
-                                ),
-                                FlutterFlowIconButton(
                                   icon: Icon(Icons.delete, color: Colors.red),
                                   onPressed: () async {
                                     bool confirmed = await _confirmDeletion();
@@ -372,9 +375,9 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                                         setState(() {
                                           recipes.removeAt(index);
                                         });
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Receta eliminada con éxito')));
+                                        SnackbarMessages.showPositiveSnackbar(context, "Receta eliminada con éxito");
                                       } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al eliminar la receta')));
+                                        SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar la receta");
                                       }
                                     }
                                   },

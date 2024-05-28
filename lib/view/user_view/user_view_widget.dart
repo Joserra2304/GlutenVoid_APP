@@ -286,8 +286,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                FlutterFlowTheme.of(context).accent3,
-                FlutterFlowTheme.of(context).accent4,
+                Color(0xFF6A1B9A),
+                Color(0xFF8E24AA),
               ],
               stops: [0.0, 1.0],
               begin: AlignmentDirectional(0.0, -1.0),
@@ -332,8 +332,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                FlutterFlowTheme.of(context).accent3,
-                FlutterFlowTheme.of(context).accent4,
+                Color(0xFF6A1B9A),
+                Color(0xFF8E24AA),
               ],
               stops: [0.0, 1.0],
               begin: AlignmentDirectional(0.0, -1.0),
@@ -383,8 +383,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                FlutterFlowTheme.of(context).accent3,
-                FlutterFlowTheme.of(context).accent4,
+                Color(0xFF6A1B9A),
+                Color(0xFF8E24AA),
               ],
               stops: [0.0, 1.0],
               begin: AlignmentDirectional(0.0, -1.0),

@@ -268,7 +268,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                 width: double.infinity,
                                 height: 100.0,
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                     colors: [
                                       Color(0xFF6A1B9A),
                                       Color(0xFF8E24AA),
