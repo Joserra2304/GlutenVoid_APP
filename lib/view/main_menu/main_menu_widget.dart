@@ -99,12 +99,12 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int timeLeft = expiryTime - currentTime;
     if (timeLeft <= 0) {
-      SnackbarMessages.showNegativeSnackbar(context, "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+      //SnackbarMessages.showNegativeSnackbar(context, "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
       print("Sesion expirada");
     } else {
       int minutesLeft = timeLeft ~/ 60000;
       int secondsLeft = (timeLeft % 60000) ~/ 1000;
-      SnackbarMessages.showWarningSnackbar(context, "Tu sesión expirará en $minutesLeft minutos y $secondsLeft segundos.");
+      //SnackbarMessages.showWarningSnackbar(context, "Tu sesión expirará en $minutesLeft minutos y $secondsLeft segundos.");
       print("Sesion expirará en $minutesLeft minutos y $secondsLeft segundos.");
     }
   }

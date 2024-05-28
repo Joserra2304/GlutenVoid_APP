@@ -50,7 +50,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
 
   Future<void> _loadUser() async {
     try {
-      final user = await userController.getUserById(widget.userId);
+      final user = await userController.getUserById(widget.userId, context);
       setState(() {
         _user = user;
         _profileBioController.text = user.profileBio ?? '';
@@ -73,7 +73,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+              backgroundColor: Color(0xFF7C4DA4),
               title: Text(
                 "Editar Usuario",
                 style: TextStyle(color: Colors.yellow),
@@ -121,7 +121,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                       'glutenCondition': _selectedCondition.toString().split('.').last,
                     };
                     print('Saving updates: $updates'); // Registro para depuración
-                    bool success = await userController.updateUser(user.id!, updates);
+                    bool success = await userController.updateUser(user.id!, updates, context);
                     Navigator.of(context).pop(success);
                     if (success) {
                       _loadUser();
@@ -168,7 +168,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
     );
 
     if (result == true) {
-      bool success = await userController.deleteUser(userId);
+      bool success = await userController.deleteUser(userId, context);
       if (success) {
         SnackbarMessages.showPositiveSnackbar(context, "Éxito al eliminar usuario");
       } else {
@@ -329,14 +329,14 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
               padding: EdgeInsets.all(14.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -347,7 +347,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                               child: Container(
                                 width: 325.0,
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context).primary,
+                                  color: Colors.purple[700],
                                   borderRadius: BorderRadius.circular(10.0),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(width: 1.0),
@@ -382,44 +382,28 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                         ),
                         Align(
                           alignment: AlignmentDirectional(0.0, 6.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                child: Text(
-                                  'Condición:',
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 25.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 6.0),
                           child: Padding(
                             padding: EdgeInsets.all(14.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                  child: Text(
-                                    _user!.glutenCondition.toString().split('.').last,
-                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Readex Pro',
-                                      fontSize: 18.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                Text(
+                                  'Condición: ',
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 18.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  _user!.glutenCondition.toString().split('.').last,
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 18.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -464,7 +448,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                       'admin': value, // Cambia 'isAdmin' a 'admin'
                                     };
                                     print('Attempting to update user with: $updates');
-                                    bool success = await userController.updateUser(_user!.id!, updates);
+                                    bool success = await userController.updateUser(_user!.id!, updates, context);
                                     if (!success) {
                                       setState(() {
                                         _user = UserModel(
@@ -506,7 +490,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                             options: FFButtonOptions(
                               height: 40.0,
                               padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
+                              color: Colors.purple[700],
                               textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                 fontFamily: 'Readex Pro',
                                 color: Colors.white,
@@ -528,7 +512,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding: EdgeInsets.all(14.0),
@@ -588,7 +572,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                         Map<String, dynamic> updates = {
                                           'profileBio': _profileBioController.text,
                                         };
-                                        bool success = await userController.updateUser(_user!.id!, updates);
+                                        bool success = await userController.updateUser(_user!.id!, updates, context);
                                         if (success) {
                                           setState(() {
                                             _isEditingBio = false;
@@ -634,7 +618,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                     height: 40.0,
                                     padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                                     iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                    color: FlutterFlowTheme.of(context).primary,
+                                    color: Colors.purple[700],
                                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                       fontFamily: 'Readex Pro',
                                       color: Colors.white,

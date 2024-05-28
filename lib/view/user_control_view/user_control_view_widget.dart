@@ -44,7 +44,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
     setState(() {
       _isLoading = true;
     });
-    final users = await _userController.getUsers();
+    final users = await _userController.getUsers(context);
     setState(() {
       _users = users;
       _isLoading = false;
@@ -111,7 +111,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                     email: _emailController.text,
                     password: _passwordController.text,
                     isAdmin: false);
-                bool success = await _userController.registerUser(newUser);
+                bool success = await _userController.registerUser(newUser, context);
                 if (success) {
                   SnackbarMessages.showPositiveSnackbar(
                       context, "Éxito al registrar usuario");
@@ -164,7 +164,7 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
     );
 
     if (result == true) {
-      bool success = await _userController.deleteUser(id);
+      bool success = await _userController.deleteUser(id, context);
       if (success) {
         setState(() {
           _users.removeWhere((user) => user.id == id);

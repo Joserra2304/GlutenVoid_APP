@@ -13,7 +13,8 @@ class RecipeViewWidget extends StatefulWidget {
   final RecipeController recipeController;
   final int? userId;
 
-  const RecipeViewWidget({super.key, required this.recipeController, this.userId});
+  const RecipeViewWidget(
+      {super.key, required this.recipeController, this.userId});
 
   @override
   State<RecipeViewWidget> createState() => _RecipeViewWidgetState();
@@ -59,24 +60,38 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre de la Receta')),
-                TextField(controller: _descriptionController, decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(controller: _ingredientsController, decoration: InputDecoration(labelText: 'Ingredientes')),
-                TextField(controller: _instructionsController, decoration: InputDecoration(labelText: 'Instrucciones')),
-                TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación (min)')),
+                TextField(
+                    controller: _nameController,
+                    decoration:
+                    InputDecoration(labelText: 'Nombre de la Receta')),
+                TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(labelText: 'Descripción')),
+                TextField(
+                    controller: _ingredientsController,
+                    decoration: InputDecoration(labelText: 'Ingredientes')),
+                TextField(
+                    controller: _instructionsController,
+                    decoration: InputDecoration(labelText: 'Instrucciones')),
+                TextField(
+                    controller: _preparationTimeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Tiempo de Preparación (min)')),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar', style: TextStyle(
-                  color: FlutterFlowTheme.of(context).secondary)),
+              child: Text('Cancelar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Guardar', style: TextStyle(
-                  color: FlutterFlowTheme.of(context).secondary)
-              ),
+              child: Text('Guardar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () async {
                 if (userService.currentUser?.id == null) {
                   print("Error: Usuario no autenticado.");
@@ -85,31 +100,38 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
                 bool isAdmin = userService.isAdmin;
                 RecipeModel newRecipe = RecipeModel(
-                  id: 0, // ID se maneja en el backend
+                  id: 0,
+                  // ID se maneja en el backend
                   name: _nameController.text,
                   description: _descriptionController.text,
                   ingredients: _ingredientsController.text,
                   instructions: _instructionsController.text,
-                  preparationTime: int.tryParse(_preparationTimeController.text) ?? 0,
+                  preparationTime:
+                  int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: isAdmin,
                   userId: userService.currentUser?.id ?? 0,
-                  username: userService.currentUser?.username ?? '', // Añadir nombre de usuario
+                  username: userService.currentUser?.username ??
+                      '', // Añadir nombre de usuario
                 );
 
                 // Utilizar Log para mostrar la información de la receta
                 print("Guardando receta: ${newRecipe.toString()}");
                 print("userId: ${newRecipe.userId}");
 
-                bool result = await widget.recipeController.addRecipe(newRecipe);
+                bool result =
+                await widget.recipeController.addRecipe(newRecipe);
                 Navigator.of(context).pop();
                 if (result) {
-                  SnackbarMessages.showPositiveSnackbar(context, "Receta añadida con éxito y "
-                          + (isAdmin ? "aprobada." : "pendiente de aprobación."));
+                  SnackbarMessages.showPositiveSnackbar(
+                      context,
+                      "Receta añadida con éxito y " +
+                          (isAdmin ? "aprobada." : "pendiente de aprobación."));
                   if (isAdmin) {
                     _refreshRecipes(); // Refresh the list immediately for admins
                   }
                 } else {
-                  SnackbarMessages.showNegativeSnackbar(context, "Error al guardar la receta");
+                  SnackbarMessages.showNegativeSnackbar(
+                      context, "Error al guardar la receta");
                 }
               },
             ),
@@ -120,11 +142,16 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
   }
 
   Future<void> _showEditRecipeDialog(RecipeModel recipe) async {
-    TextEditingController _nameController = TextEditingController(text: recipe.name);
-    TextEditingController _descriptionController = TextEditingController(text: recipe.description);
-    TextEditingController _ingredientsController = TextEditingController(text: recipe.ingredients);
-    TextEditingController _instructionsController = TextEditingController(text: recipe.instructions);
-    TextEditingController _preparationTimeController = TextEditingController(text: recipe.preparationTime.toString());
+    TextEditingController _nameController =
+    TextEditingController(text: recipe.name);
+    TextEditingController _descriptionController =
+    TextEditingController(text: recipe.description);
+    TextEditingController _ingredientsController =
+    TextEditingController(text: recipe.ingredients);
+    TextEditingController _instructionsController =
+    TextEditingController(text: recipe.instructions);
+    TextEditingController _preparationTimeController =
+    TextEditingController(text: recipe.preparationTime.toString());
 
     var result = await showDialog<bool>(
       context: context,
@@ -135,11 +162,24 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre de la Receta')),
-                TextField(controller: _descriptionController, decoration: InputDecoration(labelText: 'Descripción')),
-                TextField(controller: _ingredientsController, decoration: InputDecoration(labelText: 'Ingredientes')),
-                TextField(controller: _instructionsController, decoration: InputDecoration(labelText: 'Instrucciones')),
-                TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación (min)')),
+                TextField(
+                    controller: _nameController,
+                    decoration:
+                    InputDecoration(labelText: 'Nombre de la Receta')),
+                TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(labelText: 'Descripción')),
+                TextField(
+                    controller: _ingredientsController,
+                    decoration: InputDecoration(labelText: 'Ingredientes')),
+                TextField(
+                    controller: _instructionsController,
+                    decoration: InputDecoration(labelText: 'Instrucciones')),
+                TextField(
+                    controller: _preparationTimeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Tiempo de Preparación (min)')),
               ],
             ),
           ),
@@ -159,19 +199,23 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   description: _descriptionController.text,
                   ingredients: _ingredientsController.text,
                   instructions: _instructionsController.text,
-                  preparationTime: int.tryParse(_preparationTimeController.text) ?? 0,
+                  preparationTime:
+                  int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: recipe.approval,
                   userId: recipe.userId,
                   username: recipe.username, // Mantener nombre de usuario
                 );
 
-                bool result = await widget.recipeController.updateRecipe(recipe.id, updatedRecipe.toJson());
+                bool result = await widget.recipeController
+                    .updateRecipe(recipe.id, updatedRecipe.toJson());
                 Navigator.of(context).pop(result);
                 if (result) {
-                  SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
+                  SnackbarMessages.showPositiveSnackbar(
+                      context, "Receta actualizada con éxito");
                   _refreshRecipes();
                 } else {
-                  SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
+                  SnackbarMessages.showNegativeSnackbar(
+                      context, "Error al actualizar la receta");
                 }
               },
             ),
@@ -191,20 +235,22 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: Text('Confirmar eliminación', style: TextStyle(
-              color: FlutterFlowTheme.of(context).secondary)),
+          title: Text('Confirmar eliminación',
+              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           content: Text('¿Estás seguro de que quieres eliminar esta receta?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [
             TextButton(
-              child: Text('Cancelar', style: TextStyle(
-                  color: FlutterFlowTheme.of(context).secondary)),
+              child: Text('Cancelar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-                child: Text('Eliminar', style: TextStyle(
-                    color: FlutterFlowTheme.of(context).secondary)),
-                onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Eliminar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );
@@ -273,25 +319,26 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RecipeApprovalViewWidget(recipeController: widget.recipeController),
+                          builder: (context) => RecipeApprovalViewWidget(
+                              recipeController: widget.recipeController),
                         ),
                       );
                     },
                   ),
                 if (userService.isAdmin && !isSpecificUserView)
-                FlutterFlowIconButton(
-                  borderColor: FlutterFlowTheme.of(context).primary,
-                  borderRadius: 20.0,
-                  borderWidth: 1.0,
-                  buttonSize: 40.0,
-                  fillColor: FlutterFlowTheme.of(context).accent1,
-                  icon: Icon(
-                    Icons.add,
-                    color: FlutterFlowTheme.of(context).secondary,
-                    size: 24.0,
+                  FlutterFlowIconButton(
+                    borderColor: FlutterFlowTheme.of(context).primary,
+                    borderRadius: 20.0,
+                    borderWidth: 1.0,
+                    buttonSize: 40.0,
+                    fillColor: FlutterFlowTheme.of(context).accent1,
+                    icon: Icon(
+                      Icons.add,
+                      color: FlutterFlowTheme.of(context).secondary,
+                      size: 24.0,
+                    ),
+                    onPressed: _showAddRecipeDialog,
                   ),
-                  onPressed: _showAddRecipeDialog,
-                ),
               ],
             ),
           ],
@@ -301,107 +348,128 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       ),
       body: SafeArea(
         top: true,
-        child: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: FutureBuilder<List<RecipeModel>>(
-            future: _recipes,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error al cargar las recetas'));
-              } else {
-                var recipes = snapshot.data ?? [];
-                return ListView.builder(
-                  itemCount: recipes.length,
-                  itemBuilder: (context, index) {
-                    var recipe = recipes[index];
-                    bool isPendingApproval = !recipe.approval;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: isPendingApproval
-                                  ? [Color(0xFF9575CD), Color(0xFFB39DDB)]
-                                  : [Color(0xFF6A1B9A), Color(0xFF8E24AA)],  // Original colors
-                              stops: [0.0, 1.0],
-                              begin: AlignmentDirectional(0.0, -1.0),
-                              end: AlignmentDirectional(0, 1.0),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).primary,
-                              width: 2.0,
-                            ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: FutureBuilder<List<RecipeModel>>(
+              future: _recipes,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error al cargar las recetas'));
+                } else {
+                  var recipes = snapshot.data ?? [];
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: recipes.length,
+                    itemBuilder: (context, index) {
+                      var recipe = recipes[index];
+                      bool isPendingApproval = !recipe.approval;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Material(
+                          color: Colors.transparent,
+                          elevation: 5.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
                           ),
-                          child: ListTile(
-                            title: Text(
-                              recipe.name,
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context).titleLarge.override(
-                                fontFamily: 'Outfit',
-                                color: FlutterFlowTheme.of(context).secondary,
-                                letterSpacing: 0.0,
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: isPendingApproval
+                                    ? [Color(0xFF9575CD), Color(0xFFB39DDB)]
+                                    : [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(0.0, -1.0),
+                                end: AlignmentDirectional(0, 1.0),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
                               ),
                             ),
-                            subtitle: isPendingApproval
-                                ? Text(
-                              'Pendiente de aprobación',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Outfit',
-                                color: Colors.red,
-                                letterSpacing: 0.0,
-                              ),
-                            )
-                                : null,
-                            tileColor: FlutterFlowTheme.of(context).secondaryBackground,
-                            dense: false,
-                            onTap: () async {
-                              context.pushNamed('RecipeDetailsView',
-                                  queryParameters: {'id': recipe.id.toString()});
-                            },
-                            trailing: userService.isAdmin
-                                ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                FlutterFlowIconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () async {
-                                    bool confirmed = await _confirmDeletion();
-                                    if (confirmed) {
-                                      bool success = await widget.recipeController
-                                          .deleteRecipe(recipe.id);
-                                      if (success) {
-                                        setState(() {
-                                          recipes.removeAt(index);
-                                        });
-                                        SnackbarMessages.showPositiveSnackbar(context, "Receta eliminada con éxito");
-                                      } else {
-                                        SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar la receta");
-                                      }
-                                    }
-                                  },
+                            child: ListTile(
+                              title: Text(
+                                recipe.name,
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .override(
+                                  fontFamily: 'Outfit',
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondary,
+                                  letterSpacing: 0.0,
                                 ),
-                              ],
-                            )
-                                : null,
+                              ),
+                              subtitle: isPendingApproval
+                                  ? Text(
+                                'Pendiente de aprobación',
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                  fontFamily: 'Outfit',
+                                  color: Colors.red,
+                                  letterSpacing: 0.0,
+                                ),
+                              )
+                                  : null,
+                              tileColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              dense: false,
+                              onTap: () async {
+                                context.pushNamed('RecipeDetailsView',
+                                    queryParameters: {
+                                      'id': recipe.id.toString()
+                                    });
+                              },
+                              trailing: userService.isAdmin
+                                  ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FlutterFlowIconButton(
+                                    icon: Icon(Icons.delete,
+                                        color: Colors.red),
+                                    onPressed: () async {
+                                      bool confirmed =
+                                      await _confirmDeletion();
+                                      if (confirmed) {
+                                        bool success = await widget
+                                            .recipeController
+                                            .deleteRecipe(recipe.id);
+                                        if (success) {
+                                          setState(() {
+                                            recipes.removeAt(index);
+                                          });
+                                          SnackbarMessages
+                                              .showPositiveSnackbar(
+                                              context,
+                                              "Receta eliminada con éxito");
+                                        } else {
+                                          SnackbarMessages
+                                              .showNegativeSnackbar(
+                                              context,
+                                              "Error al eliminar la receta");
+                                        }
+                                      }
+                                    },
+                                  ),
+                                ],
+                              )
+                                  : null,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),

@@ -7,28 +7,28 @@ class UserController {
 
   UserController(this.userService);
 
-  Future<List<UserModel>> getUsers() async {
-    return await userService.fetchAllUsers();
+  Future<List<UserModel>> getUsers(BuildContext context) async {
+    return await UserService().fetchAllUsers(context);
   }
 
-  Future<UserModel> getUserById(int id) async {
-    return await userService.getUserById(id);
+  Future<UserModel> getUserById(int id, BuildContext context) async {
+    return await userService.getUserById(id, context);
   }
 
-  Future<bool> registerUser(UserModel newUser) async {
+  Future<bool> registerUser(UserModel newUser, BuildContext context) async {
     try {
-      return await userService.register(newUser);
+      return await userService.register(newUser, context);
     } catch (e) {
       throw Exception("Failed to register: $e");
     }
   }
 
-  Future<bool> deleteUser(int id) async {
-    return userService.deleteUser(id);
+  Future<bool> deleteUser(int id, BuildContext context) async {
+    return userService.deleteUser(id, context);
   }
 
-  Future<bool> updateUser(int id, Map<String, dynamic> updates) async {
-    return userService.updateUser(id, updates);
+  Future<bool> updateUser(int id, Map<String, dynamic> updates, BuildContext context) async {
+    return userService.updateUser(id, updates, context);
   }
 
   Future<UserModel?> attemptLogin(String username, String password, BuildContext context) async {

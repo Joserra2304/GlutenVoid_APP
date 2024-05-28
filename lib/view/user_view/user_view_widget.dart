@@ -32,9 +32,9 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final ProductController productController = ProductController();
   final RecipeController recipeController =
-  RecipeController(RecipeService(GlutenVoidApi()));
+      RecipeController(RecipeService(GlutenVoidApi()));
   final EstablishmentController establishmentController =
-  EstablishmentController(EstablishmentService(GlutenVoidApi()));
+      EstablishmentController(EstablishmentService(GlutenVoidApi()));
   bool _isLoadingProducts = true;
 
   @override
@@ -48,7 +48,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   void _fetchProducts() async {
     try {
       List<ProductModel> products =
-      await productController.fetchGlutenFreeProducts();
+          await productController.fetchGlutenFreeProducts();
       setState(() {
         productController.products = products;
         _isLoadingProducts = false;
@@ -63,7 +63,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   void _fetchOtherData() async {
     List<RecipeModel> recipes = await recipeController.fetchApprovedRecipes();
     List<EstablishmentModel> establishments =
-    await establishmentController.fetchEstablishments();
+        await establishmentController.fetchEstablishments();
 
     setState(() {
       recipeController.recipes = recipes;
@@ -98,11 +98,11 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               Text(
                 'Gluten Void',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  letterSpacing: 0.0,
-                ),
+                      fontFamily: 'Outfit',
+                      color: Colors.white,
+                      fontSize: 22.0,
+                      letterSpacing: 0.0,
+                    ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -148,64 +148,66 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'RECETAS',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'RECETAS',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                SizedBox(height: 2.0),
-                buildSection<RecipeModel>(
-                  context: context,
-                  icon: Icons.book,
-                  title: 'Recetas',
-                  items: recipeController.recipes,
-                  buildItem: buildRecipeItem,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'RESTAURANTES',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  SizedBox(height: 2.0),
+                  buildSection<RecipeModel>(
+                    context: context,
+                    icon: Icons.book,
+                    title: 'Recetas',
+                    items: recipeController.recipes,
+                    buildItem: buildRecipeItem,
                   ),
-                ),
-                SizedBox(height: 2.0),
-                buildSection<EstablishmentModel>(
-                  context: context,
-                  icon: Icons.store,
-                  title: 'Establecimientos',
-                  items: establishmentController.establishments,
-                  buildItem: buildEstablishmentItem,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'PRODUCTOS',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  SizedBox(height: 16.0),
+                  Text(
+                    'RESTAURANTES',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                SizedBox(height: 2.0),
-                _isLoadingProducts
-                    ? Center(child: CircularProgressIndicator())
-                    : buildSection<ProductModel>(
-                  context: context,
-                  icon: Icons.shopping_cart,
-                  title: 'Productos',
-                  items: productController.products,
-                  buildItem: buildProductItem,
-                ),
-              ],
+                  SizedBox(height: 2.0),
+                  buildSection<EstablishmentModel>(
+                    context: context,
+                    icon: Icons.store,
+                    title: 'Establecimientos',
+                    items: establishmentController.establishments,
+                    buildItem: buildEstablishmentItem,
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'PRODUCTOS',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 2.0),
+                  _isLoadingProducts
+                      ? Center(child: CircularProgressIndicator())
+                      : buildSection<ProductModel>(
+                          context: context,
+                          icon: Icons.shopping_cart,
+                          title: 'Productos',
+                          items: productController.products,
+                          buildItem: buildProductItem,
+                        ),
+                ],
+              ),
             ),
           ),
         ),
@@ -253,31 +255,32 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   Widget buildCarousel<T>(List<T> items, Widget Function(T) buildItem) {
     return items.isEmpty
         ? Center(
-      child: Text(
-        'No hay elementos disponibles',
-        style: TextStyle(color: Colors.grey),
-      ),
-    )
+            child: Text(
+              'No hay elementos disponibles',
+              style: TextStyle(color: Colors.grey),
+            ),
+          )
         : CarouselSlider(
-      items: items.map((item) => buildItem(item)).toList(),
-      options: CarouselOptions(
-        height: 150.0,
-        initialPage: 0,
-        viewportFraction: 0.8,
-        disableCenter: true,
-        enlargeCenterPage: true,
-        enlargeFactor: 0.25,
-        enableInfiniteScroll: true,
-        scrollDirection: Axis.horizontal,
-        autoPlay: false,
-      ),
-    );
+            items: items.map((item) => buildItem(item)).toList(),
+            options: CarouselOptions(
+              height: 150.0,
+              initialPage: 0,
+              viewportFraction: 0.8,
+              disableCenter: true,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.25,
+              enableInfiniteScroll: true,
+              scrollDirection: Axis.horizontal,
+              autoPlay: false,
+            ),
+          );
   }
 
   Widget buildProductItem(ProductModel item) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('ProductDetailsView', queryParameters: {'id': item.barcode});
+        context.pushNamed('ProductDetailsView',
+            queryParameters: {'barcode': item.barcode});
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.0),
@@ -323,7 +326,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   Widget buildRecipeItem(RecipeModel item) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('RecipeDetailsView', queryParameters: {'id': item.id.toString()});
+        context.pushNamed('RecipeDetailsView',
+            queryParameters: {'id': item.id.toString()});
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.0),
@@ -374,7 +378,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   Widget buildEstablishmentItem(EstablishmentModel item) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('EstablishmentDetailsView', queryParameters: {'id': item.id.toString()});
+        context.pushNamed('EstablishmentDetailsView',
+            queryParameters: {'id': item.id.toString()});
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.0),

@@ -63,7 +63,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
       password: _model.textController5!.text,
     );
 
-    final success = await UserService().register(newUser);
+    final success = await UserService().register(newUser, context);
     if (success) {
       setState(() {
         _message = "Register successful";
