@@ -517,7 +517,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                           children: [
                             FFButtonWidget(
                               onPressed: () {
-                                _register(); // Llama al método _register
+                                _register();
                               },
                               text: 'Registrarse',
                               options: FFButtonOptions(

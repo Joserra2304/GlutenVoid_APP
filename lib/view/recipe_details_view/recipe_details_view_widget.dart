@@ -69,7 +69,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
-          title: Text('Editar Receta', style: TextStyle(color: Colors.yellow)),
+          title: Text('Editar Receta', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -84,20 +84,20 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                         _isApproved = value;
                       });
                     },
-                    title: Text('Aprobada', style: TextStyle(color: Colors.yellow)),
+                    title: Text('Aprobada', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Guardar Cambios', style: TextStyle(color: Colors.yellow)),
+              child: Text('Guardar Cambios', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () async {
                 Map<String, dynamic> updates = {
                   'id': recipe.id,
@@ -133,15 +133,16 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
-          title: Text('Confirmar Eliminación', style: TextStyle(color: Colors.yellow)),
-          content: Text('¿Estás seguro de que quieres eliminar esta receta?', style: TextStyle(color: Colors.yellow)),
+          title: Text('Confirmar Eliminación', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          content: Text('¿Estás seguro de que quieres eliminar esta receta?',
+              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Eliminar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () async {
                 bool success = await widget.recipeController.deleteRecipe(widget.recipeId);
                 Navigator.of(context).pop(success);

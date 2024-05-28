@@ -109,11 +109,11 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
               ),
               actions: [
                 TextButton(
-                  child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
                 TextButton(
-                  child: Text('Guardar Cambios', style: TextStyle(color: Colors.yellow)),
+                  child: Text('Guardar Cambios', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
                     Map<String, dynamic> updates = {
                       'name': _nameController.text,
@@ -152,11 +152,11 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
           content: Text('¿Estás seguro de que deseas eliminar este usuario?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Eliminar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },

@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'establishment_details_view_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 
 export 'establishment_details_view_model.dart';
 
@@ -17,8 +18,7 @@ class EstablishmentDetailsViewWidget extends StatefulWidget {
   const EstablishmentDetailsViewWidget({Key? key, required this.establishmentId, required this.establishmentController}) : super(key: key);
 
   @override
-  State<EstablishmentDetailsViewWidget> createState() =>
-      _EstablishmentDetailsViewWidgetState();
+  State<EstablishmentDetailsViewWidget> createState() => _EstablishmentDetailsViewWidgetState();
 }
 
 class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsViewWidget> {
@@ -30,6 +30,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
 
   TextEditingController _descriptionController = TextEditingController();
   FocusNode _descriptionFocusNode = FocusNode();
+  gmaps.GoogleMapController? _mapController;
 
   @override
   void initState() {
@@ -68,7 +69,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               backgroundColor: Color(0xFF7C4DA4), // Color morado claro
               title: Text(
                 "Editar Restaurante",
-                style: TextStyle(color: Colors.yellow),
+                style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
               ),
               content: SingleChildScrollView(
                 child: Column(
@@ -117,11 +118,11 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               ),
               actions: [
                 TextButton(
-                  child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
                 TextButton(
-                  child: Text('Guardar Cambios', style: TextStyle(color: Colors.yellow)),
+                  child: Text('Guardar Cambios', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
                     Map<String, dynamic> updates = {
                       'name': _name.text,
@@ -157,15 +158,15 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: Text('Confirmar eliminación', style: TextStyle(color: Colors.yellow)),
-          content: Text('¿Estás seguro de que quieres eliminar este establecimiento?', style: TextStyle(color: Colors.yellow)),
+          title: Text('Confirmar eliminación', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          content: Text('¿Estás seguro de que quieres eliminar este establecimiento?', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [
             TextButton(
-              child: Text('Cancelar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar', style: TextStyle(color: Colors.yellow)),
+              child: Text('Eliminar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -282,13 +283,12 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   EstablishmentModel establishment = snapshot.data!;
-                  return Padding(
-                    padding: EdgeInsets.all(14.0),
+                  return SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(height: 20.0), // Espacio entre el AppBar y el contenido
                         Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -454,6 +454,44 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Container(
+                            height: 250,
+                            width: 250,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(125.0), // More circular shape
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(125.0), // More circular shape
+                              child: gmaps.GoogleMap(
+                                onMapCreated: (controller) {
+                                  _mapController = controller;
+                                  _mapController!.animateCamera(
+                                    gmaps.CameraUpdate.newLatLngZoom(
+                                      gmaps.LatLng(establishment.latitude, establishment.longitude),
+                                      15,
+                                    ),
+                                  );
+                                },
+                                initialCameraPosition: gmaps.CameraPosition(
+                                  target: gmaps.LatLng(establishment.latitude, establishment.longitude),
+                                  zoom: 15,
+                                ),
+                                markers: {
+                                  gmaps.Marker(
+                                    markerId: gmaps.MarkerId(establishment.id.toString()),
+                                    position: gmaps.LatLng(establishment.latitude, establishment.longitude),
+                                  ),
+                                },
+                              ),
                             ),
                           ),
                         ),

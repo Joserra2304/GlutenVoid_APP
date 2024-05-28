@@ -52,7 +52,9 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Añadir Receta'),
+          backgroundColor: Color(0xFF7C4DA4),
+          title: const Text('Añadir Receta',
+              style: TextStyle(color: Colors.yellow)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -66,14 +68,15 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             ),
           ),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            TextButton(
+              child: Text('Cancelar', style: TextStyle(
+                  color: FlutterFlowTheme.of(context).secondary)),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
-            ElevatedButton(
-              child: Text('Guardar'),
+            TextButton(
+              child: Text('Guardar', style: TextStyle(
+                  color: FlutterFlowTheme.of(context).secondary)
+              ),
               onPressed: () async {
                 if (userService.currentUser?.id == null) {
                   print("Error: Usuario no autenticado.");
@@ -187,16 +190,21 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de que quieres eliminar esta receta?'),
+          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          title: Text('Confirmar eliminación', style: TextStyle(
+              color: FlutterFlowTheme.of(context).secondary)),
+          content: Text('¿Estás seguro de que quieres eliminar esta receta?',
+              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(
+                  color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar'),
-              onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Eliminar', style: TextStyle(
+                    color: FlutterFlowTheme.of(context).secondary)),
+                onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );
@@ -270,6 +278,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       );
                     },
                   ),
+                if (userService.isAdmin && !isSpecificUserView)
                 FlutterFlowIconButton(
                   borderColor: FlutterFlowTheme.of(context).primary,
                   borderRadius: 20.0,

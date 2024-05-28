@@ -63,7 +63,11 @@ class _MapViewState extends State<MapView> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('Información del Restaurante'),
+              backgroundColor: Color(0xFF7C4DA4),
+              title: Text(
+                'Información del Restaurante',
+                style: TextStyle(color: Colors.yellow),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -98,7 +102,7 @@ class _MapViewState extends State<MapView> {
                                   width: 20.0, // Smaller width
                                   height: 20.0, // Smaller height
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).secondary,
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(10.0), // Smaller radius
                                   ),
                                 ),
@@ -113,7 +117,7 @@ class _MapViewState extends State<MapView> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Guardar'),
+                  child: Text('Guardar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
                     bool glutenFree = _glutenFreeOption;
                     EstablishmentModel newEstablishment = EstablishmentModel(
@@ -152,7 +156,7 @@ class _MapViewState extends State<MapView> {
                   },
                 ),
                 TextButton(
-                  child: Text('Cancelar'),
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -190,7 +194,7 @@ class _MapViewState extends State<MapView> {
         backgroundColor: FlutterFlowTheme.of(context).primary,
         actions: [
           IconButton(
-            icon: Icon(Icons.list, color:FlutterFlowTheme.of(context).secondary),
+            icon: Icon(Icons.list, color: FlutterFlowTheme.of(context).secondary),
             onPressed: () {
               context.go("/establishmentView");
             },
@@ -229,7 +233,16 @@ class _MapViewState extends State<MapView> {
                 zoom: 14,
               ),
               onTap: _handleTap,
-              markers: markers,
+              markers: markers.map((marker) {
+                return marker.copyWith(
+                  infoWindowParam: InfoWindow(
+                    title: marker.infoWindow.title,
+                    snippet: 'Pulsa para más detalles',
+                    onTap: () => openEstablishmentDetails(int.parse(marker.markerId.value)),
+                  ),
+                  iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose), // Cambiar el color del marcador
+                );
+              }).toSet(),
             ),
           ),
         ],
