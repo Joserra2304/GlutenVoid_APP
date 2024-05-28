@@ -91,7 +91,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     final prefs = await SharedPreferences.getInstance();
     int? expiryTime = prefs.getInt('tokenExpiryTime');
     if (expiryTime == null) {
-      SnackbarMessages.showWarningSnackbar(context, "No se pudo recuperar el tiempo de expiración del token");
+      //SnackbarMessages.showWarningSnackbar(context, "No se pudo recuperar el tiempo de expiración del token");
       print("No se pudo recuperar el tiempo de expiración del token");
       return;
     }
