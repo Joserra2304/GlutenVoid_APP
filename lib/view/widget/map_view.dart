@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glutenvoid_app/view/widget/snackbar_messages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../controller/establishment_controller.dart';
@@ -62,7 +63,11 @@ class _MapViewState extends State<MapView> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('Información del Restaurante'),
+              backgroundColor: Color(0xFF7C4DA4),
+              title: Text(
+                'Información del Restaurante',
+                style: TextStyle(color: Colors.yellow),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -112,7 +117,7 @@ class _MapViewState extends State<MapView> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Guardar'),
+                  child: Text('Guardar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
                     bool glutenFree = _glutenFreeOption;
                     EstablishmentModel newEstablishment = EstablishmentModel(
@@ -143,15 +148,15 @@ class _MapViewState extends State<MapView> {
                         );
                       });
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Establecimiento guardado con éxito!")));
+                      SnackbarMessages.showPositiveSnackbar(context, "Establecimiento guardado con éxito");
                     } else {
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error al guardar el establecimiento.")));
+                      SnackbarMessages.showNegativeSnackbar(context, "Error al guardar el establecimiento");
                     }
                   },
                 ),
                 TextButton(
-                  child: Text('Cancelar'),
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -175,13 +180,13 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
     return Scaffold(
-      backgroundColor: FlutterFlowTheme.of(context).info,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(
           'Mapa de restaurantes',
           style: FlutterFlowTheme.of(context).headlineMedium.override(
             fontFamily: 'Outfit',
-            color: Colors.white,
+            color: FlutterFlowTheme.of(context).secondary,
             fontSize: 22.0,
             letterSpacing: 0.0,
           ),
@@ -189,9 +194,9 @@ class _MapViewState extends State<MapView> {
         backgroundColor: FlutterFlowTheme.of(context).primary,
         actions: [
           IconButton(
-            icon: Icon(Icons.list, color: Color(0xFFe9d7ac)),
+            icon: Icon(Icons.list, color: FlutterFlowTheme.of(context).secondary),
             onPressed: () {
-              context.go("/establishmentView");
+              context.pushNamed("EstablishmentView");
             },
           ),
         ],
@@ -228,7 +233,16 @@ class _MapViewState extends State<MapView> {
                 zoom: 14,
               ),
               onTap: _handleTap,
-              markers: markers,
+              markers: markers.map((marker) {
+                return marker.copyWith(
+                  infoWindowParam: InfoWindow(
+                    title: marker.infoWindow.title,
+                    snippet: 'Pulsa para más detalles',
+                    onTap: () => openEstablishmentDetails(int.parse(marker.markerId.value)),
+                  ),
+                  iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose), // Cambiar el color del marcador
+                );
+              }).toSet(),
             ),
           ),
         ],

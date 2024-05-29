@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../service/barcode_scanner_service.dart';
 import '../widget/bottom_app_bar.dart';
 import '../widget/loading_animation.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -42,12 +43,13 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
     productController = ProductController();
     _loadProducts();
     barcodeScannerService = BarcodeScannerService((String barcode) async {
-      final productDetails = await productController.fetchProductByBarcode(barcode);
+      final productDetails =
+      await productController.fetchProductByBarcode(barcode);
       if (productDetails != null) {
         goToProductDetails(productDetails);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Producto no encontrado.')));
+        SnackbarMessages.showNegativeSnackbar(
+            context, "Producto no encontrado");
       }
     });
 
@@ -78,7 +80,10 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       setState(() {
         // Eliminar productos sin nombre y duplicados
         final uniqueTitles = <String>{};
-        _products = fetchedProducts.where((product) => product.name.isNotEmpty && uniqueTitles.add(product.name)).toList();
+        _products = fetchedProducts
+            .where((product) =>
+        product.name.isNotEmpty && uniqueTitles.add(product.name))
+            .toList();
         isLoading = false;
       });
     } catch (e) {
@@ -86,9 +91,8 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al cargar los productos: $e')),
-      );
+      SnackbarMessages.showNegativeSnackbar(
+          context, "Error al cargar los productos");
     }
   }
 
@@ -123,7 +127,8 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
         setState(() {
           currentPage = nextPage;
           final uniqueTitles = <String>{};
-          _products.addAll(moreProducts.where((product) => product.name.isNotEmpty && uniqueTitles.add(product.name)));
+          _products.addAll(moreProducts.where((product) =>
+          product.name.isNotEmpty && uniqueTitles.add(product.name)));
         });
       }
     } catch (e) {
@@ -157,18 +162,21 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
     try {
       List<ProductModel> results;
       if (currentFilter == 'filter_store') {
-        results = await productController.fetchProductsByStore(
-            _searchController.text.trim());
+        results = await productController
+            .fetchProductsByStore(_searchController.text.trim());
       } else if (currentFilter == 'filter_category') {
-        results = await productController.fetchProductsByCategory(
-            _searchController.text.trim());
+        results = await productController
+            .fetchProductsByCategory(_searchController.text.trim());
       } else {
         results = [];
       }
 
       setState(() {
         final uniqueTitles = <String>{};
-        _products = results.where((product) => product.name.isNotEmpty && uniqueTitles.add(product.name)).toList();
+        _products = results
+            .where((product) =>
+        product.name.isNotEmpty && uniqueTitles.add(product.name))
+            .toList();
         isLoading = false;
       });
     } catch (e) {
@@ -176,8 +184,8 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al buscar productos: $e')));
+      SnackbarMessages.showNegativeSnackbar(
+          context, "Error al buscar productos");
     }
   }
 
@@ -214,13 +222,13 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
               borderRadius: 30.0,
               borderWidth: 1.0,
               buttonSize: 60.0,
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back_rounded,
-                color: Colors.white,
+                color: FlutterFlowTheme.of(context).secondary,
                 size: 30.0,
               ),
               onPressed: () async {
-                context.go("UserView");
+                context.pushNamed("UserView");
               },
             ),
             title: Row(
@@ -250,7 +258,8 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                         color: FlutterFlowTheme.of(context).secondary,
                         size: 24.0,
                       ),
-                      onPressed: () => barcodeScannerService.scanBarcode(context),
+                      onPressed: () =>
+                          barcodeScannerService.scanBarcode(context),
                     ),
                     PopupMenuButton<String>(
                       onSelected: (value) {
@@ -319,7 +328,8 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                     : GridView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16.0),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
@@ -335,7 +345,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                       onTap: () => goToProductDetails(product),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        color: FlutterFlowTheme.of(context).primary, // Asegurar el color de fondo
+                        color: Color(0xFF6A1B9A),
                         elevation: 4.0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0),
@@ -361,9 +371,12 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                                     .titleLarge
                                     .override(
                                   fontFamily: 'Outfit',
-                                  color: FlutterFlowTheme.of(context)
+                                  color:
+                                  FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  fontSize: product.name.length > 20 ? 14.0 : 16.0,
+                                  fontSize: product.name.length > 20
+                                      ? 14.0
+                                      : 16.0,
                                   letterSpacing: 0.0,
                                 ),
                                 textAlign: TextAlign.center,

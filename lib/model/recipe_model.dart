@@ -31,7 +31,7 @@ class RecipeModel {
         ingredients: json['ingredients'] ?? '',
         instructions: json['instructions'] ?? '',
         preparationTime: json['preparationTime'] ?? 0,
-        approval: json['isApproved'] ?? false,
+        approval: json['approvedRecipe'] ?? false,
         userId: json['userId'] ?? -1,
         username: json['username'] ?? '',
     );
@@ -45,7 +45,7 @@ class RecipeModel {
       'ingredients': ingredients,
       'instructions': instructions,
       'preparationTime': preparationTime,
-      'isApproved': approval,
+      'approvedRecipe': approval,
       'userId': userId,
       'username': username,
     };

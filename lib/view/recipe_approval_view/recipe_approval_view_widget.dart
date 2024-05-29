@@ -1,6 +1,7 @@
 import '../../controller/recipe_controller.dart';
 import '../../model/recipe_model.dart';
 import '../../service/user_service.dart';
+import '../widget/snackbar_messages.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -37,12 +38,12 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
   void _approveRecipe(int id) async {
     bool success = await widget.recipeController.approveRecipe(id);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Receta aprobada con éxito")));
+      SnackbarMessages.showPositiveSnackbar(
+          context, "Receta aprobada con éxito");
       _refreshUnapprovedRecipes();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("No se pudo aprobar la receta")));
+      SnackbarMessages.showNegativeSnackbar(
+          context, "No se pudo aprobar la receta");
     }
   }
 
@@ -84,7 +85,7 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondary,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
@@ -95,7 +96,7 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
           buttonSize: 60.0,
           icon: Icon(
             Icons.arrow_back_rounded,
-            color: Colors.white,
+            color: FlutterFlowTheme.of(context).secondary,
             size: 30.0,
           ),
           onPressed: () {
@@ -145,278 +146,287 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
       ),
       body: SafeArea(
         top: true,
-        child: Padding(
-          padding: EdgeInsets.all(18.0),
-          child: FutureBuilder<List<RecipeModel>>(
-            future: _unapprovedRecipes,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error al cargar las recetas'));
-              } else {
-                var recipes = snapshot.data ?? [];
-                _cardKeys.clear();
-                for (int i = 0; i < recipes.length; i++) {
-                  _cardKeys.add(GlobalKey<FlipCardState>());
-                }
-                return ListView.builder(
-                  itemCount: recipes.length,
-                  itemBuilder: (context, index) {
-                    var recipe = recipes[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        child: userService.isAdmin
-                            ? FlipCard(
-                          key: _cardKeys[index],
-                          direction: FlipDirection.HORIZONTAL,
-                          front: GestureDetector(
-                            onTap: () => _flipCard(index),
-                            child: Container(
-                              width: double.infinity,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    FlutterFlowTheme.of(context).accent3,
-                                    FlutterFlowTheme.of(context).accent4
-                                  ],
-                                  stops: [0.0, 1.0],
-                                  begin: AlignmentDirectional(0.0, -1.0),
-                                  end: AlignmentDirectional(0, 1.0),
-                                ),
+        child: FutureBuilder<List<RecipeModel>>(
+          future: _unapprovedRecipes,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error al cargar las recetas'));
+            } else {
+              var recipes = snapshot.data ?? [];
+              _cardKeys.clear();
+              for (int i = 0; i < recipes.length; i++) {
+                _cardKeys.add(GlobalKey<FlipCardState>());
+              }
+              return Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: recipes.length,
+                        itemBuilder: (context, index) {
+                          var recipe = recipes[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Material(
+                              color: Color(0xFF9575CD),
+                              elevation: 5.0,
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(22.0),
-                                border: Border.all(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primary,
-                                  width: 2.0,
-                                ),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        recipe.name,
-                                        textAlign: TextAlign.center,
-                                        style:
-                                        FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .override(
-                                          fontFamily: 'Outfit',
-                                          color: FlutterFlowTheme
-                                              .of(context)
-                                              .secondary,
-                                          letterSpacing: 0.0,
-                                        ),
+                              child: userService.isAdmin
+                                  ? FlipCard(
+                                key: _cardKeys[index],
+                                direction: FlipDirection.HORIZONTAL,
+                                front: GestureDetector(
+                                  onTap: () => _flipCard(index),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFF9575CD),
+                                          Color(0xFFB39DDB)
+                                        ],
+                                        stops: [0.0, 1.0],
+                                        begin: AlignmentDirectional(0.0, -1.0),
+                                        end: AlignmentDirectional(0, 1.0),
                                       ),
-                                      subtitle: Text(
-                                        recipe.description,
-                                        textAlign: TextAlign.center,
-                                        style:
-                                        FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .override(
-                                          fontFamily:
-                                          'Readex Pro',
-                                          color: FlutterFlowTheme
-                                              .of(context)
-                                              .secondary,
-                                          letterSpacing: 0.0,
-                                        ),
+                                      borderRadius: BorderRadius.circular(22.0),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        width: 2.0,
                                       ),
-                                      tileColor: Colors.transparent,
-                                      dense: false,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: ListTile(
+                                            title: Text(
+                                              recipe.name,
+                                              textAlign: TextAlign.center,
+                                              style: FlutterFlowTheme.of(context)
+                                                  .titleLarge
+                                                  .override(
+                                                fontFamily: 'Outfit',
+                                                color: FlutterFlowTheme
+                                                    .of(context)
+                                                    .secondary,
+                                                letterSpacing: 0.0,
+                                              ),
+                                            ),
+                                            subtitle: Text(
+                                              recipe.description,
+                                              textAlign: TextAlign.center,
+                                              style: FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                fontFamily: 'Readex Pro',
+                                                color: FlutterFlowTheme
+                                                    .of(context)
+                                                    .secondary,
+                                                letterSpacing: 0.0,
+                                              ),
+                                            ),
+                                            tileColor: Colors.transparent,
+                                            dense: false,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 42.0),
+                                          child: Icon(
+                                            Icons.touch_app_outlined,
+                                            color:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                            size: 30.0,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(right: 42.0),
-                                    child: Icon(
-                                      Icons.touch_app_outlined,
+                                ),
+                                back: Container(
+                                  width: double.infinity,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        FlutterFlowTheme.of(context).accent4,
+                                        FlutterFlowTheme.of(context)
+                                            .accent4Dark,
+                                      ],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(0.0, -1.0),
+                                      end: AlignmentDirectional(0, 1.0),
+                                    ),
+                                    borderRadius: BorderRadius.circular(22.0),
+                                    border: Border.all(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      FlutterFlowIconButton(
+                                        borderColor: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        borderRadius: 20.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 40.0,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .warning,
+                                        icon: Icon(
+                                          Icons.remove_red_eye,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 24.0,
+                                        ),
+                                        onPressed: () async {
+                                          var result = await context.pushNamed('RecipeDetailsView',
+                                              queryParameters: {
+                                                'recipeId': recipe.id.toString(),
+                                                'userId': recipe.userId.toString()
+                                              });
+                                          if (result == true) {
+                                            _refreshUnapprovedRecipes();
+                                          }
+                                        },
+                                      ),
+                                      FlutterFlowIconButton(
+                                        borderColor: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        borderRadius: 20.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 40.0,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .success,
+                                        icon: Icon(
+                                          Icons.check,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 24.0,
+                                        ),
+                                        onPressed: () {
+                                          _approveRecipe(recipe.id);
+                                        },
+                                      ),
+                                      FlutterFlowIconButton(
+                                        borderColor: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        borderRadius: 20.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 40.0,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .error,
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 24.0,
+                                        ),
+                                        onPressed: () async {
+                                          bool confirmed =
+                                          await _confirmDeletion();
+                                          if (confirmed) {
+                                            bool success = await widget
+                                                .recipeController
+                                                .deleteRecipe(recipe.id);
+                                            if (success) {
+                                              setState(() {
+                                                recipes.removeAt(index);
+                                              });
+                                              SnackbarMessages
+                                                  .showPositiveSnackbar(
+                                                  context,
+                                                  "Receta eliminada con éxito");
+                                            } else {
+                                              SnackbarMessages
+                                                  .showNegativeSnackbar(
+                                                  context,
+                                                  "Error al eliminar receta");
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                                  : Container(
+                                width: double.infinity,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      FlutterFlowTheme.of(context).accent3,
+                                      FlutterFlowTheme.of(context).accent4
+                                    ],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(0.0, -1.0),
+                                    end: AlignmentDirectional(0, 1.0),
+                                  ),
+                                  borderRadius: BorderRadius.circular(22.0),
+                                  border: Border.all(
+                                    color:
+                                    FlutterFlowTheme.of(context).primary,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: ListTile(
+                                  title: Text(
+                                    recipe.name,
+                                    textAlign: TextAlign.center,
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleLarge
+                                        .override(
+                                      fontFamily: 'Outfit',
                                       color: FlutterFlowTheme.of(context)
                                           .secondary,
-                                      size: 30.0,
+                                      letterSpacing: 0.0,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          back: Container(
-                            width: double.infinity,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  FlutterFlowTheme.of(context).accent4,
-                                  FlutterFlowTheme.of(context)
-                                      .accent4Dark,
-                                ],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(0.0, -1.0),
-                                end: AlignmentDirectional(0, 1.0),
-                              ),
-                              borderRadius: BorderRadius.circular(22.0),
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryColor,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
-                              children: [
-                                FlutterFlowIconButton(
-                                  borderColor:
-                                  FlutterFlowTheme.of(context)
-                                      .primary,
-                                  borderRadius: 20.0,
-                                  borderWidth: 1.0,
-                                  buttonSize: 40.0,
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .warning,
-                                  icon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
+                                  subtitle: Text(
+                                    recipe.description,
+                                    textAlign: TextAlign.center,
+                                    style: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      letterSpacing: 0.0,
+                                    ),
                                   ),
-                                  onPressed: () {
+                                  tileColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  dense: false,
+                                  onTap: () {
                                     //_navigateToDetails(recipe.id);
                                   },
                                 ),
-                                FlutterFlowIconButton(
-                                  borderColor:
-                                  FlutterFlowTheme.of(context)
-                                      .primary,
-                                  borderRadius: 20.0,
-                                  borderWidth: 1.0,
-                                  buttonSize: 40.0,
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .success,
-                                  icon: Icon(
-                                    Icons.check,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
-                                  ),
-                                  onPressed: () {
-                                    _approveRecipe(recipe.id);
-                                  },
-                                ),
-                                FlutterFlowIconButton(
-                                  borderColor:
-                                  FlutterFlowTheme.of(context)
-                                      .primary,
-                                  borderRadius: 20.0,
-                                  borderWidth: 1.0,
-                                  buttonSize: 40.0,
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .error,
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
-                                  ),
-                                  onPressed: () async {
-                                    bool confirmed =
-                                    await _confirmDeletion();
-                                    if (confirmed) {
-                                      bool success = await widget
-                                          .recipeController
-                                          .deleteRecipe(recipe.id);
-                                      if (success) {
-                                        setState(() {
-                                          recipes.removeAt(index);
-                                        });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'Receta eliminada con éxito')));
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'Error al eliminar la receta')));
-                                      }
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                            : Container(
-                          width: double.infinity,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                FlutterFlowTheme.of(context).accent3,
-                                FlutterFlowTheme.of(context).accent4
-                              ],
-                              stops: [0.0, 1.0],
-                              begin: AlignmentDirectional(0.0, -1.0),
-                              end: AlignmentDirectional(0, 1.0),
-                            ),
-                            borderRadius: BorderRadius.circular(22.0),
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).primary,
-                              width: 2.0,
-                            ),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              recipe.name,
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .titleLarge
-                                  .override(
-                                fontFamily: 'Outfit',
-                                color: FlutterFlowTheme.of(context)
-                                    .secondary,
-                                letterSpacing: 0.0,
                               ),
                             ),
-                            subtitle: Text(
-                              recipe.description,
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .labelMedium
-                                  .override(
-                                fontFamily: 'Readex Pro',
-                                color: FlutterFlowTheme.of(context)
-                                    .secondary,
-                                letterSpacing: 0.0,
-                              ),
-                            ),
-                            tileColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            dense: false,
-                            onTap: () {
-                              //_navigateToDetails(recipe.id);
-                            },
-                          ),
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                );
-              }
-            },
-          ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
         ),
       ),
     );

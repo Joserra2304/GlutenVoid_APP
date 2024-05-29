@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,7 +26,43 @@ class UserService {
     await prefs.setInt('tokenExpiryTime', expiresAt);
   }
 
-  Future<List<UserModel>> fetchAllUsers() async {
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('jwt');
+  }
+
+  Future<int?> _getTokenExpiryTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('tokenExpiryTime');
+  }
+
+  Future<void> renewToken(BuildContext context) async {
+    final token = await _getToken();
+    if (token != null) {
+      final response = await glutenVoidApi.post('/auth/refresh', jsonEncode({'token': token}));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        String? newToken = data['token'];
+        int? newExpiresAt = data['expiresAt'];
+        if (newToken != null && newExpiresAt != null) {
+          await saveTokenAndExpiration(newToken, newExpiresAt);
+          _startTokenTimer(context, newExpiresAt - DateTime.now().millisecondsSinceEpoch);
+        }
+      } else {
+        print("Failed to renew token with status: ${response.statusCode}");
+      }
+    }
+  }
+
+  Future<void> ensureTokenIsValid(BuildContext context) async {
+    final expiryTime = await _getTokenExpiryTime();
+    if (expiryTime != null && DateTime.now().millisecondsSinceEpoch >= expiryTime - 5000) {
+      await renewToken(context);
+    }
+  }
+
+  Future<List<UserModel>> fetchAllUsers(BuildContext context) async {
+    await ensureTokenIsValid(context);
     final response = await glutenVoidApi.get('/users');
     if (response.statusCode == 200) {
       return (jsonDecode(response.body) as List)
@@ -38,7 +73,8 @@ class UserService {
     }
   }
 
-  Future<UserModel> getUserById(int id) async {
+  Future<UserModel> getUserById(int id, BuildContext context) async {
+    await ensureTokenIsValid(context);
     final response = await glutenVoidApi.get('/users/$id');
     if (response.statusCode == 200) {
       return UserModel.fromJson(jsonDecode(response.body));
@@ -47,26 +83,25 @@ class UserService {
     }
   }
 
-  Future<bool> register(UserModel newUser) async {
+  Future<bool> register(UserModel newUser, BuildContext context) async {
+    await ensureTokenIsValid(context);
     final response = await glutenVoidApi.post('/users', jsonEncode(newUser.toJson()));
     if (response.statusCode == 201) {
       return true;
     } else {
       print('Failed to register: ${response.body}');
-      print('Failed to register: Status ${response.statusCode}, Body: ${response.body}');
       return false;
     }
   }
 
-  Future<bool> updateUser(int userId, Map<String, dynamic> updates) async {
+  Future<bool> updateUser(int userId, Map<String, dynamic> updates, BuildContext context) async {
+    await ensureTokenIsValid(context);
     final response = await glutenVoidApi.patch('/users/$userId', jsonEncode(updates));
-    print('Request body: ${jsonEncode(updates)}');
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
     return response.statusCode == 200;
   }
 
-  Future<bool> deleteUser(int userId) async {
+  Future<bool> deleteUser(int userId, BuildContext context) async {
+    await ensureTokenIsValid(context);
     final response = await glutenVoidApi.delete('/users/$userId');
     return response.statusCode == 204;
   }
@@ -80,35 +115,17 @@ class UserService {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        print("Response data: $data");  // Log para depuración
-
         String? jwtToken = data['jwt'];
         int? expiresAt = data['expiresAt'];
         if (jwtToken != null && expiresAt != null) {
           await saveTokenAndExpiration(jwtToken, expiresAt);
-          print("JWT Token: $jwtToken");  // Log para depuración
           _startTokenTimer(context, expiresAt - DateTime.now().millisecondsSinceEpoch);
 
           if (data.containsKey('user') && data['user'] != null) {
             Map<String, dynamic> userJson = data['user'];
-            print("User JSON: $userJson");  // Log para depuración
-
             _currentUser = UserModel.fromJson(userJson);
-            if (_currentUser != null) {
-              print("User Data: ${_currentUser!.toJson()}");  // Log para depuración
-            }
-
             return _currentUser;
-          } else {
-            print("Error: 'user' key is missing or null in the response data");
           }
-        } else {
-          print("No token or expiration info found in the response");
-        }
-      } else {
-        print("Login failed with status: ${response.statusCode}");
-        if (response.statusCode == 500) {
-          print("Server error: ${response.body}");
         }
       }
     } catch (e) {
@@ -118,8 +135,8 @@ class UserService {
   }
 
   void _startTokenTimer(BuildContext context, int expiryDuration) {
-    _tokenTimer?.cancel();  // Cancela cualquier timer existente
-    _tokenTimer = Timer(Duration(milliseconds: expiryDuration - 5000), () => _showTokenExpiryAlert(context));  // 5 segundos antes de que expire
+    _tokenTimer?.cancel();
+    _tokenTimer = Timer(Duration(milliseconds: expiryDuration - 5000), () => _showTokenExpiryAlert(context));
   }
 
   void _showTokenExpiryAlert(BuildContext context) {
@@ -132,8 +149,9 @@ class UserService {
           actions: [
             TextButton(
               child: Text("Renew Session"),
-              onPressed: () {
-                Navigator.of(context).pop();  // Cierra el diálogo
+              onPressed: () async {
+                await renewToken(context);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -146,7 +164,7 @@ class UserService {
     _currentUser = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
-    await prefs.remove('tokenExpiryTime'); // Asegúrate de eliminar el tiempo de expiración
-    _tokenTimer?.cancel(); // Cancela el temporizador del token
+    await prefs.remove('tokenExpiryTime');
+    _tokenTimer?.cancel();
   }
 }

@@ -91,10 +91,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     final prefs = await SharedPreferences.getInstance();
     int? expiryTime = prefs.getInt('tokenExpiryTime');
     if (expiryTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("No se pudo recuperar el tiempo de expiración del token."), backgroundColor: Colors.red)
-
-      );
+      //SnackbarMessages.showWarningSnackbar(context, "No se pudo recuperar el tiempo de expiración del token");
       print("No se pudo recuperar el tiempo de expiración del token");
       return;
     }
@@ -102,20 +99,12 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int timeLeft = expiryTime - currentTime;
     if (timeLeft <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(
-              "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."), backgroundColor: Colors.red)
-
-      );
+      //SnackbarMessages.showNegativeSnackbar(context, "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
       print("Sesion expirada");
     } else {
       int minutesLeft = timeLeft ~/ 60000;
       int secondsLeft = (timeLeft % 60000) ~/ 1000;
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(
-              "Tu sesión expirará en $minutesLeft minutos y $secondsLeft segundos."), backgroundColor: Colors.blue)
-
-      );
+      //SnackbarMessages.showWarningSnackbar(context, "Tu sesión expirará en $minutesLeft minutos y $secondsLeft segundos.");
       print("Sesion expirará en $minutesLeft minutos y $secondsLeft segundos.");
     }
   }
@@ -143,7 +132,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
         onWillPop: _onWillPop,
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).secondary,
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).primary,
             automaticallyImplyLeading: false,
@@ -304,6 +293,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                     child: Icon(
                                       _model.passwordVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                                       size: 22,
+                                      color: FlutterFlowTheme.of(context).primary,
                                     ),
                                   ),
                                 ),
@@ -346,7 +336,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                   elevation: 20.0,
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
-                                    width: 1.0,
+                                    width: 2.0,
                                   ),
                                   borderRadius: BorderRadius.circular(50.0),
                                 ),

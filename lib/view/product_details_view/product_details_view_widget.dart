@@ -20,7 +20,8 @@ class ProductDetailsViewWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProductDetailsViewWidget> createState() => _ProductDetailsViewWidgetState();
+  State<ProductDetailsViewWidget> createState() =>
+      _ProductDetailsViewWidgetState();
 }
 
 class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
@@ -56,7 +57,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
@@ -67,11 +68,11 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
             buttonSize: 60.0,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: Colors.white,
+              color: FlutterFlowTheme.of(context).secondary,
               size: 30.0,
             ),
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.of(context).pop(true);
             },
           ),
           title: Row(
@@ -81,11 +82,11 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
               Text(
                 'Detalles del producto',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  letterSpacing: 0.0,
-                ),
+                      fontFamily: 'Outfit',
+                      color: Colors.white,
+                      fontSize: 22.0,
+                      letterSpacing: 0.0,
+                    ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -116,131 +117,161 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
         body: product == null
             ? Center(child: CircularProgressIndicator())
             : SafeArea(
-          top: true,
-          child: Padding(
-            padding: EdgeInsets.all(14.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: AlignmentDirectional(0.0, 0.0),
+                top: true,
+                child: SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(14.0, 20.0, 14.0, 0.0),
-                    child: Container(
-                      width: 175.0,
-                      height: 175.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        border: Border.all(width: 2.0),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Image.network(
-                          product!.imageUrl,
-                          width: 300.0,
-                          height: 200.0,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(0.0, -5.0),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(14.0, 10.0, 14.0, 5.0),
-                    child: Text(
-                      product!.name,
-                      textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(0.0, -5.0),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(14.0, 0.0, 14.0, 10.0),
-                    child: Text(
-                      product!.company,
-                      textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 22.0,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(14.0),
-                  child: Container(
-                    width: 300.0,
-                    height: 200.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primary,
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(width: 1.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                        child: Text(
-                          product!.description,
-                          style: FlutterFlowTheme.of(context).labelMedium.override(
-                            fontFamily: 'Readex Pro',
-                            color: FlutterFlowTheme.of(context).secondary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(0.0, 6.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Row(
+                    padding: EdgeInsets.all(14.0),
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                          child: Text(
-                            'Contiene GLUTEN:',
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                        Align(
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                14.0, 20.0, 14.0, 0.0),
+                            child: Container(
+                              width: 175.0,
+                              height: 175.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                border: Border.all(width: 2.0),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(0.0),
+                                child: Image.network(
+                                  product!.imageUrl,
+                                  width: 300.0,
+                                  height: 200.0,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional(0.0, -5.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                14.0, 10.0, 14.0, 5.0),
+                            child: Text(
+                              product!.name,
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional(0.0, -5.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                14.0, 0.0, 14.0, 10.0),
+                            child: Text(
+                              product!.company,
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 22.0,
+                                  ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                          padding: EdgeInsets.all(14.0),
                           child: Container(
-                            width: 50.0,
-                            height: 50.0,
+                            width: 300.0,
+                            height: 200.0,
                             decoration: BoxDecoration(
-                              color: product!.hasGluten
-                                  ? FlutterFlowTheme.of(context).error
-                                  : FlutterFlowTheme.of(context).success,
-                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(0.0, -1.0),
+                                end: AlignmentDirectional(0, 1.0),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(width: 1.0),
                             ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Text(
-                                product!.hasGluten ? 'SÍ' : 'NO',
-                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: FlutterFlowTheme.of(context).secondary,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  product!.description,
+                                  style: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                      ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional(0.0, 6.0),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 5.0, 0.0),
+                                  child: Text(
+                                    'Contiene GLUTEN:',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      5.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: BoxDecoration(
+                                      color: product!.hasGluten
+                                          ? FlutterFlowTheme.of(context).error
+                                          : FlutterFlowTheme.of(context)
+                                              .success,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Align(
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Text(
+                                        product!.hasGluten ? 'SÍ' : 'NO',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -248,16 +279,13 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
         bottomNavigationBar: isAdmin
             ? null
             : CommonBottomAppBar(
-          selectedIndex: _selectedIndex,
-          parentContext: context,
-        ),
+                selectedIndex: _selectedIndex,
+                parentContext: context,
+              ),
       ),
     );
   }
