@@ -25,6 +25,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
   late EstablishmentViewModel _model;
   final List<GlobalKey<FlipCardState>> _cardKeys = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final userService = UserService();
 
   @override
   void initState() {
@@ -76,14 +77,21 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
     _cardKeys[index].currentState!.toggleCard();
   }
 
+  Future<bool> _onWillPop() async {
+  Navigator.of(context).pop(true);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userService = UserService();
+
 
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
+    child: WillPopScope(
+    onWillPop: _onWillPop,
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.transparent,
@@ -428,6 +436,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
           ),
         ),
       ),
+    ),
     );
   }
 }

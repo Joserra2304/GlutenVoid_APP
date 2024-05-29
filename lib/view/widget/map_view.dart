@@ -24,6 +24,7 @@ class _MapViewState extends State<MapView> {
   Set<Marker> markers = {};
   int _selectedIndex = 0;
   bool _glutenFreeOption = false;
+  final userService = UserService();
 
   void _onMapCreated(GoogleMapController controller) {
     widget.mapController.setMapController(controller);
@@ -176,10 +177,18 @@ class _MapViewState extends State<MapView> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    userService.isAdmin ? context.pushNamed("AdminView")
+        : context.pushNamed("UserView");
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: _onWillPop,
+    child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(
@@ -253,6 +262,7 @@ class _MapViewState extends State<MapView> {
         selectedIndex: _selectedIndex,
         parentContext: context,
       ),
+    ),
     );
   }
 }

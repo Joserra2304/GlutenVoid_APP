@@ -259,6 +259,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
     return result ?? false;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
@@ -266,8 +267,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
     return WillPopScope(
       onWillPop: () async {
-        userService.isAdmin ? Navigator.of(context).pop(true)
-            : context.pushNamed("UserView");
+        context.pushNamed("UserView");
         return false;
       },
       child: Scaffold(

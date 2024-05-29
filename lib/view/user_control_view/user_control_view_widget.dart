@@ -111,7 +111,8 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                     email: _emailController.text,
                     password: _passwordController.text,
                     isAdmin: false);
-                bool success = await _userController.registerUser(newUser, context);
+                bool success =
+                    await _userController.registerUser(newUser, context);
                 if (success) {
                   SnackbarMessages.showPositiveSnackbar(
                       context, "Éxito al registrar usuario");
@@ -188,6 +189,11 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
     _cardKeys[index].currentState!.toggleCard();
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.of(context).pop(true);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userService = UserService();
@@ -196,97 +202,195 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30.0,
-            borderWidth: 1.0,
-            buttonSize: 60.0,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).secondary,
-              size: 30.0,
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: FlutterFlowTheme.of(context).primary,
+            automaticallyImplyLeading: false,
+            leading: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30.0,
+              borderWidth: 1.0,
+              buttonSize: 60.0,
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: FlutterFlowTheme.of(context).secondary,
+                size: 30.0,
+              ),
+              onPressed: () async {
+                context.pushNamed('AdminView');
+              },
             ),
-            onPressed: () async {
-              context.pushNamed('AdminView');
-            },
-          ),
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Configurar usuarios',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
-                    ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  if (userService.isAdmin)
-                    FlutterFlowIconButton(
-                      borderColor: FlutterFlowTheme.of(context).primary,
-                      borderRadius: 0.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      fillColor: FlutterFlowTheme.of(context).primary,
-                      icon: Icon(
-                        Icons.add,
-                        color: FlutterFlowTheme.of(context).secondary,
-                        size: 24.0,
+            title: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Configurar usuarios',
+                  style: FlutterFlowTheme.of(context).headlineMedium.override(
+                        fontFamily: 'Outfit',
+                        color: Colors.white,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
                       ),
-                      onPressed: () {
-                        _showAddUserDialog();
-                      },
-                    ),
-                ],
-              ),
-            ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (userService.isAdmin)
+                      FlutterFlowIconButton(
+                        borderColor: FlutterFlowTheme.of(context).primary,
+                        borderRadius: 0.0,
+                        borderWidth: 1.0,
+                        buttonSize: 40.0,
+                        fillColor: FlutterFlowTheme.of(context).primary,
+                        icon: Icon(
+                          Icons.add,
+                          color: FlutterFlowTheme.of(context).secondary,
+                          size: 24.0,
+                        ),
+                        onPressed: () {
+                          _showAddUserDialog();
+                        },
+                      ),
+                  ],
+                ),
+              ],
+            ),
+            actions: [],
+            centerTitle: false,
+            elevation: 2.0,
           ),
-          actions: [],
-          centerTitle: false,
-          elevation: 2.0,
-        ),
-        body: SafeArea(
-          top: true,
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(18.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ..._users.map((user) {
-                            int index = _users.indexOf(user);
-                            return Column(
-                              children: [
-                                FlipCard(
-                                  key: _cardKeys[index],
-                                  fill: Fill.fillBack,
-                                  direction: FlipDirection.HORIZONTAL,
-                                  speed: 400,
-                                  front: GestureDetector(
-                                    onTap: () => _flipCard(index),
-                                    child: Container(
+          body: SafeArea(
+            top: true,
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(18.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ..._users.map((user) {
+                              int index = _users.indexOf(user);
+                              return Column(
+                                children: [
+                                  FlipCard(
+                                    key: _cardKeys[index],
+                                    fill: Fill.fillBack,
+                                    direction: FlipDirection.HORIZONTAL,
+                                    speed: 400,
+                                    front: GestureDetector(
+                                      onTap: () => _flipCard(index),
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 100.0,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF6A1B9A),
+                                              Color(0xFF8E24AA),
+                                            ],
+                                            stops: [0.0, 1.0],
+                                            begin:
+                                                AlignmentDirectional(0.0, -1.0),
+                                            end: AlignmentDirectional(0, 1.0),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(14.0),
+                                        ),
+                                        child: Wrap(
+                                          spacing: 0.0,
+                                          runSpacing: 0.0,
+                                          alignment: WrapAlignment.start,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          direction: Axis.horizontal,
+                                          runAlignment: WrapAlignment.start,
+                                          verticalDirection:
+                                              VerticalDirection.down,
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                      0.0, 15.0, 0.0, 0.0),
+                                              child: ListTile(
+                                                leading: user.isAdmin
+                                                    ? Icon(
+                                                        Icons
+                                                            .admin_panel_settings,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .warning,
+                                                        size: 30.0,
+                                                      )
+                                                    : Icon(
+                                                        Icons.person,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .successLight,
+                                                        size: 30.0,
+                                                      ),
+                                                title: Text(
+                                                  user.name,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .titleLarge
+                                                      .override(
+                                                        fontFamily: 'Outfit',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                                subtitle: Text(
+                                                  user.email,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .labelMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .info,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                                trailing: Icon(
+                                                  Icons.touch_app_outlined,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondary,
+                                                  size: 30.0,
+                                                ),
+                                                dense: false,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    back: Container(
                                       width: double.infinity,
                                       height: 100.0,
                                       decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
+                                        gradient: LinearGradient(
                                           colors: [
-                                            Color(0xFF6A1B9A),
-                                            Color(0xFF8E24AA),
+                                            Color(0xFF7B1FA2),
+                                            Color(0xFF9C27B0),
                                           ],
                                           stops: [0.0, 1.0],
                                           begin:
@@ -294,160 +398,73 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                           end: AlignmentDirectional(0, 1.0),
                                         ),
                                         borderRadius:
-                                            BorderRadius.circular(14.0),
+                                            BorderRadius.circular(12.0),
                                       ),
-                                      child: Wrap(
-                                        spacing: 0.0,
-                                        runSpacing: 0.0,
-                                        alignment: WrapAlignment.start,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.start,
-                                        direction: Axis.horizontal,
-                                        runAlignment: WrapAlignment.start,
-                                        verticalDirection:
-                                            VerticalDirection.down,
-                                        clipBehavior: Clip.none,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 0.0, 0.0),
-                                            child: ListTile(
-                                              leading: user.isAdmin
-                                                  ? Icon(
-                                                      Icons
-                                                          .admin_panel_settings,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .warning,
-                                                      size: 30.0,
-                                                    )
-                                                  : Icon(
-                                                      Icons.person,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .successLight,
-                                                      size: 30.0,
-                                                    ),
-                                              title: Text(
-                                                user.name,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleLarge
-                                                        .override(
-                                                          fontFamily: 'Outfit',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondary,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                              subtitle: Text(
-                                                user.email,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .labelMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .info,
-                                                      letterSpacing: 0.0,
-                                                    ),
-                                              ),
-                                              trailing: Icon(
-                                                Icons.touch_app_outlined,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondary,
-                                                size: 30.0,
-                                              ),
-                                              dense: false,
+                                          FlutterFlowIconButton(
+                                            borderColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                            borderRadius: 20.0,
+                                            borderWidth: 1.0,
+                                            buttonSize: 40.0,
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .warning,
+                                            icon: Icon(
+                                              Icons.remove_red_eye,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              size: 24.0,
                                             ),
+                                            onPressed: () {
+                                              GoRouter.of(context).goNamed(
+                                                  'UserProfileView',
+                                                  queryParameters: {
+                                                    'id': user.id.toString()
+                                                  });
+                                            },
+                                          ),
+                                          FlutterFlowIconButton(
+                                            borderColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                            borderRadius: 20.0,
+                                            borderWidth: 1.0,
+                                            buttonSize: 40.0,
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .error,
+                                            icon: Icon(
+                                              Icons.delete,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              size: 24.0,
+                                            ),
+                                            onPressed: () {
+                                              _confirmDeletion(user.id!);
+                                            },
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  back: Container(
-                                    width: double.infinity,
-                                    height: 100.0,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xFF7B1FA2),
-                                          Color(0xFF9C27B0),
-                                        ],
-                                        stops: [0.0, 1.0],
-                                        begin: AlignmentDirectional(0.0, -1.0),
-                                        end: AlignmentDirectional(0, 1.0),
-                                      ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        FlutterFlowIconButton(
-                                          borderColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondary,
-                                          borderRadius: 20.0,
-                                          borderWidth: 1.0,
-                                          buttonSize: 40.0,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .warning,
-                                          icon: Icon(
-                                            Icons.remove_red_eye,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            size: 24.0,
-                                          ),
-                                          onPressed: () {
-                                            GoRouter.of(context).goNamed(
-                                                'UserProfileView',
-                                                queryParameters: {
-                                                  'id': user.id.toString()
-                                                });
-                                          },
-                                        ),
-                                        FlutterFlowIconButton(
-                                          borderColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                          borderRadius: 20.0,
-                                          borderWidth: 1.0,
-                                          buttonSize: 40.0,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .error,
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            size: 24.0,
-                                          ),
-                                          onPressed: () {
-                                            _confirmDeletion(user.id!);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 16.0),
-                              ],
-                            );
-                          }).toList(),
-                        ],
+                                  SizedBox(height: 16.0),
+                                ],
+                              );
+                            }).toList(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+          ),
         ),
       ),
     );

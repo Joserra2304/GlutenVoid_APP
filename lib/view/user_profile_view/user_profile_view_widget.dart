@@ -29,6 +29,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
   bool _isEditingBio = false;
   TextEditingController _profileBioController = TextEditingController();
   FocusNode _focusNode = FocusNode();
+  final userService = UserService();
 
   final List<String> glutenConditions = [
     'Alergia',
@@ -190,6 +191,13 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
     return result ?? false;
   }
 
+  Future<bool> _onWillPop() async {
+    userService.isAdmin
+        ? Navigator.of(context).pop(true)
+        : context.pushNamed("UserView");
+    return false;
+  }
+
   Widget buildRecipeItem(RecipeModel recipe) {
     return GestureDetector(
       onTap: () {
@@ -245,28 +253,25 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
   @override
   Widget build(BuildContext context) {
     final currentUser = UserService().currentUser;
-    final userService = UserService();
+
     final bool isViewingOwnProfile =
         currentUser != null && currentUser.id == widget.userId;
     final bool isAdmin = currentUser?.isAdmin ?? false;
 
-    return WillPopScope(
-      onWillPop: () async {
-        context.pushNamed("UserView");
-        return false;
+    return GestureDetector(
+      onTap: () {
+        if (_isEditingBio) {
+          setState(() {
+            _isEditingBio = false;
+          });
+        } else {
+          _model.unfocusNode.canRequestFocus
+              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+              : FocusScope.of(context).unfocus();
+        }
       },
-      child: GestureDetector(
-        onTap: () {
-          if (_isEditingBio) {
-            setState(() {
-              _isEditingBio = false;
-            });
-          } else {
-            _model.unfocusNode.canRequestFocus
-                ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-                : FocusScope.of(context).unfocus();
-          }
-        },
+      child: WillPopScope(
+        onWillPop: _onWillPop,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: Colors.transparent,

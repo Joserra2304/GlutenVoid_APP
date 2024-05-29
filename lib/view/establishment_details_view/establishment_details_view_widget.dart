@@ -176,6 +176,11 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
     return result ?? false;
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.of(context).pop(true);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userService = UserService();
@@ -186,6 +191,8 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
         });
         FocusScope.of(context).unfocus();
       },
+    child: WillPopScope(
+    onWillPop: _onWillPop,
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.transparent,
@@ -507,6 +514,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
           ),
         ),
       ),
+    ),
     );
   }
 

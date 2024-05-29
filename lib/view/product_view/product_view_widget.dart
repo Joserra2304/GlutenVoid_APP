@@ -44,7 +44,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
     _loadProducts();
     barcodeScannerService = BarcodeScannerService((String barcode) async {
       final productDetails =
-      await productController.fetchProductByBarcode(barcode);
+          await productController.fetchProductByBarcode(barcode);
       if (productDetails != null) {
         goToProductDetails(productDetails);
       } else {
@@ -76,13 +76,13 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
 
     try {
       List<ProductModel> fetchedProducts =
-      await productController.fetchGlutenFreeProducts();
+          await productController.fetchGlutenFreeProducts();
       setState(() {
         // Eliminar productos sin nombre y duplicados
         final uniqueTitles = <String>{};
         _products = fetchedProducts
             .where((product) =>
-        product.name.isNotEmpty && uniqueTitles.add(product.name))
+                product.name.isNotEmpty && uniqueTitles.add(product.name))
             .toList();
         isLoading = false;
       });
@@ -108,7 +108,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
 
       if (currentFilter.isEmpty) {
         moreProducts =
-        await productController.fetchGlutenFreeProducts(page: nextPage);
+            await productController.fetchGlutenFreeProducts(page: nextPage);
       } else if (currentFilter == 'filter_store') {
         moreProducts = await productController.fetchProductsByStore(
             _searchController.text.trim(),
@@ -128,7 +128,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
           currentPage = nextPage;
           final uniqueTitles = <String>{};
           _products.addAll(moreProducts.where((product) =>
-          product.name.isNotEmpty && uniqueTitles.add(product.name)));
+              product.name.isNotEmpty && uniqueTitles.add(product.name)));
         });
       }
     } catch (e) {
@@ -175,7 +175,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
         final uniqueTitles = <String>{};
         _products = results
             .where((product) =>
-        product.name.isNotEmpty && uniqueTitles.add(product.name))
+                product.name.isNotEmpty && uniqueTitles.add(product.name))
             .toList();
         isLoading = false;
       });
@@ -199,7 +199,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.pop(context);
+    context.pushNamed("UserView");
     return false;
   }
 
@@ -238,11 +238,11 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                 Text(
                   'Productos',
                   style: FlutterFlowTheme.of(context).headlineMedium.override(
-                    fontFamily: 'Outfit',
-                    color: Colors.white,
-                    fontSize: 22.0,
-                    letterSpacing: 0.0,
-                  ),
+                        fontFamily: 'Outfit',
+                        color: Colors.white,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
+                      ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -266,7 +266,7 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                         _toggleSearchBar(value);
                       },
                       itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
+                          <PopupMenuEntry<String>>[
                         const PopupMenuItem<String>(
                           value: "filter_store",
                           child: Text("Buscar por supermercado"),
@@ -326,68 +326,66 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
                 child: isLoading
                     ? Center(child: LoadingAnimationWidget())
                     : GridView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(16.0),
-                  gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: _products.length + (isMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == _products.length) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    ProductModel product = _products[index];
-                    return InkWell(
-                      onTap: () => goToProductDetails(product),
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        color: Color(0xFF6A1B9A),
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16.0),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          childAspectRatio: 0.8,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
+                        itemCount: _products.length + (isMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == _products.length) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          ProductModel product = _products[index];
+                          return InkWell(
+                            onTap: () => goToProductDetails(product),
+                            child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: Color(0xFF6A1B9A),
+                              elevation: 4.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                              child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  product.imageUrl,
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.cover,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.network(
+                                        product.imageUrl,
+                                        width: 100.0,
+                                        height: 100.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.0),
+                                    Text(
+                                      product.name,
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            fontSize: product.name.length > 20
+                                                ? 14.0
+                                                : 16.0,
+                                            letterSpacing: 0.0,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                product.name,
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                  FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  fontSize: product.name.length > 20
-                                      ? 14.0
-                                      : 16.0,
-                                  letterSpacing: 0.0,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),

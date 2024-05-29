@@ -159,17 +159,17 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
     return result ?? false;
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.of(context).pop(true);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isAdmin = userService.isAdmin;
     final bool canEdit = isAdmin || userService.currentUser?.id == widget.userId;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pop(true);
-        return false;
-      },
-      child: GestureDetector(
+    return GestureDetector(
         onTap: () {
           setState(() {
             _isEditingDescription = false;
@@ -177,7 +177,10 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
             _isEditingInstructions = false;
           });
           FocusScope.of(context).unfocus();
+
         },
+      child: WillPopScope(
+        onWillPop: _onWillPop,
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(

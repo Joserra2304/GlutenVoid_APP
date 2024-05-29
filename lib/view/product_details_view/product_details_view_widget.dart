@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glutenvoid_app/flutter_flow/nav/nav.dart';
 import 'package:glutenvoid_app/service/user_service.dart';
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_model.dart';
@@ -29,6 +30,8 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
   late BarcodeScannerService barcodeScannerService;
   ProductModel? product;
   int _selectedIndex = 0;
+  final userService = UserService();
+
 
   @override
   void initState() {
@@ -50,11 +53,18 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
     setState(() {});
   }
 
+  Future<bool> _onWillPop() async {
+   context.pushNamed("ProductView");
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
+    child: WillPopScope(
+    onWillPop: _onWillPop,
       child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
         backgroundColor: Colors.transparent,
@@ -287,6 +297,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
                 parentContext: context,
               ),
       ),
+    ),
     );
   }
 }

@@ -36,6 +36,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
   final EstablishmentController establishmentController =
       EstablishmentController(EstablishmentService(GlutenVoidApi()));
   bool _isLoadingProducts = true;
+  final userService = UserService();
 
   @override
   void initState() {
@@ -77,143 +78,174 @@ class _UserViewWidgetState extends State<UserViewWidget> {
     super.dispose();
   }
 
+  Future<bool> shouldExit(BuildContext context) async {
+    bool shouldExit = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirmación'),
+        content: Text('¿Está seguro de que deseas salir de tu sesión?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Sí'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldExit) {
+      userService.logout();
+      context.pushNamed("MainMenu");
+    }
+
+    return false;
+  }
+
+  Future<bool> _onWillPop(BuildContext context) async {
+    return shouldExit(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userService = UserService();
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Gluten Void',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
+      child: WillPopScope(
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: FlutterFlowTheme.of(context).primary,
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Gluten Void',
+                  style: FlutterFlowTheme.of(context).headlineMedium.override(
+                        fontFamily: 'Outfit',
+                        color: Colors.white,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
+                      ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).primary,
+                      icon: Icon(
+                        Icons.map,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: () {
+                        context.pushNamed('MapView');
+                      },
                     ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primary,
-                    icon: Icon(
-                      Icons.map,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).primary,
+                      icon: Icon(
+                        Icons.logout_outlined,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: () {
+                        shouldExit(context);
+                      },
                     ),
-                    onPressed: () {
-                      context.pushNamed('MapView');
-                    },
-                  ),
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primary,
-                    icon: Icon(
-                      Icons.logout_outlined,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      userService.logout();
-                      GoRouter.of(context).goNamed('MainMenu');
-                    },
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
+            actions: [],
+            centerTitle: false,
+            elevation: 2.0,
           ),
-          actions: [],
-          centerTitle: false,
-          elevation: 2.0,
-        ),
-        body: SafeArea(
-          top: true,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'RECETAS',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+          body: SafeArea(
+            top: true,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'RECETAS',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 2.0),
-                  buildSection<RecipeModel>(
-                    context: context,
-                    icon: Icons.cookie,
-                    title: 'Recetas',
-                    items: recipeController.recipes,
-                    buildItem: buildRecipeItem,
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'RESTAURANTES',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                    SizedBox(height: 2.0),
+                    buildSection<RecipeModel>(
+                      context: context,
+                      icon: Icons.cookie,
+                      title: 'Recetas',
+                      items: recipeController.recipes,
+                      buildItem: buildRecipeItem,
                     ),
-                  ),
-                  SizedBox(height: 2.0),
-                  buildSection<EstablishmentModel>(
-                    context: context,
-                    icon: Icons.food_bank,
-                    title: 'Establecimientos',
-                    items: establishmentController.establishments,
-                    buildItem: buildEstablishmentItem,
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'PRODUCTOS',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                    SizedBox(height: 16.0),
+                    Text(
+                      'RESTAURANTES',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 2.0),
-                  _isLoadingProducts
-                      ? Center(child: CircularProgressIndicator())
-                      : buildSection<ProductModel>(
-                          context: context,
-                          icon: Icons.shopping_bag,
-                          title: 'Productos',
-                          items: productController.products,
-                          buildItem: buildProductItem,
-                        ),
-                ],
+                    SizedBox(height: 2.0),
+                    buildSection<EstablishmentModel>(
+                      context: context,
+                      icon: Icons.food_bank,
+                      title: 'Establecimientos',
+                      items: establishmentController.establishments,
+                      buildItem: buildEstablishmentItem,
+                    ),
+                    SizedBox(height: 16.0),
+                    Text(
+                      'PRODUCTOS',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 2.0),
+                    _isLoadingProducts
+                        ? Center(child: CircularProgressIndicator())
+                        : buildSection<ProductModel>(
+                            context: context,
+                            icon: Icons.shopping_bag,
+                            title: 'Productos',
+                            items: productController.products,
+                            buildItem: buildProductItem,
+                          ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: CommonBottomAppBar(
-          selectedIndex: _selectedIndex,
-          parentContext: context,
+          bottomNavigationBar: CommonBottomAppBar(
+            selectedIndex: _selectedIndex,
+            parentContext: context,
+          ),
         ),
       ),
     );
