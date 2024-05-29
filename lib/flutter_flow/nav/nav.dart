@@ -220,7 +220,6 @@ extension NavParamExtensions on Map<String, String?> {
 extension NavigationExtensions on BuildContext {
   void safePop() {
     if (canPop()) {
-      pop();
     } else {
       go('/');
     }
