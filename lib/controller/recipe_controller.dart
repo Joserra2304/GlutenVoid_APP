@@ -33,7 +33,7 @@ class RecipeController {
   }
 
   Future<bool> updateRecipe(int recipeId, Map<String, dynamic> changes) async {
-    return await updateRecipe(recipeId, changes);
+    return await recipeService.updateRecipe(recipeId, changes);
   }
 
   Future<bool> approveRecipe(int recipeId) async {

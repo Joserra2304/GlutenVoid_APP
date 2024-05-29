@@ -5,6 +5,7 @@ import 'package:glutenvoid_app/flutter_flow/flutter_flow_util.dart';
 import 'package:glutenvoid_app/controller/recipe_controller.dart';
 import 'package:glutenvoid_app/model/recipe_model.dart';
 import 'package:glutenvoid_app/service/user_service.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widget/bottom_app_bar.dart';
 import '../widget/snackbar_messages.dart';
@@ -12,8 +13,9 @@ import '../widget/snackbar_messages.dart';
 class RecipeDetailsViewWidget extends StatefulWidget {
   final int recipeId;
   final RecipeController recipeController;
+  final int userId;
 
-  RecipeDetailsViewWidget({Key? key, required this.recipeId, required this.recipeController}) : super(key: key);
+  RecipeDetailsViewWidget({Key? key, required this.recipeId, required this.recipeController, required this.userId}) : super(key: key);
 
   @override
   _RecipeDetailsViewWidgetState createState() => _RecipeDetailsViewWidgetState();
@@ -67,61 +69,66 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
-          title: Text('Editar Receta', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre')),
-                TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación')),
-                if (userService.isAdmin)
-                  SwitchListTile(
-                    value: _isApproved,
-                    onChanged: (bool value) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
+              title: Text('Editar Receta', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre')),
+                    TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación')),
+                    if (userService.isAdmin)
+                      SwitchListTile(
+                        value: _isApproved,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isApproved = value;
+                          });
+                        },
+                        title: Text('Aprobada', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                      ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('Guardar Cambios', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                  onPressed: () async {
+                    Map<String, dynamic> updates = {
+                      'id': recipe.id,
+                      'name': _nameController.text,
+                      'description': _descriptionController.text,
+                      'ingredients': _ingredientsController.text,
+                      'instructions': _instructionsController.text,
+                      'preparationTime': int.tryParse(_preparationTimeController.text) ?? recipe.preparationTime,
+                      'approval': _isApproved,
+                      'userId': recipe.userId,
+                      'username': recipe.username,
+                    };
+                    bool success = await widget.recipeController.updateRecipe(recipe.id, updates);
+                    if (success) {
+                      Navigator.of(context).pop();
                       setState(() {
-                        _isApproved = value;
+                        _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId);
                       });
-                    },
-                    title: Text('Aprobada', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-                  ),
+                      SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
+                    } else {
+                      SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
+                    }
+                  },
+                ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Guardar Cambios', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-              onPressed: () async {
-                Map<String, dynamic> updates = {
-                  'id': recipe.id,
-                  'name': _nameController.text,
-                  'description': _descriptionController.text,
-                  'ingredients': _ingredientsController.text,
-                  'instructions': _instructionsController.text,
-                  'preparationTime': int.tryParse(_preparationTimeController.text) ?? recipe.preparationTime,
-                  'approval': _isApproved,
-                  'userId': recipe.userId
-                };
-                bool success = await widget.recipeController.updateRecipe(recipe.id, updates);
-                if (success) {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    _recipeFuture = widget.recipeController.getRecipeById(widget.recipeId);
-                  });
-                  SnackbarMessages.showPositiveSnackbar(context, "Receta actualizada con éxito");
-                } else {
-                  SnackbarMessages.showNegativeSnackbar(context, "Error al actualizar la receta");
-                }
-              },
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -143,10 +150,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
             ),
             TextButton(
               child: Text('Eliminar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-              onPressed: () async {
-                bool success = await widget.recipeController.deleteRecipe(widget.recipeId);
-                Navigator.of(context).pop(success);
-              },
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );
@@ -157,238 +161,258 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAdmin = UserService().isAdmin;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isEditingDescription = false;
-          _isEditingIngredients = false;
-          _isEditingInstructions = false;
-        });
-        FocusScope.of(context).unfocus();
+    final bool isAdmin = userService.isAdmin;
+    final bool canEdit = isAdmin || userService.currentUser?.id == widget.userId;
+
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(true);
+        return false;
       },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30.0,
-            borderWidth: 1.0,
-            buttonSize: 60.0,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 30.0,
-            ),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recetas',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  letterSpacing: 0.0,
-                ),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _isEditingDescription = false;
+            _isEditingIngredients = false;
+            _isEditingInstructions = false;
+          });
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: FlutterFlowTheme.of(context).primary,
+            automaticallyImplyLeading: false,
+            leading: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30.0,
+              borderWidth: 1.0,
+              buttonSize: 60.0,
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+                size: 30.0,
               ),
-              if (userService.isAdmin)
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    FlutterFlowIconButton(
-                      borderColor: FlutterFlowTheme.of(context).primary,
-                      borderRadius: 20.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      fillColor: FlutterFlowTheme.of(context).primary,
-                      icon: Icon(
-                        Icons.edit,
-                        color: FlutterFlowTheme.of(context).secondary,
-                        size: 24.0,
-                      ),
-                      onPressed: () {
-                        _recipeFuture.then((recipe) {
-                          if (recipe != null) _showEditRecipeDialog(recipe);
-                        });
-                      },
-                    ),
-                    FlutterFlowIconButton(
-                      borderColor: FlutterFlowTheme.of(context).primary,
-                      borderRadius: 20.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      fillColor: FlutterFlowTheme.of(context).primary,
-                      icon: Icon(
-                        Icons.delete,
-                        color: FlutterFlowTheme.of(context).secondary,
-                        size: 24.0,
-                      ),
-                      onPressed: () async {
-                        bool deleted = await _confirmDeletion();
-                        if (deleted) {
-                          Navigator.of(context).pop(true);
-                        }
-                      },
-                    ),
-                  ],
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            title: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recetas',
+                  style: FlutterFlowTheme.of(context).headlineMedium.override(
+                    fontFamily: 'Outfit',
+                    color: Colors.white,
+                    fontSize: 22.0,
+                    letterSpacing: 0.0,
+                  ),
                 ),
-            ],
+                if (canEdit)
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      FlutterFlowIconButton(
+                        borderColor: FlutterFlowTheme.of(context).primary,
+                        borderRadius: 20.0,
+                        borderWidth: 1.0,
+                        buttonSize: 40.0,
+                        fillColor: FlutterFlowTheme.of(context).primary,
+                        icon: Icon(
+                          Icons.edit,
+                          color: FlutterFlowTheme.of(context).secondary,
+                          size: 24.0,
+                        ),
+                        onPressed: () {
+                          _recipeFuture.then((recipe) {
+                            if (recipe != null) _showEditRecipeDialog(recipe);
+                          });
+                        },
+                      ),
+                      FlutterFlowIconButton(
+                        borderColor: FlutterFlowTheme.of(context).primary,
+                        borderRadius: 20.0,
+                        borderWidth: 1.0,
+                        buttonSize: 40.0,
+                        fillColor: FlutterFlowTheme.of(context).primary,
+                        icon: Icon(
+                          Icons.delete,
+                          color: FlutterFlowTheme.of(context).secondary,
+                          size: 24.0,
+                        ),
+                        onPressed: () async {
+                          bool confirmed = await _confirmDeletion();
+                          if (confirmed) {
+                            bool success = await widget.recipeController.deleteRecipe(widget.recipeId);
+                            if (success) {
+                              SnackbarMessages.showPositiveSnackbar(context, "Receta eliminada con éxito");
+                              Navigator.of(context).pop(true);
+                            } else {
+                              SnackbarMessages.showNegativeSnackbar(context, "Error al eliminar la receta");
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+            actions: [],
+            centerTitle: false,
+            elevation: 2.0,
           ),
-          actions: [],
-          centerTitle: false,
-          elevation: 2.0,
-        ),
-        body: SafeArea(
-          top: true,
-          child: FutureBuilder<RecipeModel>(
-            future: _recipeFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  snapshot.data!.name,
-                                  textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 22.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          _buildEditableField(
-                            context,
-                            label: 'Descripción',
-                            isEditing: _isEditingDescription,
-                            focusNode: _descriptionFocusNode,
-                            controller: _descriptionController,
-                            onTap: () {
-                              setState(() {
-                                _isEditingDescription = true;
-                                _isEditingIngredients = false;
-                                _isEditingInstructions = false;
-                                _descriptionFocusNode.requestFocus();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          _buildEditableField(
-                            context,
-                            label: 'Ingredientes',
-                            isEditing: _isEditingIngredients,
-                            focusNode: _ingredientsFocusNode,
-                            controller: _ingredientsController,
-                            onTap: () {
-                              setState(() {
-                                _isEditingDescription = false;
-                                _isEditingIngredients = true;
-                                _isEditingInstructions = false;
-                                _ingredientsFocusNode.requestFocus();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          _buildEditableField(
-                            context,
-                            label: 'Instrucciones',
-                            isEditing: _isEditingInstructions,
-                            focusNode: _instructionsFocusNode,
-                            controller: _instructionsController,
-                            onTap: () {
-                              setState(() {
-                                _isEditingDescription = false;
-                                _isEditingIngredients = false;
-                                _isEditingInstructions = true;
-                                _instructionsFocusNode.requestFocus();
-                              });
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                                  child: Icon(
-                                    Icons.av_timer,
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    size: 40.0,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                  child: Text(
-                                    snapshot.data!.preparationTime.toString(),
+          body: SafeArea(
+            top: true,
+            child: FutureBuilder<RecipeModel>(
+              future: _recipeFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(14.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    snapshot.data!.name,
+                                    textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                       fontFamily: 'Readex Pro',
-                                      fontSize: 18.0,
+                                      fontSize: 22.0,
                                       letterSpacing: 0.0,
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  'min.',
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (!snapshot.data!.approval)
-                            Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Text(
-                                'Receta pendiente de aprobación',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
-                                ),
+                                ],
                               ),
                             ),
-                        ],
+                            _buildEditableField(
+                              context,
+                              label: 'Descripción',
+                              isEditing: _isEditingDescription,
+                              focusNode: _descriptionFocusNode,
+                              controller: _descriptionController,
+                              onTap: () {
+                                if (canEdit) {
+                                  setState(() {
+                                    _isEditingDescription = true;
+                                    _isEditingIngredients = false;
+                                    _isEditingInstructions = false;
+                                    _descriptionFocusNode.requestFocus();
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            _buildEditableField(
+                              context,
+                              label: 'Ingredientes',
+                              isEditing: _isEditingIngredients,
+                              focusNode: _ingredientsFocusNode,
+                              controller: _ingredientsController,
+                              onTap: () {
+                                if (canEdit) {
+                                  setState(() {
+                                    _isEditingDescription = false;
+                                    _isEditingIngredients = true;
+                                    _isEditingInstructions = false;
+                                    _ingredientsFocusNode.requestFocus();
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            _buildEditableField(
+                              context,
+                              label: 'Instrucciones',
+                              isEditing: _isEditingInstructions,
+                              focusNode: _instructionsFocusNode,
+                              controller: _instructionsController,
+                              onTap: () {
+                                if (canEdit) {
+                                  setState(() {
+                                    _isEditingDescription = false;
+                                    _isEditingIngredients = false;
+                                    _isEditingInstructions = true;
+                                    _instructionsFocusNode.requestFocus();
+                                  });
+                                }
+                              },
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(14.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                    child: Icon(
+                                      Icons.av_timer,
+                                      color: FlutterFlowTheme.of(context).primary,
+                                      size: 40.0,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                    child: Text(
+                                      snapshot.data!.preparationTime.toString(),
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: 'Readex Pro',
+                                        fontSize: 18.0,
+                                        letterSpacing: 0.0,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'min.',
+                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                      fontFamily: 'Readex Pro',
+                                      fontSize: 16.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (!snapshot.data!.approval)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Receta pendiente de aprobación',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
                 }
-              }
-              return Center(child: CircularProgressIndicator());
-            },
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
           ),
-        ),
-        bottomNavigationBar: isAdmin
-            ? null
-            : CommonBottomAppBar(
-          selectedIndex: _selectedIndex,
-          parentContext: context,
+          bottomNavigationBar: isAdmin
+              ? null
+              : CommonBottomAppBar(
+            selectedIndex: _selectedIndex,
+            parentContext: context,
+          ),
         ),
       ),
     );

@@ -55,14 +55,14 @@ class CommonBottomAppBar extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.shopping_cart,
+              Icons.shopping_bag,
               color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(0),
           ),
           IconButton(
             icon: Icon(
-              Icons.menu_book,
+              Icons.cookie,
               color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(1),
@@ -76,7 +76,7 @@ class CommonBottomAppBar extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(
-              Icons.restaurant_menu,
+              Icons.food_bank,
               color: secondaryColor,
             ),
             onPressed: () => _onItemTapped(3),

@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // Navega a la página principal después de 5 segundos
     Future.delayed(Duration(seconds: 5), () {
-      context.go('/mainMenu');
+      context.pushNamed('MainMenu');
     });
   }
 

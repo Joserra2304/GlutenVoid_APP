@@ -165,7 +165,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                   SizedBox(height: 2.0),
                   buildSection<RecipeModel>(
                     context: context,
-                    icon: Icons.book,
+                    icon: Icons.cookie,
                     title: 'Recetas',
                     items: recipeController.recipes,
                     buildItem: buildRecipeItem,
@@ -182,7 +182,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                   SizedBox(height: 2.0),
                   buildSection<EstablishmentModel>(
                     context: context,
-                    icon: Icons.store,
+                    icon: Icons.food_bank,
                     title: 'Establecimientos',
                     items: establishmentController.establishments,
                     buildItem: buildEstablishmentItem,
@@ -201,7 +201,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                       ? Center(child: CircularProgressIndicator())
                       : buildSection<ProductModel>(
                           context: context,
-                          icon: Icons.shopping_cart,
+                          icon: Icons.shopping_bag,
                           title: 'Productos',
                           items: productController.products,
                           buildItem: buildProductItem,
@@ -257,7 +257,10 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         ? Center(
             child: Text(
               'No hay elementos disponibles',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(
+                color: Colors.pink[900],
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
         : CarouselSlider(

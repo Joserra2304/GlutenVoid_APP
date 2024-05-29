@@ -199,7 +199,7 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
             buttonSize: 60.0,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: Colors.white,
+              color: FlutterFlowTheme.of(context).secondary,
               size: 30.0,
             ),
             onPressed: () async {

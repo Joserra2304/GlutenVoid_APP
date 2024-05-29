@@ -70,7 +70,7 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
         SnackbarMessages.showPositiveSnackbar(
             context, "Registro exitoso");
       });
-      context.go('/mainMenu');
+      context.pushNamed("MainMenu");
     } else {
       setState(() {
         _message = "Failed to register. Please try again.";

@@ -196,7 +196,7 @@ class _MapViewState extends State<MapView> {
           IconButton(
             icon: Icon(Icons.list, color: FlutterFlowTheme.of(context).secondary),
             onPressed: () {
-              context.go("/establishmentView");
+              context.pushNamed("EstablishmentView");
             },
           ),
         ],

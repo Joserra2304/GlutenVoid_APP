@@ -63,7 +63,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 TextField(
                     controller: _nameController,
                     decoration:
-                    InputDecoration(labelText: 'Nombre de la Receta')),
+                        InputDecoration(labelText: 'Nombre de la Receta')),
                 TextField(
                     controller: _descriptionController,
                     decoration: InputDecoration(labelText: 'Descripción')),
@@ -85,13 +85,13 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             TextButton(
               child: Text('Cancelar',
                   style:
-                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               child: Text('Guardar',
                   style:
-                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () async {
                 if (userService.currentUser?.id == null) {
                   print("Error: Usuario no autenticado.");
@@ -107,7 +107,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   ingredients: _ingredientsController.text,
                   instructions: _instructionsController.text,
                   preparationTime:
-                  int.tryParse(_preparationTimeController.text) ?? 0,
+                      int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: isAdmin,
                   userId: userService.currentUser?.id ?? 0,
                   username: userService.currentUser?.username ??
@@ -119,7 +119,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 print("userId: ${newRecipe.userId}");
 
                 bool result =
-                await widget.recipeController.addRecipe(newRecipe);
+                    await widget.recipeController.addRecipe(newRecipe);
                 Navigator.of(context).pop();
                 if (result) {
                   SnackbarMessages.showPositiveSnackbar(
@@ -143,15 +143,15 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
   Future<void> _showEditRecipeDialog(RecipeModel recipe) async {
     TextEditingController _nameController =
-    TextEditingController(text: recipe.name);
+        TextEditingController(text: recipe.name);
     TextEditingController _descriptionController =
-    TextEditingController(text: recipe.description);
+        TextEditingController(text: recipe.description);
     TextEditingController _ingredientsController =
-    TextEditingController(text: recipe.ingredients);
+        TextEditingController(text: recipe.ingredients);
     TextEditingController _instructionsController =
-    TextEditingController(text: recipe.instructions);
+        TextEditingController(text: recipe.instructions);
     TextEditingController _preparationTimeController =
-    TextEditingController(text: recipe.preparationTime.toString());
+        TextEditingController(text: recipe.preparationTime.toString());
 
     var result = await showDialog<bool>(
       context: context,
@@ -165,7 +165,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 TextField(
                     controller: _nameController,
                     decoration:
-                    InputDecoration(labelText: 'Nombre de la Receta')),
+                        InputDecoration(labelText: 'Nombre de la Receta')),
                 TextField(
                     controller: _descriptionController,
                     decoration: InputDecoration(labelText: 'Descripción')),
@@ -200,7 +200,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   ingredients: _ingredientsController.text,
                   instructions: _instructionsController.text,
                   preparationTime:
-                  int.tryParse(_preparationTimeController.text) ?? 0,
+                      int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: recipe.approval,
                   userId: recipe.userId,
                   username: recipe.username, // Mantener nombre de usuario
@@ -243,13 +243,13 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
             TextButton(
               child: Text('Cancelar',
                   style:
-                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               child: Text('Eliminar',
                   style:
-                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -263,221 +263,236 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
     final bool isSpecificUserView = widget.userId != null;
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primary,
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30.0,
-          borderWidth: 1.0,
-          buttonSize: 60.0,
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: FlutterFlowTheme.of(context).secondary,
-            size: 30.0,
+
+    return WillPopScope(
+      onWillPop: () async {
+        userService.isAdmin ? Navigator.of(context).pop(true)
+            : context.pushNamed("UserView");
+        return false;
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: FlutterFlowTheme.of(context).secondary,
+              size: 30.0,
+            ),
+            onPressed: () {
+              if (isSpecificUserView && widget.userId != null) {
+                context.pushNamed('UserProfileView',
+                    queryParameters: {'id': widget.userId.toString()});
+              } else {
+                context.pushNamed(isAdmin ? 'AdminView' : 'UserView');
+              }
+            },
           ),
-          onPressed: () {
-            if (isSpecificUserView && widget.userId != null) {
-              context.go('/userProfileView?id=${widget.userId}');
-            } else {
-              context.go(isAdmin ? '/adminView' : '/userView');
-            }
-          },
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Recetas',
+                style: FlutterFlowTheme.of(context).headlineMedium.override(
+                      fontFamily: 'Outfit',
+                      color: FlutterFlowTheme.of(context).secondary,
+                      fontSize: 18.0,
+                      letterSpacing: 0.0,
+                    ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  if (userService.isAdmin && !isSpecificUserView)
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).accent1,
+                      icon: Icon(
+                        Icons.approval,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeApprovalViewWidget(
+                                recipeController: widget.recipeController),
+                          ),
+                        );
+                      },
+                    ),
+                  if ((userService.isAdmin && !isSpecificUserView) ||
+                      !userService.isAdmin)
+                    FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).primary,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: FlutterFlowTheme.of(context).accent1,
+                      icon: Icon(
+                        Icons.add,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 24.0,
+                      ),
+                      onPressed: _showAddRecipeDialog,
+                    ),
+                ],
+              ),
+            ],
+          ),
+          centerTitle: false,
+          elevation: 2.0,
         ),
-        title: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Recetas',
-              style: FlutterFlowTheme.of(context).headlineMedium.override(
-                fontFamily: 'Outfit',
-                color: FlutterFlowTheme.of(context).secondary,
-                fontSize: 18.0,
-                letterSpacing: 0.0,
+        body: SafeArea(
+          top: true,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: FutureBuilder<List<RecipeModel>>(
+                future: _recipes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error al cargar las recetas'));
+                  } else {
+                    var recipes = snapshot.data ?? [];
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: recipes.length,
+                      itemBuilder: (context, index) {
+                        var recipe = recipes[index];
+                        bool isPendingApproval = !recipe.approval;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Material(
+                            color: Colors.transparent,
+                            elevation: 5.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.0),
+                            ),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: isPendingApproval
+                                      ? [Color(0xFF9575CD), Color(0xFFB39DDB)]
+                                      : [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                                  stops: [0.0, 1.0],
+                                  begin: AlignmentDirectional(0.0, -1.0),
+                                  end: AlignmentDirectional(0, 1.0),
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: ListTile(
+                                title: Text(
+                                  recipe.name,
+                                  textAlign: TextAlign.center,
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        letterSpacing: 0.0,
+                                      ),
+                                ),
+                                subtitle: isPendingApproval
+                                    ? Text(
+                                        'Pendiente de aprobación',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              color: Colors.red,
+                                              letterSpacing: 0.0,
+                                            ),
+                                      )
+                                    : null,
+                                tileColor: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                dense: false,
+                                onTap: () async {
+                                  var result = await context.pushNamed(
+                                      'RecipeDetailsView',
+                                      queryParameters: {
+                                        'recipeId': recipe.id.toString(),
+                                        'userId': recipe.userId.toString()
+                                      });
+                                  if (result == true) {
+                                    _refreshRecipes();
+                                  }
+                                },
+                                trailing: userService.isAdmin
+                                    ? Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          FlutterFlowIconButton(
+                                            icon: Icon(Icons.delete,
+                                                color: Colors.red),
+                                            onPressed: () async {
+                                              bool confirmed =
+                                                  await _confirmDeletion();
+                                              if (confirmed) {
+                                                bool success = await widget
+                                                    .recipeController
+                                                    .deleteRecipe(recipe.id);
+                                                if (success) {
+                                                  setState(() {
+                                                    recipes.removeAt(index);
+                                                  });
+                                                  SnackbarMessages
+                                                      .showPositiveSnackbar(
+                                                          context,
+                                                          "Receta eliminada con éxito");
+                                                } else {
+                                                  SnackbarMessages
+                                                      .showNegativeSnackbar(
+                                                          context,
+                                                          "Error al eliminar la receta");
+                                                }
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (userService.isAdmin && !isSpecificUserView)
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).accent1,
-                    icon: Icon(
-                      Icons.approval,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecipeApprovalViewWidget(
-                              recipeController: widget.recipeController),
-                        ),
-                      );
-                    },
-                  ),
-                if (userService.isAdmin && !isSpecificUserView)
-                  FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primary,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).accent1,
-                    icon: Icon(
-                      Icons.add,
-                      color: FlutterFlowTheme.of(context).secondary,
-                      size: 24.0,
-                    ),
-                    onPressed: _showAddRecipeDialog,
-                  ),
-              ],
-            ),
-          ],
-        ),
-        centerTitle: false,
-        elevation: 2.0,
-      ),
-      body: SafeArea(
-        top: true,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(12.0),
-            child: FutureBuilder<List<RecipeModel>>(
-              future: _recipes,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error al cargar las recetas'));
-                } else {
-                  var recipes = snapshot.data ?? [];
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: recipes.length,
-                    itemBuilder: (context, index) {
-                      var recipe = recipes[index];
-                      bool isPendingApproval = !recipe.approval;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 5.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22.0),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: isPendingApproval
-                                    ? [Color(0xFF9575CD), Color(0xFFB39DDB)]
-                                    : [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(0.0, -1.0),
-                                end: AlignmentDirectional(0, 1.0),
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: ListTile(
-                              title: Text(
-                                recipe.name,
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                  fontFamily: 'Outfit',
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondary,
-                                  letterSpacing: 0.0,
-                                ),
-                              ),
-                              subtitle: isPendingApproval
-                                  ? Text(
-                                'Pendiente de aprobación',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                  fontFamily: 'Outfit',
-                                  color: Colors.red,
-                                  letterSpacing: 0.0,
-                                ),
-                              )
-                                  : null,
-                              tileColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              dense: false,
-                              onTap: () async {
-                                context.pushNamed('RecipeDetailsView',
-                                    queryParameters: {
-                                      'id': recipe.id.toString()
-                                    });
-                              },
-                              trailing: userService.isAdmin
-                                  ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  FlutterFlowIconButton(
-                                    icon: Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () async {
-                                      bool confirmed =
-                                      await _confirmDeletion();
-                                      if (confirmed) {
-                                        bool success = await widget
-                                            .recipeController
-                                            .deleteRecipe(recipe.id);
-                                        if (success) {
-                                          setState(() {
-                                            recipes.removeAt(index);
-                                          });
-                                          SnackbarMessages
-                                              .showPositiveSnackbar(
-                                              context,
-                                              "Receta eliminada con éxito");
-                                        } else {
-                                          SnackbarMessages
-                                              .showNegativeSnackbar(
-                                              context,
-                                              "Error al eliminar la receta");
-                                        }
-                                      }
-                                    },
-                                  ),
-                                ],
-                              )
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
           ),
         ),
-      ),
-      bottomNavigationBar: isAdmin
-          ? null
-          : CommonBottomAppBar(
-        selectedIndex: _selectedIndex,
-        parentContext: context,
+        bottomNavigationBar: isAdmin
+            ? null
+            : CommonBottomAppBar(
+                selectedIndex: _selectedIndex,
+                parentContext: context,
+              ),
       ),
     );
   }

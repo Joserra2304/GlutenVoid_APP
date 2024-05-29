@@ -126,8 +126,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             );
           }
         }
-        // Considera mostrar una página de error o redireccionar si el userId no es válido
-        print("Error: userId is null or not a number.");
         return RecipeViewWidget(
           recipeController: RecipeController(RecipeService(GlutenVoidApi())),
         );
@@ -138,11 +136,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       name: 'RecipeDetailsView',
       path: '/recipeDetailsView',
       builder: (context, state) {
-        final id = int.parse(state.uri.queryParameters['id']!);
-        return RecipeDetailsViewWidget(
-          recipeId: id,
-          recipeController: RecipeController(RecipeService(GlutenVoidApi())),
-      );
+        final recipeIdParam = state.uri.queryParameters['recipeId'];
+        final userIdParam = state.uri.queryParameters['userId'];
+        if (recipeIdParam != null && userIdParam != null) {
+          final recipeId = int.tryParse(recipeIdParam);
+          final userId = int.tryParse(userIdParam);
+          if (recipeId != null && userId != null) {
+            return RecipeDetailsViewWidget(
+              recipeId: recipeId,
+              recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+              userId: userId,
+            );
+          }
+        }
+        return RecipeViewWidget(
+            recipeController: RecipeController(RecipeService(GlutenVoidApi())),
+        );
       },
     ),
     GoRoute(
