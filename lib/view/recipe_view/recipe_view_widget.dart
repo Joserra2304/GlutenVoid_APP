@@ -267,7 +267,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
 
     return WillPopScope(
       onWillPop: () async {
-        context.pushNamed("UserView");
+        Navigator.of(context).pop(true);
         return false;
       },
       child: Scaffold(
