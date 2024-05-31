@@ -23,7 +23,7 @@ class ProductModel {
       name: json['product_name'] ?? 'Nombre no disponible',
       company: json['brands'] ?? 'Marca no disponible',
       description:json['ingredients_text'] ?? 'Descripción no disponible',
-      hasGluten: json['has_gluten'] ?? false,
+      hasGluten: json['sin-gluten'] ?? false,
       barcode: json['code'] ?? '',
     );
   }

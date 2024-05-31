@@ -290,9 +290,15 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
               ),
               onPressed: () async {
                 if (isViewingOwnProfile && !isAdmin) {
-                  context.pushNamed("userView");
+                  setState(() {
+                    _user = null;
+                  });
+                  context.pushNamed("UserView");
                 } else {
-                  context.pushNamed("userControlView");
+                  setState(() {
+                    _user = null;
+                  });
+                  context.pushNamed("UserControlView");
                 }
               },
             ),

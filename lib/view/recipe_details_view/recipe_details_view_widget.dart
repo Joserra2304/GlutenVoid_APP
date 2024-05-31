@@ -197,7 +197,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                 size: 30.0,
               ),
               onPressed: () {
-                context.safePop();
+                Navigator.of(context).pop(true);
               },
             ),
             title: Row(

@@ -74,7 +74,11 @@ class _EstablishmentDetailsViewWidgetState extends State<EstablishmentDetailsVie
               content: SingleChildScrollView(
                 child: Column(
                   children: [
-                    TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
+                    TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante',
+                      labelStyle: TextStyle(color: Colors.white),
+                    ),
+                      style: TextStyle(color: Colors.white),
+                    ),
                     TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
                     TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
                     TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),

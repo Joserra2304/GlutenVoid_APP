@@ -82,7 +82,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
               size: 30.0,
             ),
             onPressed: () async {
-              context.safePop();
+              Navigator.of(context).pop(true);
             },
           ),
           title: Row(
