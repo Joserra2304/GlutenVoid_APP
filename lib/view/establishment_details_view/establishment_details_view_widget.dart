@@ -16,10 +16,9 @@ class EstablishmentDetailsViewWidget extends StatefulWidget {
   final EstablishmentController establishmentController;
 
   const EstablishmentDetailsViewWidget(
-      {Key? key,
+      {super.key,
       required this.establishmentId,
-      required this.establishmentController})
-      : super(key: key);
+      required this.establishmentController});
 
   @override
   State<EstablishmentDetailsViewWidget> createState() =>
@@ -34,8 +33,8 @@ class _EstablishmentDetailsViewWidgetState
   bool _glutenFreeOption = false;
   bool _isEditingDescription = false;
 
-  TextEditingController _descriptionController = TextEditingController();
-  FocusNode _descriptionFocusNode = FocusNode();
+  final TextEditingController _descriptionController = TextEditingController();
+  final FocusNode _descriptionFocusNode = FocusNode();
   gmaps.GoogleMapController? _mapController;
 
   @override
@@ -60,13 +59,13 @@ class _EstablishmentDetailsViewWidgetState
   }
 
   Future<void> _showEditDialog(EstablishmentModel establishment) async {
-    TextEditingController _name =
+    TextEditingController name =
         TextEditingController(text: establishment.name);
-    TextEditingController _telephone =
+    TextEditingController telephone =
         TextEditingController(text: establishment.phoneNumber.toString());
-    TextEditingController _address =
+    TextEditingController address =
         TextEditingController(text: establishment.address);
-    TextEditingController _city =
+    TextEditingController city =
         TextEditingController(text: establishment.city);
     _glutenFreeOption = establishment.glutenFreeOption;
 
@@ -77,7 +76,7 @@ class _EstablishmentDetailsViewWidgetState
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: Color(0xFF7C4DA4),
+              backgroundColor: const Color(0xFF7C4DA4),
               title: const Text(
                 "Editar Restaurante",
                 style: TextStyle(color: Colors.yellow),
@@ -86,7 +85,7 @@ class _EstablishmentDetailsViewWidgetState
                 child: Column(
                   children: [
                     TextField(
-                      controller: _name,
+                      controller: name,
                       decoration: const InputDecoration(
                         labelText: 'Nombre del Restaurante',
                         labelStyle: TextStyle(color: Colors.yellow),
@@ -95,7 +94,7 @@ class _EstablishmentDetailsViewWidgetState
                           color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(
-                      controller: _telephone,
+                      controller: telephone,
                       decoration: const InputDecoration(
                         labelText: 'Teléfono',
                         labelStyle: TextStyle(color: Colors.yellow),
@@ -104,7 +103,7 @@ class _EstablishmentDetailsViewWidgetState
                           color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(
-                      controller: _address,
+                      controller: address,
                       decoration: const InputDecoration(
                         labelText: 'Dirección',
                         labelStyle: TextStyle(color: Colors.yellow),
@@ -113,7 +112,7 @@ class _EstablishmentDetailsViewWidgetState
                           color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(
-                      controller: _city,
+                      controller: city,
                       decoration: const InputDecoration(
                         labelText: 'Ciudad',
                         labelStyle: TextStyle(color: Colors.yellow),
@@ -180,10 +179,10 @@ class _EstablishmentDetailsViewWidgetState
                           color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
                     Map<String, dynamic> updates = {
-                      'name': _name.text,
-                      'phoneNumber': int.parse(_telephone.text),
-                      'address': _address.text,
-                      'city': _city.text,
+                      'name': name.text,
+                      'phoneNumber': int.parse(telephone.text),
+                      'address': address.text,
+                      'city': city.text,
                       'glutenFreeOption': _glutenFreeOption,
                     };
                     bool success = await widget.establishmentController
@@ -216,7 +215,7 @@ class _EstablishmentDetailsViewWidgetState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          backgroundColor: const Color(0xFF7C4DA4), // Color morado claro
           title: Text('Confirmar eliminación',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           content: Text(
@@ -345,7 +344,7 @@ class _EstablishmentDetailsViewWidgetState
                 ),
               ],
             ),
-            actions: [],
+            actions: const [],
             centerTitle: false,
             elevation: 2.0,
           ),
@@ -362,15 +361,15 @@ class _EstablishmentDetailsViewWidgetState
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 20.0),
+                          const SizedBox(height: 20.0),
                           // Espacio entre el AppBar y el contenido
                           Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Align(
-                                alignment: AlignmentDirectional(0.0, -5.0),
+                                alignment: const AlignmentDirectional(0.0, -5.0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       14.0, 10.0, 14.0, 5.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -378,7 +377,7 @@ class _EstablishmentDetailsViewWidgetState
                                     children: [
                                       Align(
                                         alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                            const AlignmentDirectional(0.0, 0.0),
                                         child: Text(
                                           establishment.name,
                                           textAlign: TextAlign.center,
@@ -397,9 +396,9 @@ class _EstablishmentDetailsViewWidgetState
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(0.0, -5.0),
+                                alignment: const AlignmentDirectional(0.0, -5.0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       14.0, 0.0, 14.0, 5.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -407,7 +406,7 @@ class _EstablishmentDetailsViewWidgetState
                                     children: [
                                       Align(
                                         alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                            const AlignmentDirectional(0.0, 0.0),
                                         child: Text(
                                           establishment.address,
                                           textAlign: TextAlign.center,
@@ -426,9 +425,9 @@ class _EstablishmentDetailsViewWidgetState
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(0.0, -5.0),
+                                alignment: const AlignmentDirectional(0.0, -5.0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       14.0, 0.0, 14.0, 5.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -436,7 +435,7 @@ class _EstablishmentDetailsViewWidgetState
                                     children: [
                                       Align(
                                         alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                            const AlignmentDirectional(0.0, 0.0),
                                         child: Text(
                                           establishment.city,
                                           textAlign: TextAlign.center,
@@ -455,9 +454,9 @@ class _EstablishmentDetailsViewWidgetState
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(0.0, -5.0),
+                                alignment: const AlignmentDirectional(0.0, -5.0),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       14.0, 0.0, 14.0, 20.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -465,7 +464,7 @@ class _EstablishmentDetailsViewWidgetState
                                     children: [
                                       Align(
                                         alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                            const AlignmentDirectional(0.0, 0.0),
                                         child: Text(
                                           establishment.phoneNumber.toString(),
                                           textAlign: TextAlign.center,
@@ -483,7 +482,7 @@ class _EstablishmentDetailsViewWidgetState
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.all(14.0),
+                                padding: const EdgeInsets.all(14.0),
                                 child: _buildEditableField(
                                   context,
                                   label: 'Descripción',
@@ -501,15 +500,15 @@ class _EstablishmentDetailsViewWidgetState
                             ],
                           ),
                           Align(
-                            alignment: AlignmentDirectional(0.0, 6.0),
+                            alignment: const AlignmentDirectional(0.0, 6.0),
                             child: Padding(
-                              padding: EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(20.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 5.0, 0.0),
                                     child: Text(
                                       'Opción sin GLUTEN',
@@ -524,7 +523,7 @@ class _EstablishmentDetailsViewWidgetState
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         5.0, 0.0, 0.0, 0.0),
                                     child: Container(
                                       width: 50.0,
@@ -539,7 +538,7 @@ class _EstablishmentDetailsViewWidgetState
                                       ),
                                       child: Align(
                                         alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                            const AlignmentDirectional(0.0, 0.0),
                                         child: Text(
                                           establishment.glutenFreeOption
                                               ? 'SI'
@@ -564,7 +563,7 @@ class _EstablishmentDetailsViewWidgetState
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(20.0),
+                            padding: const EdgeInsets.all(20.0),
                             child: Container(
                               height: 250,
                               width: 250,
@@ -615,7 +614,7 @@ class _EstablishmentDetailsViewWidgetState
                     return Center(child: Text("Error: ${snapshot.error}"));
                   }
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ),
@@ -664,7 +663,7 @@ class _EstablishmentDetailsViewWidgetState
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: isEditing
               ? Column(
                   children: [
