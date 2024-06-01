@@ -217,8 +217,8 @@ class _EstablishmentDetailsViewWidgetState
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: Text('Confirmar eliminación',
-              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          title: const Text('Confirmar Eliminación', style: TextStyle(
+              color: Colors.yellow)),
           content: Text(
               '¿Estás seguro de que quieres eliminar este establecimiento?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
@@ -686,7 +686,7 @@ class _EstablishmentDetailsViewWidgetState
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.save,
                         color: Colors.yellow,
                       ),

@@ -14,7 +14,7 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: 3),
     )..repeat();
   }
 
@@ -27,21 +27,26 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          RotationTransition(
-            turns: _animationController,
-            child: Transform.scale(
-              scale: 0.4,
-              child: Image.asset('assets/images/gluten_void_logo.png'),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            RotationTransition(
+              turns: Tween(begin: 1.0, end: 0.0).animate(_animationController), // Invertir la dirección
+              child: Transform.scale(
+                scale: 0.4,
+                child: Image.asset('assets/images/gluten_void_logo.png'),
+              ),
             ),
-          ),
-          Text('Absorbiendo gluten...', style: TextStyle(
-              fontSize: 20,
-              color: Colors.black),
-          )
-        ],
+            const Text(
+              'Absorbiendo gluten...',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
       ),
     );
   }

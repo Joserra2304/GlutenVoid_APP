@@ -35,16 +35,23 @@ class _AdminViewWidgetState extends State<AdminViewWidget> {
     bool shouldExit = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirmación'),
-        content: Text('¿Está seguro de que deseas salir de tu sesión?'),
+        backgroundColor: Color(0xFF7C4DA4),
+        title: const Text('Cerrar sesión',
+            style: TextStyle(color: Colors.yellow)),
+        content: Text('¿Está seguro de que deseas salir de tu sesión?',
+            style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('No'),
+            child: Text('No',
+                style:
+                TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text('Sí'),
+            child: Text('Sí',
+                style:
+                TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           ),
         ],
       ),

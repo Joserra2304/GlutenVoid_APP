@@ -9,22 +9,23 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
 
-    // Inicializa el AnimationController
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 5),
-    )..repeat(period: Duration(seconds: 3)); // Hace que la animación se repita cada 3 segundos
+    )..repeat(period: Duration(seconds: 3));
 
-    // Navega a la página principal después de 5 segundos
     Future.delayed(Duration(seconds: 5), () {
-      context.pushNamed('MainMenu');
+      if (mounted) {
+        context.pushNamed('MainMenu');
+      }
     });
   }
 
@@ -52,15 +53,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             mainAxisSize: MainAxisSize.min,
             children: [
               RotationTransition(
-                turns: _animationController,
+                turns: Tween(begin: 1.0, end: 0.0).animate(_animationController), // Invertir la dirección
                 child: Transform.scale(
-                  scale: 0.4, // Puedes ajustar el tamaño aquí
+                  scale: 0.4,
                   child: Image.asset('assets/images/gluten_void_logo.png'),
                 ),
               ),
-              Text('Absorbiendo gluten...', style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black)
+              const Text('Absorbiendo gluten...',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold)
               ),
             ],
           ),

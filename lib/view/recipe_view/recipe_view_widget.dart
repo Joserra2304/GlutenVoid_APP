@@ -61,23 +61,51 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(
-                    controller: _nameController,
-                    decoration:
-                        InputDecoration(labelText: 'Nombre de la Receta')),
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre de la Receta',
+                    labelStyle: TextStyle(color: Colors.yellow),
+                  ),
+                  style:
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Descripción')),
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Descripción',
+                    labelStyle: TextStyle(color: Colors.yellow),
+                  ),
+                  style:
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
-                    controller: _ingredientsController,
-                    decoration: InputDecoration(labelText: 'Ingredientes')),
+                  controller: _ingredientsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Ingredientes',
+                    labelStyle: TextStyle(color: Colors.yellow),
+                  ),
+                  style:
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
-                    controller: _instructionsController,
-                    decoration: InputDecoration(labelText: 'Instrucciones')),
+                  controller: _instructionsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Instrucciones',
+                    labelStyle: TextStyle(color: Colors.yellow),
+                  ),
+                  style:
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
-                    controller: _preparationTimeController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: 'Tiempo de Preparación (min)')),
+                  controller: _preparationTimeController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Tiempo de Preparación (min)',
+                    labelStyle: TextStyle(color: Colors.yellow),
+                  ),
+                  style:
+                      TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
               ],
             ),
           ),
@@ -235,8 +263,9 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: Text('Confirmar eliminación',
-              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          title: const Text(
+            'Confirmar eliminación',
+            style: TextStyle(color: Colors.yellow)),
           content: Text('¿Estás seguro de que quieres eliminar esta receta?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [
@@ -258,7 +287,6 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
     );
     return result ?? false;
   }
-
 
   @override
   Widget build(BuildContext context) {

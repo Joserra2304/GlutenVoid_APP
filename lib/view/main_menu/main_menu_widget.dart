@@ -58,9 +58,11 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
   }
 
   void _login() async {
-    if (_model.textController1!.text.isEmpty || _model.textController2!.text.isEmpty) {
+    if (_model.textController1!.text.isEmpty ||
+        _model.textController2!.text.isEmpty) {
       _showErrorMessage('Por favor ingrese usuario y contraseña');
-      SnackbarMessages.showWarningSnackbar(context, "Por favor ingrese usuario y contraseña");
+      SnackbarMessages.showWarningSnackbar(
+          context, "Por favor ingrese usuario y contraseña");
       return;
     }
 
@@ -74,14 +76,17 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
       );
       if (user != null) {
         navigateBasedOnUserRole(user, context);
-        SnackbarMessages.showPositiveSnackbar(context, "Bienvenido/a, ${user.name}");
+        SnackbarMessages.showPositiveSnackbar(
+            context, "Bienvenido/a, ${user.name}");
       } else {
         _showErrorMessage("Usuario o contraseña incorrectos");
-        SnackbarMessages.showNegativeSnackbar(context, "Usuario o contraseña incorrectos");
+        SnackbarMessages.showNegativeSnackbar(
+            context, "Usuario o contraseña incorrectos");
       }
     } catch (e) {
       _showErrorMessage("Error durante el inicio de sesión: $e");
-      SnackbarMessages.showNegativeSnackbar(context, "Error durante el inicio de sesión");
+      SnackbarMessages.showNegativeSnackbar(
+          context, "Error durante el inicio de sesión");
     } finally {
       _showLoading(false);
     }
@@ -139,11 +144,11 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             title: Text(
               'Gluten Void',
               style: FlutterFlowTheme.of(context).headlineMedium.override(
-                fontFamily: 'Outfit',
-                color: Colors.white,
-                fontSize: 22.0,
-                letterSpacing: 0.0,
-              ),
+                    fontFamily: 'Outfit',
+                    color: Colors.white,
+                    fontSize: 22.0,
+                    letterSpacing: 0.0,
+                  ),
             ),
             actions: [],
             centerTitle: false,
@@ -152,7 +157,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
           body: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFEDE7F6), Color(0xFF9575CD)], // Gradiente claro a más oscuro
+                colors: [Color(0xFFEDE7F6), Color(0xFF9575CD)],
+                // Gradiente claro a más oscuro
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -180,7 +186,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  8.0, 0.0, 8.0, 0.0),
                               child: TextFormField(
                                 controller: _model.textController1,
                                 focusNode: _model.textFieldFocusNode1,
@@ -188,15 +195,19 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Usuario',
-                                  labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
+                                  labelStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold),
                                   alignLabelWithHint: true,
-                                  hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                      ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -206,7 +217,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context).primary,
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -226,12 +238,15 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                     borderRadius: BorderRadius.circular(24.0),
                                   ),
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0.0,
+                                    ),
                                 textAlign: TextAlign.start,
-                                validator: _model.textController1Validator.asValidator(context),
+                                validator: _model.textController1Validator
+                                    .asValidator(context),
                               ),
                             ),
                           ),
@@ -242,7 +257,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  8.0, 0.0, 8.0, 0.0),
                               child: TextFormField(
                                 controller: _model.textController2,
                                 focusNode: _model.textFieldFocusNode2,
@@ -250,15 +266,19 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                 obscureText: !_model.passwordVisibility,
                                 decoration: InputDecoration(
                                   labelText: 'Contraseña',
-                                  labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
+                                  labelStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold),
                                   alignLabelWithHint: true,
-                                  hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                      ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -268,7 +288,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context).primary,
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
                                       width: 2.0,
                                     ),
                                     borderRadius: BorderRadius.circular(24.0),
@@ -288,20 +309,28 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                     borderRadius: BorderRadius.circular(24.0),
                                   ),
                                   suffixIcon: InkWell(
-                                    onTap: () => setState(() => _model.passwordVisibility = !_model.passwordVisibility),
+                                    onTap: () => setState(() =>
+                                        _model.passwordVisibility =
+                                            !_model.passwordVisibility),
                                     focusNode: FocusNode(skipTraversal: true),
                                     child: Icon(
-                                      _model.passwordVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                      _model.passwordVisibility
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
                                       size: 22,
-                                      color: FlutterFlowTheme.of(context).primary,
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
                                     ),
                                   ),
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
-                                validator: _model.textController2Validator.asValidator(context),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0.0,
+                                    ),
+                                validator: _model.textController2Validator
+                                    .asValidator(context),
                               ),
                             ),
                           ),
@@ -329,10 +358,10 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                  ),
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                        letterSpacing: 0.0,
+                                      ),
                                   elevation: 20.0,
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
@@ -351,16 +380,16 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 0, 24, 0),
-                                  iconPadding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
                                   color: Colors.purple[700],
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    letterSpacing: 0,
-                                  ),
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                        letterSpacing: 0,
+                                      ),
                                   elevation: 20,
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
