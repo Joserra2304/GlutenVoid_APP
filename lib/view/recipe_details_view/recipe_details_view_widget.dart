@@ -63,7 +63,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
 
   void _showEditRecipeDialog(RecipeModel recipe) {
     TextEditingController _nameController = TextEditingController(text: recipe.name);
-    TextEditingController _preparationTimeController = TextEditingController(text: recipe.preparationTime.toString());
+    TextEditingController _preparationTimeController = TextEditingController(
+        text: recipe.preparationTime.toString());
     bool _isApproved = recipe.approval;
 
     showDialog(
@@ -73,13 +74,27 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
-              title: Text('Editar Receta', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+              title: const Text('Editar Receta',
+                  style: TextStyle(color: Colors.yellow)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Nombre')),
-                    TextField(controller: _preparationTimeController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Tiempo de Preparación')),
+                    TextField(controller: _nameController,
+                        decoration: const InputDecoration(
+                            labelText: 'Nombre',
+                          labelStyle: TextStyle(color: Colors.yellow),
+                        ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
+                    TextField(controller: _preparationTimeController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            labelText: 'Tiempo de Preparación',
+                          labelStyle: TextStyle(color: Colors.yellow),
+                        ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
                     if (userService.isAdmin)
                       SwitchListTile(
                         value: _isApproved,
@@ -88,7 +103,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                             _isApproved = value;
                           });
                         },
-                        title: Text('Aprobada', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                        title: const Text('Aprobada',
+                            style: TextStyle(color: Colors.yellow)),
                       ),
                   ],
                 ),
@@ -109,7 +125,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                       'description': _descriptionController.text,
                       'ingredients': _ingredientsController.text,
                       'instructions': _instructionsController.text,
-                      'preparationTime': int.tryParse(_preparationTimeController.text) ?? recipe.preparationTime,
+                      'preparationTime': int.tryParse(_preparationTimeController.text)
+                          ?? recipe.preparationTime,
                       'approval': _isApproved,
                       'userId': recipe.userId,
                       'username': recipe.username,
@@ -140,7 +157,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
-          title: Text('Confirmar Eliminación', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          title: const Text('Confirmar Eliminación', style: TextStyle(
+              color: Colors.yellow)),
           content: Text('¿Estás seguro de que quieres eliminar esta receta?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: <Widget>[
@@ -370,7 +388,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                                       snapshot.data!.preparationTime.toString(),
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Readex Pro',
-                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
                                         letterSpacing: 0.0,
                                       ),
                                     ),
@@ -379,7 +398,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                                     'min.',
                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                       fontFamily: 'Readex Pro',
-                                      fontSize: 16.0,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
                                       letterSpacing: 0.0,
                                     ),
                                   ),
@@ -463,9 +483,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: isEditing
-              ? Column(
-            children: [
-              Expanded(
+              ? Column(children: [Expanded(
                 child: TextField(
                   controller: controller,
                   maxLines: null,
@@ -473,7 +491,8 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: label,
-                  ),
+                          fillColor: Colors.yellow,
+                        ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                     fontFamily: 'Readex Pro',
                     color: FlutterFlowTheme.of(context).secondary,
@@ -482,7 +501,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                 ),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.save,
                   color: Colors.yellow,
                 ),

@@ -65,7 +65,7 @@ class _MapViewState extends State<MapView> {
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: Color(0xFF7C4DA4),
-              title: Text(
+              title: const Text(
                 'Información del Restaurante',
                 style: TextStyle(color: Colors.yellow),
               ),
@@ -73,17 +73,43 @@ class _MapViewState extends State<MapView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    TextField(controller: _name, decoration: InputDecoration(labelText: 'Nombre del Restaurante')),
-                    TextField(controller: _description, decoration: InputDecoration(labelText: 'Descripción')),
-                    TextField(controller: _telephone, decoration: InputDecoration(labelText: 'Teléfono')),
-                    TextField(controller: _address, decoration: InputDecoration(labelText: 'Dirección')),
-                    TextField(controller: _city, decoration: InputDecoration(labelText: 'Ciudad')),
+                    TextField(controller: _name, decoration: const InputDecoration(
+                        labelText: 'Nombre del Restaurante',
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
+                    TextField(controller: _description, decoration: const InputDecoration(
+                        labelText: 'Descripción',
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
+                    TextField(controller: _telephone, decoration: const InputDecoration(
+                        labelText: 'Teléfono',
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
+                    TextField(controller: _address, decoration: const InputDecoration(
+                        labelText: 'Dirección',
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
+                    TextField(controller: _city, decoration: const InputDecoration(
+                        labelText: 'Ciudad',
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0), // Add top margin
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('¿Opción Sin Gluten?'),
+                          const Text('¿Opción Sin Gluten?',
+                          style: TextStyle(color: Colors.yellow)),
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -117,6 +143,13 @@ class _MapViewState extends State<MapView> {
                 ),
               ),
               actions: <Widget>[
+
+                TextButton(
+                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
                 TextButton(
                   child: Text('Guardar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
                   onPressed: () async {
@@ -154,12 +187,6 @@ class _MapViewState extends State<MapView> {
                       Navigator.of(context).pop();
                       SnackbarMessages.showNegativeSnackbar(context, "Error al guardar el establecimiento");
                     }
-                  },
-                ),
-                TextButton(
-                  child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
                   },
                 ),
               ],

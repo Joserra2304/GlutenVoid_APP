@@ -49,16 +49,23 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
+          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          title: const Text('Confirmar Eliminación', style: TextStyle(
+              color: Colors.yellow)),
           content: Text(
-              '¿Estás seguro de que quieres eliminar este establecimiento?'),
+              '¿Estás seguro de que quieres eliminar este establecimiento?',
+              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: Text('Eliminar',
+                  style:
+                  TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],

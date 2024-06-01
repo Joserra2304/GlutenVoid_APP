@@ -74,20 +74,45 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
               children: <Widget>[
                 TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(hintText: "Nombre")),
+                    decoration: const InputDecoration(
+                      labelText: "Nombre",
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                  style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
                     controller: _surNameController,
-                    decoration: InputDecoration(hintText: "Apellido")),
+                    decoration: const InputDecoration(
+                      labelText: "Apellido",
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                  style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
                     controller: _emailController,
                     decoration:
-                    InputDecoration(hintText: "Correo electrónico")),
+                    const InputDecoration(
+                      labelText: "Correo electrónico",
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                  style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
                     controller: _usernameController,
-                    decoration: InputDecoration(hintText: "Nombre de usuario")),
+                    decoration: const InputDecoration(
+                      labelText: "Nombre de usuario",
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                  style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
                 TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(hintText: "Contraseña")),
+                    decoration: const InputDecoration(
+                      labelText: "Contraseña",
+                      labelStyle: TextStyle(color: Colors.yellow),
+                    ),
+                  style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                ),
               ],
             ),
           ),
@@ -135,9 +160,9 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: Text('Confirmar eliminación',
-              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          backgroundColor: Color(0xFF7C4DA4),
+          title: const Text('Confirmar eliminación',
+              style: TextStyle(color: Colors.yellow)),
           content: Text('¿Estás seguro de que quieres eliminar este usuario?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           actions: [

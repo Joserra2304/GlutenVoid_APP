@@ -170,9 +170,9 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
-                                          ),
+                                              fontFamily: 'Readex Pro',
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold),
                                       alignLabelWithHint: true,
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
@@ -246,9 +246,9 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold),
                                     alignLabelWithHint: true,
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
@@ -317,9 +317,9 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold),
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
@@ -387,9 +387,9 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold),
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
@@ -457,9 +457,9 @@ class _RegisterViewWidgetState extends State<RegisterViewWidget> {
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold),
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(

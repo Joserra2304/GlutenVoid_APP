@@ -53,15 +53,18 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de que quieres eliminar esta receta?'),
-          actions: [
+          backgroundColor: Color(0xFF7C4DA4).withOpacity(0.9),
+          title: const Text('Confirmar Eliminación', style: TextStyle(
+              color: Colors.yellow)),
+          content: Text('¿Estás seguro de que quieres eliminar esta receta sin aprobar?',
+              style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
+          actions: <Widget>[
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: Text('Eliminar', style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],

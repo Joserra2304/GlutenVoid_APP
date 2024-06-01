@@ -82,7 +82,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               backgroundColor: Color(0xFF7C4DA4),
-              title: Text(
+              title: const Text(
                 "Editar Usuario",
                 style: TextStyle(color: Colors.yellow),
               ),
@@ -91,11 +91,19 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                   children: [
                     TextField(
                       controller: _nameController,
-                      decoration: InputDecoration(labelText: 'Nombre'),
+                      decoration: const InputDecoration(
+                          labelText: 'Nombre',
+                        labelStyle: TextStyle(color: Colors.yellow),
+                      ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(
                       controller: _surnameController,
-                      decoration: InputDecoration(labelText: 'Apellido'),
+                      decoration: const InputDecoration(
+                          labelText: 'Apellido',
+                        labelStyle: TextStyle(color: Colors.yellow),
+                      ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     DropdownButtonFormField<GlutenCondition>(
                       value: _selectedCondition,
@@ -112,7 +120,11 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                         });
                       },
                       decoration:
-                          InputDecoration(labelText: 'Condición de Gluten'),
+                          const InputDecoration(
+                              labelText: 'Condición de Gluten',
+                            labelStyle: TextStyle(color: Colors.yellow),
+                          ),
+                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                   ],
                 ),
@@ -167,8 +179,13 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar Eliminación'),
-          content: Text('¿Estás seguro de que deseas eliminar esta cuenta?'),
+          title: const Text('Confirmar Eliminación',
+              style: TextStyle(color: Colors.yellow),
+          ),
+
+          content: Text('¿Estás seguro de que deseas eliminar esta cuenta?',
+            style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text('Cancelar',
