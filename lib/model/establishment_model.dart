@@ -10,6 +10,7 @@ class EstablishmentModel {
   final double latitude;
   final double longitude;
   final bool glutenFreeOption;
+  final int userId;
 
   EstablishmentModel({
     required this.id,
@@ -21,6 +22,7 @@ class EstablishmentModel {
     required this.latitude,
     required this.longitude,
     this.glutenFreeOption = false,
+    this.userId = 0,
   });
 
   factory EstablishmentModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class EstablishmentModel {
       latitude: json['latitude'],
       longitude: json['longitude'],
       glutenFreeOption: json['glutenFreeOption'],
+      userId: json['userId'] ?? -1,
     );
   }
 
@@ -48,6 +51,7 @@ class EstablishmentModel {
       'latitude': latitude,
       'longitude': longitude,
       'glutenFreeOption': glutenFreeOption,
+      'userId': userId,
     };
   }
 }

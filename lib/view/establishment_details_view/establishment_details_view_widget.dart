@@ -127,8 +127,7 @@ class _EstablishmentDetailsViewWidgetState
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text('¿Opción Sin Gluten?',
-                              style: TextStyle(color: Colors.yellow)
-                          ),
+                              style: TextStyle(color: Colors.yellow)),
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -217,8 +216,8 @@ class _EstablishmentDetailsViewWidgetState
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF7C4DA4), // Color morado claro
-          title: const Text('Confirmar Eliminación', style: TextStyle(
-              color: Colors.yellow)),
+          title: const Text('Confirmar Eliminación',
+              style: TextStyle(color: Colors.yellow)),
           content: Text(
               '¿Estás seguro de que quieres eliminar este establecimiento?',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
@@ -376,9 +375,7 @@ class _EstablishmentDetailsViewWidgetState
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                      Flexible(
                                         child: Text(
                                           establishment.name,
                                           textAlign: TextAlign.center,
@@ -388,7 +385,7 @@ class _EstablishmentDetailsViewWidgetState
                                                 fontFamily: 'Readex Pro',
                                                 fontSize: 22.0,
                                                 letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                       ),
@@ -405,9 +402,7 @@ class _EstablishmentDetailsViewWidgetState
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
+                                      Flexible(
                                         child: Text(
                                           establishment.address,
                                           textAlign: TextAlign.center,
@@ -415,9 +410,8 @@ class _EstablishmentDetailsViewWidgetState
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Readex Pro',
-                                                fontSize: 22.0,
+                                                fontSize: 20.0,
                                                 letterSpacing: 0.0,
-                                                fontWeight: FontWeight.normal,
                                               ),
                                         ),
                                       ),
