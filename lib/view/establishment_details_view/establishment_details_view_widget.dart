@@ -686,7 +686,7 @@ class _EstablishmentDetailsViewWidgetState
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.save,
                         color: Colors.yellow,
                       ),
