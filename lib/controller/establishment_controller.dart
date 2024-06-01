@@ -78,7 +78,4 @@ class EstablishmentController {
       return false;
     }
   }
-
-
-
 }

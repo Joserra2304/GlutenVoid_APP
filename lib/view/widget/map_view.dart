@@ -164,7 +164,6 @@ class _MapViewState extends State<MapView> {
                       latitude: point.latitude,
                       longitude: point.longitude,
                       glutenFreeOption: glutenFree,
-                      userId: userService.currentUser?.id ?? 0,
                     );
 
                     bool result = await widget.establishmentController.registerEstablishment(newEstablishment);
