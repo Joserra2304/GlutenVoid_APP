@@ -208,7 +208,6 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
         );
       },
     );
-
     return result ?? false;
   }
 
