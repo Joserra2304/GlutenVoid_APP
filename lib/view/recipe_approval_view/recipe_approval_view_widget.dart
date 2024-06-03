@@ -144,9 +144,6 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                     borderRadius: 20.0,
                     borderWidth: 1.0,
                     buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme
-                        .of(context)
-                        .accent1,
                     icon: Icon(
                       Icons.list_alt,
                       color: FlutterFlowTheme
@@ -267,14 +264,14 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(
+                                            padding: EdgeInsets.only(
                                                 right: 42.0),
                                             child: Icon(
                                               Icons.touch_app_outlined,
-                                              color:
-                                              FlutterFlowTheme
+                                              color: FlutterFlowTheme
                                                   .of(context)
-                                                  .secondary,
+                                                  .primary,
+
                                               size: 30.0,
                                             ),
                                           ),

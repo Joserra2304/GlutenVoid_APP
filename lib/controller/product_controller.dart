@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../model/product_model.dart';
-import '../service/openfoodfacts_api_service.dart';
 import '../service/product_service.dart';
 
 class ProductController {

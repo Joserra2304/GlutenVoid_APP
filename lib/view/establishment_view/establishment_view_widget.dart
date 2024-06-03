@@ -142,7 +142,6 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                     borderRadius: 20.0,
                     borderWidth: 1.0,
                     buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).accent1,
                     icon: Icon(
                       Icons.map,
                       color: FlutterFlowTheme.of(context).secondary,
@@ -264,14 +263,13 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
                                           dense: false,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
+                                      const Padding(
+                                        padding: EdgeInsets.only(
                                             right: 42.0),
                                         child: Icon(
                                           Icons.touch_app_outlined,
                                           color:
-                                          FlutterFlowTheme.of(context)
-                                              .secondary,
+                                          Colors.yellow,
                                           size: 30.0,
                                         ),
                                       ),

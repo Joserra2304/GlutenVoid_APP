@@ -192,7 +192,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'RECETAS',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -209,7 +209,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                       buildItem: buildRecipeItem,
                     ),
                     SizedBox(height: 16.0),
-                    Text(
+                    const Text(
                       'RESTAURANTES',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -226,7 +226,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                       buildItem: buildEstablishmentItem,
                     ),
                     SizedBox(height: 16.0),
-                    Text(
+                    const Text(
                       'PRODUCTOS',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -328,7 +328,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         borderRadius: BorderRadius.circular(12.0),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color(0xFF6A1B9A),
@@ -351,8 +351,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               SizedBox(height: 10.0),
               Text(
                 item.name,
-                style: TextStyle(
-                  color: Colors.white,
+                style: const TextStyle(
+                  color: Colors.yellow,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
                 ),
@@ -375,7 +375,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         borderRadius: BorderRadius.circular(12.0),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color(0xFF6A1B9A),
@@ -393,8 +393,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               children: [
                 Text(
                   item.name,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.yellow,
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
@@ -402,9 +402,9 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                 ),
                 SizedBox(height: 10.0),
                 Text(
-                  item.ingredients,
+                  item.description,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: FlutterFlowTheme.of(context).secondary,
                     fontSize: 14.0,
                   ),
                   textAlign: TextAlign.center,
@@ -427,7 +427,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
         borderRadius: BorderRadius.circular(12.0),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color(0xFF6A1B9A),
@@ -445,8 +445,8 @@ class _UserViewWidgetState extends State<UserViewWidget> {
               children: [
                 Text(
                   item.name,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.yellow,
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
@@ -456,7 +456,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                 Text(
                   '${item.address}',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: FlutterFlowTheme.of(context).secondary,
                     fontSize: 14.0,
                   ),
                   textAlign: TextAlign.center,
@@ -465,7 +465,7 @@ class _UserViewWidgetState extends State<UserViewWidget> {
                 Text(
                   '${item.city}',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: FlutterFlowTheme.of(context).secondary,
                     fontSize: 14.0,
                   ),
                   textAlign: TextAlign.center,

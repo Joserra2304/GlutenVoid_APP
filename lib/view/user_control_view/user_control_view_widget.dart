@@ -271,7 +271,6 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                         borderRadius: 0.0,
                         borderWidth: 1.0,
                         buttonSize: 40.0,
-                        fillColor: FlutterFlowTheme.of(context).primary,
                         icon: Icon(
                           Icons.add,
                           color: FlutterFlowTheme.of(context).secondary,
@@ -394,11 +393,9 @@ class _UserControlViewWidgetState extends State<UserControlViewWidget> {
                                               letterSpacing: 0.0,
                                             ),
                                           ),
-                                          trailing: Icon(
+                                          trailing: const Icon(
                                             Icons.touch_app_outlined,
-                                            color: FlutterFlowTheme.of(
-                                                context)
-                                                .secondary,
+                                            color: Colors.yellow,
                                             size: 30.0,
                                           ),
                                           dense: false,

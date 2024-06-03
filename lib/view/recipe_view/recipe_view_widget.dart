@@ -345,7 +345,6 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       borderRadius: 20.0,
                       borderWidth: 1.0,
                       buttonSize: 40.0,
-                      fillColor: FlutterFlowTheme.of(context).accent1,
                       icon: Icon(
                         Icons.approval,
                         color: FlutterFlowTheme.of(context).secondary,
@@ -368,7 +367,6 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       borderRadius: 20.0,
                       borderWidth: 1.0,
                       buttonSize: 40.0,
-                      fillColor: FlutterFlowTheme.of(context).accent1,
                       icon: Icon(
                         Icons.add,
                         color: FlutterFlowTheme.of(context).secondary,

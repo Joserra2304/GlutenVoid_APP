@@ -92,20 +92,23 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                     TextField(
                       controller: _nameController,
                       decoration: const InputDecoration(
-                          labelText: 'Nombre',
+                        labelText: 'Nombre',
                         labelStyle: TextStyle(color: Colors.yellow),
                       ),
-                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                      style: TextStyle(
+                          color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(
                       controller: _surnameController,
                       decoration: const InputDecoration(
-                          labelText: 'Apellido',
+                        labelText: 'Apellido',
                         labelStyle: TextStyle(color: Colors.yellow),
                       ),
-                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                      style: TextStyle(
+                          color: FlutterFlowTheme.of(context).secondary),
                     ),
                     DropdownButtonFormField<GlutenCondition>(
+                      dropdownColor: FlutterFlowTheme.of(context).primary,
                       value: _selectedCondition,
                       items: GlutenCondition.values
                           .map((GlutenCondition condition) {
@@ -119,12 +122,12 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                           _selectedCondition = newValue!;
                         });
                       },
-                      decoration:
-                          const InputDecoration(
-                              labelText: 'Condición de Gluten',
-                            labelStyle: TextStyle(color: Colors.yellow),
-                          ),
-                      style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
+                      decoration: const InputDecoration(
+                        labelText: 'Condición de Gluten',
+                        labelStyle: TextStyle(color: Colors.yellow),
+                      ),
+                      style: TextStyle(
+                          color: FlutterFlowTheme.of(context).secondary),
                     ),
                   ],
                 ),
@@ -179,11 +182,12 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmar Eliminación',
-              style: TextStyle(color: Colors.yellow),
+          title: const Text(
+            'Confirmar Eliminación',
+            style: TextStyle(color: Colors.yellow),
           ),
-
-          content: Text('¿Estás seguro de que deseas eliminar esta cuenta?',
+          content: Text(
+            '¿Estás seguro de que deseas eliminar esta cuenta?',
             style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
           ),
           actions: <Widget>[
@@ -360,9 +364,21 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                         color: FlutterFlowTheme.of(context).secondary,
                         size: 24.0,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_user != null) {
-                          _confirmDeletion(_user!.id!);
+                          bool confirmed = await _confirmDeletion(_user!.id!);
+                          if (confirmed) {
+                            bool success = await userController.deleteUser(
+                                _user!.id!, context);
+                            if (success) {
+                              SnackbarMessages.showPositiveSnackbar(
+                                  context, "Usuario eliminado con éxito");
+                              context.go('/userControlView');
+                            } else {
+                              SnackbarMessages.showNegativeSnackbar(
+                                  context, "Error al eliminar usuario");
+                            }
+                          }
                         }
                       },
                     ),

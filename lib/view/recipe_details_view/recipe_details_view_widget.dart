@@ -95,17 +95,6 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                         ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
-                    if (userService.isAdmin)
-                      SwitchListTile(
-                        value: _isApproved,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isApproved = value;
-                          });
-                        },
-                        title: const Text('Aprobada',
-                            style: TextStyle(color: Colors.yellow)),
-                      ),
                   ],
                 ),
               ),
@@ -303,13 +292,16 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    snapshot.data!.name,
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Readex Pro',
-                                      fontSize: 22.0,
-                                      letterSpacing: 0.0,
+                                  Flexible(
+                                    child: Text(
+                                      snapshot.data!.name,
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: 'Readex Pro',
+                                        fontSize: 22.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],

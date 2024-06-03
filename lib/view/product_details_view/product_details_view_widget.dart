@@ -106,7 +106,6 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
                     borderRadius: 20.0,
                     borderWidth: 1.0,
                     buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primary,
                     icon: Icon(
                       Icons.qr_code_scanner_rounded,
                       color: FlutterFlowTheme.of(context).secondary,
@@ -174,7 +173,7 @@ class _ProductDetailsViewWidgetState extends State<ProductDetailsViewWidget> {
                                   .override(
                                     fontFamily: 'Readex Pro',
                                     fontSize: 22.0,
-                                    fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
                                   ),
                             ),
                           ),
