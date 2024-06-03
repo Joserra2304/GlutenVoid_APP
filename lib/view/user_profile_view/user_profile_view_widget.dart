@@ -108,6 +108,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                           color: FlutterFlowTheme.of(context).secondary),
                     ),
                     DropdownButtonFormField<GlutenCondition>(
+                      dropdownColor: FlutterFlowTheme.of(context).primary,
                       value: _selectedCondition,
                       items: GlutenCondition.values
                           .map((GlutenCondition condition) {
