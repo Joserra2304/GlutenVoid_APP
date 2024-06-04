@@ -26,16 +26,17 @@ class EstablishmentModel {
   factory EstablishmentModel.fromJson(Map<String, dynamic> json) {
     return EstablishmentModel(
       id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      phoneNumber: json['phoneNumber'],
-      address: json['address'],
-      city: json['city'],
+      name: json['name'] ?? 'Nombre no disponible',
+      description: json['description'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? 0,
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
       latitude: json['latitude'],
       longitude: json['longitude'],
-      glutenFreeOption: json['glutenFreeOption'],
+      glutenFreeOption: json['glutenFreeOption'] ?? false,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

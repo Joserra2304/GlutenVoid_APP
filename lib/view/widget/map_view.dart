@@ -74,31 +74,31 @@ class _MapViewState extends State<MapView> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     TextField(controller: _name, decoration: const InputDecoration(
-                        labelText: 'Nombre del Restaurante',
+                      labelText: 'Nombre del Restaurante',
                       labelStyle: TextStyle(color: Colors.yellow),
                     ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(controller: _description, decoration: const InputDecoration(
-                        labelText: 'Descripción',
+                      labelText: 'Descripción',
                       labelStyle: TextStyle(color: Colors.yellow),
                     ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(controller: _telephone, decoration: const InputDecoration(
-                        labelText: 'Teléfono',
+                      labelText: 'Teléfono',
                       labelStyle: TextStyle(color: Colors.yellow),
                     ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(controller: _address, decoration: const InputDecoration(
-                        labelText: 'Dirección',
+                      labelText: 'Dirección',
                       labelStyle: TextStyle(color: Colors.yellow),
                     ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
                     ),
                     TextField(controller: _city, decoration: const InputDecoration(
-                        labelText: 'Ciudad',
+                      labelText: 'Ciudad',
                       labelStyle: TextStyle(color: Colors.yellow),
                     ),
                       style: TextStyle(color: FlutterFlowTheme.of(context).secondary),
@@ -109,7 +109,7 @@ class _MapViewState extends State<MapView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text('¿Opción Sin Gluten?',
-                          style: TextStyle(color: Colors.yellow)),
+                              style: TextStyle(color: Colors.yellow)),
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -198,7 +198,7 @@ class _MapViewState extends State<MapView> {
   }
 
   Future<void> loadMarkers() async {
-    var newMarkers = await widget.mapController.loadMarkers();
+    var newMarkers = await widget.mapController.loadMarkers(openEstablishmentDetails);
     setState(() {
       markers = newMarkers;
     });
@@ -214,82 +214,82 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     final bool isAdmin = UserService().isAdmin;
     return WillPopScope(
-        onWillPop: _onWillPop,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: Text(
-          'Mapa de restaurantes',
-          style: FlutterFlowTheme.of(context).headlineMedium.override(
-            fontFamily: 'Outfit',
-            color: FlutterFlowTheme.of(context).secondary,
-            fontSize: 22.0,
-            letterSpacing: 0.0,
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            'Mapa de restaurantes',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+              fontFamily: 'Outfit',
+              color: FlutterFlowTheme.of(context).secondary,
+              fontSize: 22.0,
+              letterSpacing: 0.0,
+            ),
           ),
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.list, color: FlutterFlowTheme.of(context).secondary),
+              onPressed: () {
+                context.pushNamed("EstablishmentView");
+              },
+            ),
+          ],
         ),
-        backgroundColor: FlutterFlowTheme.of(context).primary,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.list, color: FlutterFlowTheme.of(context).secondary),
-            onPressed: () {
-              context.pushNamed("EstablishmentView");
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _addressController,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                hintText: 'Buscar dirección',
-                hintStyle: TextStyle(color: Colors.black),
-                border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search, color: Colors.black),
-                  onPressed: () => widget.mapController.searchAndUpdateLocation(_addressController.text),
-                ),
-              ),
-              onSubmitted: (value) => widget.mapController.searchAndUpdateLocation(value),
-            ),
-          ),
-          Expanded(
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(41.65606, -0.87734),
-                zoom: 14,
-              ),
-              onTap: _handleTap,
-              markers: markers.map((marker) {
-                return marker.copyWith(
-                  infoWindowParam: InfoWindow(
-                    title: marker.infoWindow.title,
-                    snippet: 'Pulsa para más detalles',
-                    onTap: () => openEstablishmentDetails(int.parse(marker.markerId.value)),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _addressController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'Buscar dirección',
+                  hintStyle: TextStyle(color: Colors.black),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black), // Borde negro
                   ),
-                  iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-                );
-              }).toSet(),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black), // Borde negro cuando está habilitado
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.search, color: Colors.black),
+                    onPressed: () => widget.mapController.searchAndUpdateLocation(_addressController.text),
+                  ),
+                ),
+                onSubmitted: (value) => widget.mapController.searchAndUpdateLocation(value),
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(41.65606, -0.87734),
+                  zoom: 14,
+                ),
+                onTap: _handleTap,
+                markers: markers.map((marker) {
+                  return marker.copyWith(
+                    infoWindowParam: InfoWindow(
+                      title: marker.infoWindow.title,
+                      snippet: 'Pulsa para más detalles',
+                      onTap: () => openEstablishmentDetails(int.parse(marker.markerId.value)),
+                    ),
+                    iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose), // Cambiar el color del marcador
+                  );
+                }).toSet(),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: isAdmin
+            ? null
+            : CommonBottomAppBar(
+          selectedIndex: _selectedIndex,
+          parentContext: context,
+        ),
       ),
-      bottomNavigationBar: isAdmin
-          ? null
-          : CommonBottomAppBar(
-        selectedIndex: _selectedIndex,
-        parentContext: context,
-      ),
-    ),
     );
   }
 }

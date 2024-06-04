@@ -15,26 +15,31 @@ class MapController {
     _mapController = controller;
   }
 
-  Future<Set<Marker>> loadMarkers() async {
+  Future<Set<Marker>> loadMarkers(Function(int) onTapCallback) async {
+    Set<Marker> markers = {};
     try {
       List<EstablishmentModel> establishments = await establishmentService.loadEstablishments();
-
-      _markers.clear();
-
       for (var establishment in establishments) {
+        String name = establishment.name ?? 'Nombre no disponible';
+        String description = establishment.description ?? 'Descripción no disponible';
+
         Marker marker = Marker(
           markerId: MarkerId(establishment.id.toString()),
           position: LatLng(establishment.latitude, establishment.longitude),
-          infoWindow: InfoWindow(title: establishment.name, snippet: establishment.description),
+          infoWindow: InfoWindow(
+              title: name,
+              snippet: description,
+              onTap: () => onTapCallback(establishment.id)
+          ),
         );
-        _markers.add(marker);
+        markers.add(marker);
       }
     } catch (e) {
       print("Error al cargar marcadores: $e");
     }
-
-    return _markers;
+    return markers;
   }
+
 
 
   Future<void> searchAndUpdateLocation(String address) async {
