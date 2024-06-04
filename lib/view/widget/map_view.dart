@@ -248,10 +248,10 @@ class _MapViewState extends State<MapView> {
                 hintText: 'Buscar dirección',
                 hintStyle: TextStyle(color: Colors.black),
                 border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Borde negro
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black), // Borde negro cuando está habilitado
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search, color: Colors.black),
@@ -276,7 +276,7 @@ class _MapViewState extends State<MapView> {
                     snippet: 'Pulsa para más detalles',
                     onTap: () => openEstablishmentDetails(int.parse(marker.markerId.value)),
                   ),
-                  iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose), // Cambiar el color del marcador
+                  iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
                 );
               }).toSet(),
             ),

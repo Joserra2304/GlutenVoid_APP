@@ -1,9 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../view/widget/notfound_dialog.dart';
 
 class BarcodeScannerService{
@@ -39,13 +36,4 @@ class BarcodeScannerService{
     }
     barcodeScanner.close();
   }
-
-  Future<String> scanBarcodeEmulator() async {
-    // Simula un retraso
-    await Future.delayed(Duration(seconds: 1));
-    // Retorna un código de barras predefinido
-    print("devuelvo esto");
-    return "8480000651778";
-  }
-
 }

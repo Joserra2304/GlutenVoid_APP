@@ -135,26 +135,26 @@ class _EstablishmentDetailsViewWidgetState
                               });
                             },
                             child: Container(
-                              width: 40.0, // Smaller width
-                              height: 25.0, // Smaller height
+                              width: 40.0,
+                              height: 25.0,
                               decoration: BoxDecoration(
                                 color: _glutenFreeOption
                                     ? Colors.green
                                     : Colors.red,
                                 borderRadius: BorderRadius.circular(
-                                    12.5), // Smaller radius
+                                    12.5),
                               ),
                               child: Align(
                                 alignment: _glutenFreeOption
                                     ? Alignment.centerRight
                                     : Alignment.centerLeft,
                                 child: Container(
-                                  width: 20.0, // Smaller width
-                                  height: 20.0, // Smaller height
+                                  width: 20.0,
+                                  height: 20.0,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(
-                                        10.0), // Smaller radius
+                                        10.0),
                                   ),
                                 ),
                               ),
@@ -215,7 +215,7 @@ class _EstablishmentDetailsViewWidgetState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          backgroundColor: Color(0xFF7C4DA4),
           title: const Text('Confirmar Eliminación',
               style: TextStyle(color: Colors.yellow)),
           content: Text(
@@ -362,7 +362,6 @@ class _EstablishmentDetailsViewWidgetState
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: 20.0),
-                          // Espacio entre el AppBar y el contenido
                           Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -564,7 +563,6 @@ class _EstablishmentDetailsViewWidgetState
                               width: 250,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(125.0),
-                                // More circular shape
                                 border: Border.all(
                                   color: Colors.black,
                                   width: 2.0,
@@ -572,7 +570,6 @@ class _EstablishmentDetailsViewWidgetState
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(125.0),
-                                // More circular shape
                                 child: gmaps.GoogleMap(
                                   onMapCreated: (controller) {
                                     _mapController = controller;
@@ -635,7 +632,7 @@ class _EstablishmentDetailsViewWidgetState
           gradient: isEditing
               ? const LinearGradient(
                   colors: [
-                    Color(0xFF8E5DB2), // Un poco más claro que el fondo morado
+                    Color(0xFF8E5DB2),
                     Color(0xFF7A2B9B),
                   ],
                   stops: [0.0, 1.0],

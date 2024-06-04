@@ -22,7 +22,7 @@ class ProductNotFoundDialog extends StatelessWidget {
           child: Text('Volver',
               style: TextStyle(color: FlutterFlowTheme.of(context).secondary)),
           onPressed: () {
-            Navigator.of(context).pop(); // Cierra el AlertDialog
+            Navigator.of(context).pop();
           },
         ),
       ],

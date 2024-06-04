@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:glutenvoid_app/view/recipe_approval_view/recipe_approval_view_widget.dart';
 import 'package:glutenvoid_app/view/widget/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import '../../controller/establishment_controller.dart';
 import '../../controller/map_controller.dart';
 import '../../controller/recipe_controller.dart';
@@ -32,7 +30,6 @@ import '/flutter_flow/lat_lng.dart';
 import '/flutter_flow/place.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'serialization_util.dart';
-
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
 
@@ -51,6 +48,7 @@ class AppStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
+
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
@@ -103,7 +101,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         recipeController: RecipeController(RecipeService(GlutenVoidApi())),
       ),
     ),
-    //RECIPES
+
     GoRoute(
       name: 'RecipeView',
       path: '/recipeView',

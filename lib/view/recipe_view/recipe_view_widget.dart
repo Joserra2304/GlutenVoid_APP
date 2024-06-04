@@ -129,7 +129,6 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                 bool isAdmin = userService.isAdmin;
                 RecipeModel newRecipe = RecipeModel(
                   id: 0,
-                  // ID se maneja en el backend
                   name: _nameController.text,
                   description: _descriptionController.text,
                   ingredients: _ingredientsController.text,
@@ -139,10 +138,9 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                   approval: isAdmin,
                   userId: userService.currentUser?.id ?? 0,
                   username: userService.currentUser?.username ??
-                      '', // Añadir nombre de usuario
+                      '',
                 );
 
-                // Utilizar Log para mostrar la información de la receta
                 print("Guardando receta: ${newRecipe.toString()}");
                 print("userId: ${newRecipe.userId}");
 
@@ -155,7 +153,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       "Receta añadida con éxito y " +
                           (isAdmin ? "aprobada." : "pendiente de aprobación."));
                   if (isAdmin) {
-                    _refreshRecipes(); // Refresh the list immediately for admins
+                    _refreshRecipes();
                   }
                 } else {
                   SnackbarMessages.showNegativeSnackbar(
@@ -231,7 +229,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
                       int.tryParse(_preparationTimeController.text) ?? 0,
                   approval: recipe.approval,
                   userId: recipe.userId,
-                  username: recipe.username, // Mantener nombre de usuario
+                  username: recipe.username,
                 );
 
                 bool result = await widget.recipeController
@@ -262,7 +260,7 @@ class _RecipeViewWidgetState extends State<RecipeViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          backgroundColor: Color(0xFF7C4DA4),
           title: const Text(
             'Confirmar eliminación',
             style: TextStyle(color: Colors.yellow)),

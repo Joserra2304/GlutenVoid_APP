@@ -43,7 +43,7 @@ class UserModel {
             (e) => e.toString().split('.').last.toUpperCase() == json['glutenCondition'].toString().toUpperCase(),
         orElse: () => GlutenCondition.Ninguna,
       ),
-      isAdmin: json['admin'] ?? false, // Cambia 'isAdmin' a 'admin'
+      isAdmin: json['admin'] ?? false,
       recipes: (json['recipes'] as List<dynamic>?)
           ?.map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
           .toList() ?? [],

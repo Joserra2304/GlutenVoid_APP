@@ -96,7 +96,6 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     final prefs = await SharedPreferences.getInstance();
     int? expiryTime = prefs.getInt('tokenExpiryTime');
     if (expiryTime == null) {
-      //SnackbarMessages.showWarningSnackbar(context, "No se pudo recuperar el tiempo de expiración del token");
       print("No se pudo recuperar el tiempo de expiración del token");
       return;
     }
@@ -104,12 +103,10 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int timeLeft = expiryTime - currentTime;
     if (timeLeft <= 0) {
-      //SnackbarMessages.showNegativeSnackbar(context, "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
       print("Sesion expirada");
     } else {
       int minutesLeft = timeLeft ~/ 60000;
       int secondsLeft = (timeLeft % 60000) ~/ 1000;
-      //SnackbarMessages.showWarningSnackbar(context, "Tu sesión expirará en $minutesLeft minutos y $secondsLeft segundos.");
       print("Sesion expirará en $minutesLeft minutos y $secondsLeft segundos.");
     }
   }
@@ -158,7 +155,6 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFFEDE7F6), Color(0xFF9575CD)],
-                // Gradiente claro a más oscuro
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

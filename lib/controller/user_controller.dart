@@ -42,8 +42,8 @@ class UserController {
 
 
   void logout(BuildContext context) {
-    userService.logout(); // Llama al método logout del UserService
-    Navigator.pushReplacementNamed(context, '/login'); // Redirige al login
+    userService.logout();
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   Widget getViewForCurrentUser() {
@@ -51,7 +51,7 @@ class UserController {
     if (currentUser == null) {
       return Center(child: Text("No hay usuario autenticado"));
     }
-    // Simplifica las vistas, retorna solo el esqueleto básico.
+
     if (currentUser.isAdmin) {
       return Scaffold(
         appBar: AppBar(title: Text("Admin Dashboard")),
