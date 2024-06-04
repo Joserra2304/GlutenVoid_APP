@@ -450,7 +450,7 @@ class _RecipeDetailsViewWidgetState extends State<RecipeDetailsViewWidget> {
           gradient: isEditing
               ? const LinearGradient(
             colors: [
-              Color(0xFF8E5DB2), // Un poco más claro que el fondo morado
+              Color(0xFF8E5DB2),
               Color(0xFF7A2B9B),
             ],
             stops: [0.0, 1.0],

@@ -58,18 +58,4 @@ class GlutenVoidApi {
       body: data,
     );
   }
-
-  // Método para probar la conexión
-  Future<void> testConnection() async {
-    try {
-      final response = await get('/users');
-      if (response.statusCode == 200) {
-        print("Conexión exitosa: ${response.body}");
-      } else {
-        print("Falló la conexión: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Error durante la prueba de conexión: $e");
-    }
-  }
 }

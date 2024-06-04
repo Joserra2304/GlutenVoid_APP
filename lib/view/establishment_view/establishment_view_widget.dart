@@ -49,7 +49,7 @@ class _EstablishmentViewWidgetState extends State<EstablishmentViewWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7C4DA4), // Color morado claro
+          backgroundColor: Color(0xFF7C4DA4),
           title: const Text('Confirmar Eliminación', style: TextStyle(
               color: Colors.yellow)),
           content: Text(

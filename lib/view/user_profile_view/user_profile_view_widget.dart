@@ -151,7 +151,7 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                           _selectedCondition.toString().split('.').last,
                     };
                     print(
-                        'Saving updates: $updates'); // Registro para depuración
+                        'Saving updates: $updates');
                     bool success = await userController.updateUser(
                         user.id!, updates, context);
                     Navigator.of(context).pop(success);
@@ -537,10 +537,8 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                                 recipes: _user!.recipes,
                                               );
                                             });
-                                            // Save the new state using UserController
                                             Map<String, dynamic> updates = {
                                               'admin': value,
-                                              // Cambia 'isAdmin' a 'admin'
                                             };
                                             print(
                                                 'Attempting to update user with: $updates');
@@ -575,9 +573,8 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                             }
                                           },
                                           activeColor: Colors.green,
-                                          // Color del switch activo
                                           inactiveThumbColor: Colors
-                                              .red, // Color del switch inactivo
+                                              .red,
                                         ),
                                       ),
                                     ],

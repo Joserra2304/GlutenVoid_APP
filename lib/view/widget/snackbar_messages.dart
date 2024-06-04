@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 
 class SnackbarMessages {
-  // Método para mostrar un snackbar positivo
   static void showPositiveSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -18,7 +17,6 @@ class SnackbarMessages {
     );
   }
 
-  // Método para mostrar un snackbar de advertencia
   static void showWarningSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

@@ -10,7 +10,7 @@ class BackgroundContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFEDE7F6), Color(0xFF9575CD)], // Ajusta los colores según tu preferencia
+          colors: [Color(0xFFEDE7F6), Color(0xFF9575CD)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

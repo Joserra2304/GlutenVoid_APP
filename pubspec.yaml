@@ -71,8 +71,6 @@ flutter_icons:
 
 flutter:
   assets:
-    - assets/images/gv_animated.gif
-    - assets/images/gv_animated.mp4
     - assets/images/gluten_void_logo.png
 
   uses-material-design: true

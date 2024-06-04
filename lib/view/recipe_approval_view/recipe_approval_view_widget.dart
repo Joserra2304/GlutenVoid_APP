@@ -466,7 +466,6 @@ class _RecipeApprovalViewWidgetState extends State<RecipeApprovalViewWidget> {
                                         .secondaryBackground,
                                     dense: false,
                                     onTap: () {
-                                      //_navigateToDetails(recipe.id);
                                     },
                                   ),
                                 ),

@@ -22,8 +22,6 @@ class RecipeController {
     return recipeService.getRecipeByUserId(userId);
   }
 
-
-  // Add a new recipe
   Future<bool> addRecipe(RecipeModel recipe) async {
     try {
       return await recipeService.addRecipe(recipe);

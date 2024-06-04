@@ -1,12 +1,8 @@
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
+
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'establishment_details_view_widget.dart'
-    show EstablishmentDetailsViewWidget;
+import 'establishment_details_view_widget.dart' show EstablishmentDetailsViewWidget;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+
 
 class EstablishmentDetailsViewModel
     extends FlutterFlowModel<EstablishmentDetailsViewWidget> {

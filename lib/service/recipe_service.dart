@@ -1,20 +1,14 @@
-
-
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../model/recipe_model.dart';
 import 'glutenvoid_api_service.dart';
 
 class RecipeService {
   final GlutenVoidApi glutenVoidApi;
 
-  // Private constructor
   RecipeService._privateConstructor(this.glutenVoidApi);
 
-  // Static instance
   static RecipeService? _instance;
 
-  // Factory constructor
   factory RecipeService(GlutenVoidApi api) {
     _instance ??= RecipeService._privateConstructor(api);
     return _instance!;

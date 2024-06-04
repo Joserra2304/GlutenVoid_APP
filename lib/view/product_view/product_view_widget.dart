@@ -78,7 +78,6 @@ class _ProductViewWidgetState extends State<ProductViewWidget> {
       List<ProductModel> fetchedProducts =
           await productController.fetchGlutenFreeProducts();
       setState(() {
-        // Eliminar productos sin nombre y duplicados
         final uniqueTitles = <String>{};
         _products = fetchedProducts
             .where((product) =>

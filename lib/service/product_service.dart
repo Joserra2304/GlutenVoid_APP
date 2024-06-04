@@ -1,4 +1,3 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../model/product_model.dart';
 import 'openfoodfacts_api_service.dart';
@@ -15,7 +14,6 @@ class ProductService {
     return _singleton;
   }
 
-  // Búsqueda de productos sin gluten
   Future<List<ProductModel>> fetchGlutenFreeProducts({int page = 1, int limit = 21}) async {
     final key = 'gluten_free_page_$page';
     if (_cachedProducts.containsKey(key)) {
@@ -34,7 +32,6 @@ class ProductService {
     }
   }
 
-  // Búsquedas de productos por supermercado
   Future<List<ProductModel>> fetchProductsByStore(String store, {int page = 1, int limit = 20}) async {
     final String cacheKey = 'store_${store}_page_$page';
 
@@ -53,7 +50,6 @@ class ProductService {
     }
   }
 
-  // Búsquedas de productos por categoría
   Future<List<ProductModel>> fetchProductsByCategory(String category, {int page = 1, int limit = 20}) async {
     final String cacheKey = 'category_${category}_page_$page';
 
@@ -72,7 +68,6 @@ class ProductService {
     }
   }
 
-  // Escanear producto
   Future<ProductModel?> fetchProductByBarcode(String barcode) async {
     final response = await openFoodFactsApi.get('/api/v3/product/$barcode.json');
     if (response.statusCode == 200 && json.decode(response.body)['product'] != null) {

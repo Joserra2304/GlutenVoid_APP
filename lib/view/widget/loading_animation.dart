@@ -32,7 +32,7 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget>
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             RotationTransition(
-              turns: Tween(begin: 1.0, end: 0.0).animate(_animationController), // Invertir la dirección
+              turns: Tween(begin: 1.0, end: 0.0).animate(_animationController),
               child: Transform.scale(
                 scale: 0.4,
                 child: Image.asset('assets/images/gluten_void_logo.png'),
